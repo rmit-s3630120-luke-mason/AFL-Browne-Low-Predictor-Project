@@ -1,44 +1,4 @@
----
-title: "AFL Modelling"
-output: html_notebook
----
 
-Read train and test sets from files.
-```{r}
-train <- read.csv("../../data/train_set.csv")
-test <- read.csv("../../data/test_set.csv")
-
-
-```
-
-# Modelling
-
-```{r}
-summary(train)
-y <- train$Brownlow.Votes
-x <- as.matrix(train[,7:30])
-x <- -x[,-16]
-xPred = as.matrix(test[,7:30])
-xPred <- -xPred[,-16]
-
-dataList = list(
-  x = x,
-  y = y,
-  xPred = xPred,
-  rowCount = length(y),
-  colCount = ncol(x), 
-  predCount = nrow(xPred)
-)
-
-
-
-```
-
-
-
-### JAGS Model
-```{r}
-	modelString = "
 	data {
 	  yMean <- mean(y)
 	 
@@ -75,28 +35,76 @@ dataList = list(
 	  
 	  # Prior variances to reflect the expert information
 	  Var0   <- 1.00000 # Set simply to 1
-	  for (i in 1:colCount) {
-	    var[i] <- 0.25
-	  }  
+	  var[1:23] <- 0.25   
 	}
 	# Model
 	model {
-	  beta0   ~ dnorm(mu0,  1/Var0)
-	  for (j in 1:colCount) {
-	    beta[j] ~ dnorm(mu[j], 1/var[j])
-	    }
+	
+	  
+	  
+	  beta0   ~ dnorm(mu0,  1/Var0) + 
+	  beta[1] ~ dnorm(mu[1], 1/Var[1])
+	  beta[2] ~ dnorm(mu[2], 1/Var[2])
+	  beta[3] ~ dnorm(mu[3], 1/Var[3])
+	  beta[4] ~ dnorm(mu[4], 1/Var[4])
+	  beta[5] ~ dnorm(mu[5], 1/Var[5])
+	  beta[6] ~ dnorm(mu[6], 1/Var[6])
+	  beta[7] ~ dnorm(mu[7], 1/Var[7])
+	  beta[8] ~ dnorm(mu[8], 1/Var[8])
+	  beta[9] ~ dnorm(mu[9], 1/Var[9])
+	  beta[10] ~ dnorm(mu[10], 1/Var[10])
+	  beta[11] ~ dnorm(mu[1`], 1/Var[11])
+	  beta[12] ~ dnorm(mu[12], 1/Var[12])
+	  beta[13] ~ dnorm(mu[13], 1/Var[13])
+	  beta[14] ~ dnorm(mu[14], 1/Var[14])
+	  beta[15] ~ dnorm(mu[15], 1/Var[15])
+	  beta[16] ~ dnorm(mu[16], 1/Var[16])
+	  beta[17] ~ dnorm(mu[17], 1/Var[17])
+	  beta[18] ~ dnorm(mu[12], 1/Var[12])
+	  beta[19] ~ dnorm(mu[13], 1/Var[13])
+	  beta[20] ~ dnorm(mu[14], 1/Var[14])
+	  beta[21] ~ dnorm(mu[15], 1/Var[15])
+	  beta[22] ~ dnorm(mu[16], 1/Var[16])
+	  beta[23] ~ dnorm(mu[17], 1/Var[17])
 	  }
 	  
 	  
-	  # ... variance as it is ...
-	  precision ~ dexp(1/0.25) 
+	  # High variance as it is unknown
+	  precision ~ dexp(1/30.0) 
 	  
 	  for (i in 1:rowCount) {
 	  
 	    # Normal Likelihood
-	    #for (i in 1:rowCount) {
+	    #a = 0
+	    #for (i in 1:23) {
+	    #b = beta[i] ~ dnorm(m[i], 1/Var[i])
+	    #a = a+b
 	    #beta0   ~ dnorm(mu0,  1/Var0) + a 
-	    y[i] ~ dnorm(beta0 + sum(beta[1:colCount]*x[i,1:colCount]) , precision)
+	    y[i] ~ dnorm(beta0 + 
+	          (beta[1] * x[i,1]) +
+	          (beta[2] * x[i,2]) +
+	          (beta[3] * x[i,3]) +
+	          (beta[4] * x[i,4]) +
+	          (beta[5] * x[i,5]) +
+	          (beta[6] * x[i,6]) +
+	          (beta[7] * x[i,7]) +
+	          (beta[8] * x[i,8]) +
+	          (beta[9] * x[i,9]) +
+	          (beta[10] * x[i,10]) +
+	          (beta[11] * x[i,11]) +
+	          (beta[12] * x[i,12]) +
+	          (beta[13] * x[i,13]) +
+	          (beta[14] * x[i,14]) +
+	          (beta[15] * x[i,15]) +
+	          (beta[16] * x[i,16]) +
+	          (beta[17] * x[i,17]) +
+	          (beta[18] * x[i,18]) +
+	          (beta[19] * x[i,19]) +
+	          (beta[20] * x[i,20]) +
+	          (beta[21] * x[i,21]) +
+	          (beta[22] * x[i,22]) +
+	          (beta[23] * x[i,23])
+	          , precision)
 	  }
 	    # Compute predictions at every step of the MCMC
 	    # HOW DO I MAKE THIS INTO A FOR LOOP AAAAAAA
@@ -127,47 +135,4 @@ dataList = list(
         (beta[23] * xPred[k,23]) 
   }
 
-}"
-	
-	writeLines(modelString, con="TEMPmodel.txt")
-```
-### Run JAGS
-```{r}
-
-parameters = c("beta0")
-for ( i in 1:23){
-  parameters = c(parameters, paste0("beta[",i,"]"))
 }
-for ( i in 1:nrow(xPred)){
-  parameters = c(parameters, paste0("pred[",i,"]"))
-}
-
-adaptSteps = 50
-burnInSteps = 100
-nChains = 2
-thinSteps = 17
-numSavedSteps = 15000
-
-nIter = ceiling( ( numSavedSteps * thinSteps ) / nChains )
-
-startTime = proc.time()
-# sink("debug2.txt")
-runJagsOut <- run.jags( method="parallel" ,
-                        model="TEMPmodel.txt" ,
-                        monitor=parameters  ,
-                        data=dataList ,
-                        n.chains=nChains ,
-                        adapt=adaptSteps ,
-                        burnin=burnInSteps ,
-                        sample=numSavedSteps ,
-                        thin=thinSteps , summarise=FALSE , plots=FALSE )
-stopTime = proc.time()
-duration = stopTime - startTime
-show(duration)
-codaSamples = as.mcmc.list( runJagsOut )
-# sink()
-# save( codaSamples , file=paste("A2Run4","Mcmc.Rdata",sep="") )
-# save.image(file='A2Run4.RData')
-```
-
-### Results
