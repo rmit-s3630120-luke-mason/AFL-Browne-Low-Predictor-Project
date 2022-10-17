@@ -2,24 +2,30 @@
 title: "AFL Modelling"
 output: html_notebook
 ---
+```{r}
+source("../../utilities/DBDA2E-utilities.R")
+library(ggplot2)
+library(ggpubr)
+library(ks)
+library(rjags)
+library(runjags)
+library(benchmarkme)
+```
 
 Read train and test sets from files.
 ```{r}
-train <- read.csv("../../data/train_set.csv")
-test <- read.csv("../../data/test_set.csv")
-
-
+train <- read.csv("../../data/train_ preprocessed_all_stats .csv")
+test <- read.csv("../../data/test_ preprocessed_all_stats .csv")
 ```
 
 # Modelling
 
 ```{r}
-summary(train)
 y <- train$Brownlow.Votes
-x <- as.matrix(train[,7:30])
-x <- -x[,-16]
-xPred = as.matrix(test[,7:30])
-xPred <- -xPred[,-16]
+x <- as.matrix(train[,8:30])
+x <- x[,-15]
+xPred = as.matrix(test[,8:30])
+xPred <- -xPred[,-15]
 
 dataList = list(
   x = x,
@@ -29,6 +35,8 @@ dataList = list(
   colCount = ncol(x), 
   predCount = nrow(xPred)
 )
+
+summary(x)
 
 
 
@@ -48,47 +56,71 @@ dataList = list(
 	  # predictor increases the log odds of outcome 1.
 	  # Set to overall mean a priori based on the interpretation of constant term in regression
 	  
-	  mu0 <- yMean 
-	  mu[1] <- 0
-	  mu[2] <- 1/54*0.36
-	  mu[3] <- 1/36*0.36
-	  mu[4] <- 1/19*0.067
-	  mu[5] <- 1/35*0.36
-	  mu[6] <- 1/11*1.2
-	  mu[7] <- 1/7*0.067
-	  mu[8] <- 0
-	  mu[9] <- 1/19*0.067
-	  mu[10] <- 0
-	  mu[11] <- 1/16*0.36
-	  mu[12] <- 1/36*1.2
-	  mu[13] <- 1/15*0.067
-	  mu[14] <- 1/9*0.067
-	  mu[15] <- 0
-	  mu[16] <- 1/32*1.2
-	  mu[17] <- 1/40*0.067
-	  mu[18] <- 1/9*0.067
-	  mu[19] <- 1/13*0.36
-	  mu[20] <- 0
-	  mu[21] <- 1/15*0.067
-	  mu[22] <- 1/6*0.067
-	  mu[23] <- 0
+	  # mu0 <- yMean 
+	  # mu[1] <- 16.37
+	  # mu[2] <- 9.359
+	  # mu[3] <- 4.009
+	  # mu[4] <- 7.01
+	  # mu[5] <- 0.5516
+	  # mu[6] <- 0.37973
+	  # mu[7] <- 1.735
+	  # mu[8] <- 2.875
+	  # mu[9] <- 1.599
+	  # mu[10] <- 2.286
+	  # mu[11] <- 1.663
+	  # mu[12] <- 2.274
+	  # mu[13] <- 0.8302
+	  # mu[14] <- 0.8329
+	  # mu[15] <- 6.276
+	  # mu[16] <- 9.992
+	  # mu[17] <- 0.487
+	  # mu[18] <- 0.511
+	  # mu[19] <- 2.154
+	  # mu[20] <- 0.3222
+	  # mu[21] <- 0.3769
+	  # mu[22] <- 81.38
 	  
-	  # Prior variances to reflect the expert information
+	  mu0 <- yMean
+	  mu[1] <- 15
+	  mu[2] <- 10
+	  mu[3] <- 5
+	  mu[4] <- 0.7
+	  mu[5] <- 0.5
+	  mu[6] <- 2
+	  mu[7] <- 4
+	  mu[8] <- 1
+	  mu[9] <- 2
+	  mu[10] <- 1
+	  mu[11] <- 1.5
+	  mu[12] <- 1.3
+	  mu[13] <- 1.3
+	  mu[14] <- 7
+	  mu[15] <- 10
+	  mu[16] <- 1
+	  mu[17] <- 3
+	  mu[18] <- 0.8
+	  mu[19] <- 1.5
+	  mu[20] <- 0.3
+	  mu[21] <- 0.5
+	  mu[22] <- 80
+	  
+	  
+	  
+	  # Prior Variances to reflect the expert information
 	  Var0   <- 1.00000 # Set simply to 1
 	  for (i in 1:colCount) {
-	    var[i] <- 0.25
-	  }  
+	    Var[i] <- 0.25
+	  }
 	}
 	# Model
 	model {
 	  beta0   ~ dnorm(mu0,  1/Var0)
 	  for (j in 1:colCount) {
-	    beta[j] ~ dnorm(mu[j], 1/var[j])
+	    beta[j] ~ dnorm(mu[j], 1/Var[j])
 	    }
-	  }
 	  
 	  
-	  # ... variance as it is ...
+	  # ... Variance as it is ...
 	  precision ~ dexp(1/0.25) 
 	  
 	  for (i in 1:rowCount) {
@@ -101,33 +133,10 @@ dataList = list(
 	    # Compute predictions at every step of the MCMC
 	    # HOW DO I MAKE THIS INTO A FOR LOOP AAAAAAA
   for (k in 1:predCount) {
-    pred[k] <- beta0 + 
-        (beta[1] * xPred[k,1]) + 
-        (beta[2] * xPred[k,2]) + 
-        (beta[3] * xPred[k,3]) + 
-        (beta[4] * xPred[k,4]) +
-        (beta[5] * xPred[k,5]) +
-        (beta[6] * xPred[k,6]) + 
-        (beta[7] * xPred[k,7]) + 
-        (beta[8] * xPred[k,8]) + 
-        (beta[9] * xPred[k,9]) +
-        (beta[10] * xPred[k,10]) +
-        (beta[11] * xPred[k,11]) + 
-        (beta[12] * xPred[k,12]) + 
-        (beta[13] * xPred[k,13]) + 
-        (beta[14] * xPred[k,14]) +
-        (beta[15] * xPred[k,15]) +
-        (beta[16] * xPred[k,16]) +
-        (beta[17] * xPred[k,17]) +
-        (beta[18] * xPred[k,18]) +
-        (beta[19] * xPred[k,19]) +
-        (beta[20] * xPred[k,20]) +
-        (beta[21] * xPred[k,21]) +
-        (beta[22] * xPred[k,22]) +
-        (beta[23] * xPred[k,23]) 
+    pred[k] <- beta0 + sum(beta[1:colCount]*xPred[k,1:colCount])
   }
-
-}"
+}
+"
 	
 	writeLines(modelString, con="TEMPmodel.txt")
 ```
@@ -135,7 +144,7 @@ dataList = list(
 ```{r}
 
 parameters = c("beta0")
-for ( i in 1:23){
+for ( i in 1:22){
   parameters = c(parameters, paste0("beta[",i,"]"))
 }
 for ( i in 1:nrow(xPred)){
@@ -146,7 +155,7 @@ adaptSteps = 50
 burnInSteps = 100
 nChains = 2
 thinSteps = 17
-numSavedSteps = 15000
+numSavedSteps = 250
 
 nIter = ceiling( ( numSavedSteps * thinSteps ) / nChains )
 
@@ -171,3 +180,67 @@ codaSamples = as.mcmc.list( runJagsOut )
 ```
 
 ### Results
+```{r}
+# ============= Display Results ============
+diagMCMC( codaSamples , parName="beta0" )
+for ( i in 1:22){
+  diagMCMC( codaSamples , parName=paste0("beta[",i,"]") )
+}
+
+compVal <- data.frame(
+  "beta0" = 1, 
+  "beta[1]" = 15,
+  "beta[2]" = 10, 
+  "beta[3]" = 5, 
+  "beta[4]" =  0.7, 
+  "beta[5]" =  0.5,
+  "beta[6]" =  2,
+  "beta[7]" =  4,
+  "beta[8]" =  1,
+  "beta[9]" =  2,
+  "beta[10]" =  4,
+  "beta[11]" =  1,
+  "beta[12]" =  2,
+  "beta[13]" =  1,
+  "beta[14]" =  1.5,
+  "beta[15]" =  1.3,
+  "beta[16]" =  1.3,
+  "beta[17]" =  7,
+  "beta[18]" =  10,
+  "beta[19]" =  1,
+  "beta[20]" =  3,
+  "beta[21]" =  0.8,
+  check.names=FALSE)
+
+#===============================================================================
+#smryMCMC = function()
+
+#===============================================================================
+
+
+summaryInfo <- smryMCMC( codaSamples = codaSamples , compVal = compVal, saveName="SummaryInfo" )
+
+
+plotMCMC_HD( codaSamples = codaSamples, data = price_data, xName=c("disposals","kicks","handballs","goals", "behind","hitouts", "tackles", "rebound", "inside50s","clearances","clangers","frees","frees_against","contested_possessions","uncontested_possesions","contested_marks","marks","marks_inside50") ,
+             yName="Brownlow.", compVal = compVal, preds = TRUE)
+# 
+# 
+# # ============ Predictive check ============
+# modes = summaryInfo[,"Mode"]
+# # 14 is the number of rows skipping beta and heading rows = (6 + 5 + 2)
+# predictions = modes[13:length(modes) - 1]
+# real = c(test$SalePrice.100K.)
+# length(predictions)
+# length(real)
+# n = length(real)
+# # MAE
+# sum(abs(predictions - real))/n
+# # MSE
+# mse = sum((real - predictions)^2)
+# mse
+# # RMSE
+# sqrt(mse/n)
+
+failed.JAGS("model")
+```
+

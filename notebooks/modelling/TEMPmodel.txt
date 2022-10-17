@@ -8,131 +8,84 @@
 	  # predictor increases the log odds of outcome 1.
 	  # Set to overall mean a priori based on the interpretation of constant term in regression
 	  
-	  mu0 <- yMean 
-	  mu[1] <- 0
-	  mu[2] <- 1/54*0.36
-	  mu[3] <- 1/36*0.36
-	  mu[4] <- 1/19*0.067
-	  mu[5] <- 1/35*0.36
-	  mu[6] <- 1/11*1.2
-	  mu[7] <- 1/7*0.067
-	  mu[8] <- 0
-	  mu[9] <- 1/19*0.067
-	  mu[10] <- 0
-	  mu[11] <- 1/16*0.36
-	  mu[12] <- 1/36*1.2
-	  mu[13] <- 1/15*0.067
-	  mu[14] <- 1/9*0.067
-	  mu[15] <- 0
-	  mu[16] <- 1/32*1.2
-	  mu[17] <- 1/40*0.067
-	  mu[18] <- 1/9*0.067
-	  mu[19] <- 1/13*0.36
-	  mu[20] <- 0
-	  mu[21] <- 1/15*0.067
-	  mu[22] <- 1/6*0.067
-	  mu[23] <- 0
+	  # mu0 <- yMean 
+	  # mu[1] <- 16.37
+	  # mu[2] <- 9.359
+	  # mu[3] <- 4.009
+	  # mu[4] <- 7.01
+	  # mu[5] <- 0.5516
+	  # mu[6] <- 0.37973
+	  # mu[7] <- 1.735
+	  # mu[8] <- 2.875
+	  # mu[9] <- 1.599
+	  # mu[10] <- 2.286
+	  # mu[11] <- 1.663
+	  # mu[12] <- 2.274
+	  # mu[13] <- 0.8302
+	  # mu[14] <- 0.8329
+	  # mu[15] <- 6.276
+	  # mu[16] <- 9.992
+	  # mu[17] <- 0.487
+	  # mu[18] <- 0.511
+	  # mu[19] <- 2.154
+	  # mu[20] <- 0.3222
+	  # mu[21] <- 0.3769
+	  # mu[22] <- 81.38
 	  
-	  # Prior variances to reflect the expert information
+	  mu0 <- yMean
+	  mu[1] <- 15
+	  mu[2] <- 10
+	  mu[3] <- 5
+	  mu[4] <- 0.7
+	  mu[5] <- 0.5
+	  mu[6] <- 2
+	  mu[7] <- 4
+	  mu[8] <- 1
+	  mu[9] <- 2
+	  mu[10] <- 1
+	  mu[11] <- 1.5
+	  mu[12] <- 1.3
+	  mu[13] <- 1.3
+	  mu[14] <- 7
+	  mu[15] <- 10
+	  mu[16] <- 1
+	  mu[17] <- 3
+	  mu[18] <- 0.8
+	  mu[19] <- 1.5
+	  mu[20] <- 0.3
+	  mu[21] <- 0.5
+	  mu[22] <- 80
+	  
+	  
+	  
+	  # Prior Variances to reflect the expert information
 	  Var0   <- 1.00000 # Set simply to 1
-	  var[1:23] <- 0.25   
+	  for (i in 1:colCount) {
+	    Var[i] <- 0.25
+	  }
 	}
 	# Model
 	model {
-	
+	  beta0   ~ dnorm(mu0,  1/Var0)
+	  for (j in 1:colCount) {
+	    beta[j] ~ dnorm(mu[j], 1/Var[j])
+	    }
 	  
 	  
-	  beta0   ~ dnorm(mu0,  1/Var0) + 
-	  beta[1] ~ dnorm(mu[1], 1/Var[1])
-	  beta[2] ~ dnorm(mu[2], 1/Var[2])
-	  beta[3] ~ dnorm(mu[3], 1/Var[3])
-	  beta[4] ~ dnorm(mu[4], 1/Var[4])
-	  beta[5] ~ dnorm(mu[5], 1/Var[5])
-	  beta[6] ~ dnorm(mu[6], 1/Var[6])
-	  beta[7] ~ dnorm(mu[7], 1/Var[7])
-	  beta[8] ~ dnorm(mu[8], 1/Var[8])
-	  beta[9] ~ dnorm(mu[9], 1/Var[9])
-	  beta[10] ~ dnorm(mu[10], 1/Var[10])
-	  beta[11] ~ dnorm(mu[1`], 1/Var[11])
-	  beta[12] ~ dnorm(mu[12], 1/Var[12])
-	  beta[13] ~ dnorm(mu[13], 1/Var[13])
-	  beta[14] ~ dnorm(mu[14], 1/Var[14])
-	  beta[15] ~ dnorm(mu[15], 1/Var[15])
-	  beta[16] ~ dnorm(mu[16], 1/Var[16])
-	  beta[17] ~ dnorm(mu[17], 1/Var[17])
-	  beta[18] ~ dnorm(mu[12], 1/Var[12])
-	  beta[19] ~ dnorm(mu[13], 1/Var[13])
-	  beta[20] ~ dnorm(mu[14], 1/Var[14])
-	  beta[21] ~ dnorm(mu[15], 1/Var[15])
-	  beta[22] ~ dnorm(mu[16], 1/Var[16])
-	  beta[23] ~ dnorm(mu[17], 1/Var[17])
-	  }
-	  
-	  
-	  # High variance as it is unknown
-	  precision ~ dexp(1/30.0) 
+	  # ... Variance as it is ...
+	  precision ~ dexp(1/0.25) 
 	  
 	  for (i in 1:rowCount) {
 	  
 	    # Normal Likelihood
-	    #a = 0
-	    #for (i in 1:23) {
-	    #b = beta[i] ~ dnorm(m[i], 1/Var[i])
-	    #a = a+b
+	    #for (i in 1:rowCount) {
 	    #beta0   ~ dnorm(mu0,  1/Var0) + a 
-	    y[i] ~ dnorm(beta0 + 
-	          (beta[1] * x[i,1]) +
-	          (beta[2] * x[i,2]) +
-	          (beta[3] * x[i,3]) +
-	          (beta[4] * x[i,4]) +
-	          (beta[5] * x[i,5]) +
-	          (beta[6] * x[i,6]) +
-	          (beta[7] * x[i,7]) +
-	          (beta[8] * x[i,8]) +
-	          (beta[9] * x[i,9]) +
-	          (beta[10] * x[i,10]) +
-	          (beta[11] * x[i,11]) +
-	          (beta[12] * x[i,12]) +
-	          (beta[13] * x[i,13]) +
-	          (beta[14] * x[i,14]) +
-	          (beta[15] * x[i,15]) +
-	          (beta[16] * x[i,16]) +
-	          (beta[17] * x[i,17]) +
-	          (beta[18] * x[i,18]) +
-	          (beta[19] * x[i,19]) +
-	          (beta[20] * x[i,20]) +
-	          (beta[21] * x[i,21]) +
-	          (beta[22] * x[i,22]) +
-	          (beta[23] * x[i,23])
-	          , precision)
+	    y[i] ~ dnorm(beta0 + sum(beta[1:colCount]*x[i,1:colCount]) , precision)
 	  }
 	    # Compute predictions at every step of the MCMC
 	    # HOW DO I MAKE THIS INTO A FOR LOOP AAAAAAA
   for (k in 1:predCount) {
-    pred[k] <- beta0 + 
-        (beta[1] * xPred[k,1]) + 
-        (beta[2] * xPred[k,2]) + 
-        (beta[3] * xPred[k,3]) + 
-        (beta[4] * xPred[k,4]) +
-        (beta[5] * xPred[k,5]) +
-        (beta[6] * xPred[k,6]) + 
-        (beta[7] * xPred[k,7]) + 
-        (beta[8] * xPred[k,8]) + 
-        (beta[9] * xPred[k,9]) +
-        (beta[10] * xPred[k,10]) +
-        (beta[11] * xPred[k,11]) + 
-        (beta[12] * xPred[k,12]) + 
-        (beta[13] * xPred[k,13]) + 
-        (beta[14] * xPred[k,14]) +
-        (beta[15] * xPred[k,15]) +
-        (beta[16] * xPred[k,16]) +
-        (beta[17] * xPred[k,17]) +
-        (beta[18] * xPred[k,18]) +
-        (beta[19] * xPred[k,19]) +
-        (beta[20] * xPred[k,20]) +
-        (beta[21] * xPred[k,21]) +
-        (beta[22] * xPred[k,22]) +
-        (beta[23] * xPred[k,23]) 
+    pred[k] <- beta0 + sum(beta[1:colCount]*xPred[k,1:colCount])
   }
-
 }
+
