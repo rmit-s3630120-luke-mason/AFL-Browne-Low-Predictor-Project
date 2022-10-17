@@ -39,8 +39,8 @@ split <- function(df, name, seed = 3456) {
   trainIndex <- createDataPartition(df$Brownlow.Votes, p = .9, list = FALSE, times = 1)
   
   # Write train and test sets to files.
-  write.csv(raw_stats[ trainIndex,], paste("../../data/train_", name, ".csv"), row.names=FALSE)
-  write.csv(raw_stats[-trainIndex,], paste("../../data/test_", name, ".csv"), row.names=FALSE)
+  write.csv(raw_stats[ trainIndex,], paste("../../data/train_", name, ".csv", sep=""), row.names=FALSE)
+  write.csv(raw_stats[-trainIndex,], paste("../../data/test_", name, ".csv", sep=""), row.names=FALSE)
 }
 
 split(stat_df, "preprocessed_stats_per_round")

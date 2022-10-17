@@ -4,6 +4,7 @@ output: html_notebook
 ---
 ```{r}
 source("../../utilities/DBDA2E-utilities.R")
+source("../../utilities/MoreUtilities.R")
 library(ggplot2)
 library(ggpubr)
 library(ks)
@@ -14,12 +15,11 @@ library(benchmarkme)
 
 Read train and test sets from files.
 ```{r}
-train <- read.csv("../../data/train_ preprocessed_all_stats .csv")
-test <- read.csv("../../data/test_ preprocessed_all_stats .csv")
+train <- read.csv("../../data/train_preprocessed_all_stats.csv")
+test <- read.csv("../../data/test_preprocessed_all_stats.csv")
 ```
 
 # Modelling
-
 ```{r}
 y <- train$Brownlow.Votes
 x <- as.matrix(train[,8:30])
