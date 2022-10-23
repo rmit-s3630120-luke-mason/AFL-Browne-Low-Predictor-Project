@@ -36,11 +36,11 @@ Splitting the raw_stats into train and test sets, with 10% test and 90% training
 
 split <- function(df, name, seed = 3456) {
   set.seed(seed)
-  trainIndex <- createDataPartition(df$Brownlow.Votes, p = .9, list = FALSE, times = 1)
+  testIndex <- createDataPartition(df$Brownlow.Votes, p = .1, list = FALSE, times = 1)
   
   # Write train and test sets to files.
-  write.csv(raw_stats[ trainIndex,], paste("../../data/train_", name, ".csv", sep=""), row.names=FALSE)
-  write.csv(raw_stats[-trainIndex,], paste("../../data/test_", name, ".csv", sep=""), row.names=FALSE)
+  write.csv(df[-testIndex,], paste("../../data/train_", name, ".csv", sep=""), row.names=FALSE)
+  write.csv(df[testIndex,], paste("../../data/test_", name, ".csv", sep=""), row.names=FALSE)
 }
 
 split(stat_df, "preprocessed_stats_per_round")

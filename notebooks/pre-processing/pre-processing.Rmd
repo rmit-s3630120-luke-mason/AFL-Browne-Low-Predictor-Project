@@ -109,7 +109,36 @@ write.csv(stat_df, "../../data/preprocessed_stats_per_unque_round.csv", row.name
 write.csv(per_player_agg, "../../data/preprocessed_stats_per_career.csv", row.names=FALSE)
 write.csv(all_stats, "../../data/preprocessed_all_stats.csv", row.names=FALSE)
 ```
-    
+
+
+# Pre processing the % average performance for each player per game
+```{r}
+library(dplyr)
+
+# Read in the stats of the players
+raw_stats = read.csv("../../data/raw_stats.csv")
+
+# Group the rows into games, by game id
+# df = raw_stats %>% group_by(gameId)
+top = raw_stats %>% group_by(gameId) %>% summarise()
+
+gameIds = as.list(head(top, 10))
+print(gameIds)
+# game_stats = raw_stats[raw_stats$gameId %in% gameIds,]
+# game_stats = dplyr::filter(df, state %in% c("CA", "AZ", "PH"))
+
+# print(game_stats)
+# For each group
+
+
+# For each player in the group, get the rest of the players in that group and aggregate their stats
+
+
+# Get the percentage difference between the player's stats and the rest of the player's
+percentage_differences = player_stats / other_players_stats
+
+```
+
 
 
 
