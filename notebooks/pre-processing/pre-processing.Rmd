@@ -82,6 +82,7 @@ names(df1)[names(df1) == 'Group.3'] <- 'round'
 stat_df <- df1[order(df1$playerId, df1$displayName, df1$round),]
 stat_df
 ```
+
 ```{r}
 filtered_df2 <- filtered_df[ , !(names(filtered_df) %in% c("rounds"))]
 # Aggregate all fields in the filtered data frame, but group them by the list of values in field columns:
@@ -97,6 +98,8 @@ names(per_player_agg)[names(per_player_agg) == 'Group.2'] <- 'displayName'
 ppa <- per_player_agg[order(per_player_agg$playerId, per_player_agg$displayName),]
 ppa
 ```
+
+
 ```{r}
 all_stats <- raw_stats[ raw_stats$round %in% valid_round_names, ]
 all_stats
@@ -105,9 +108,9 @@ all_stats
 
 ## Save datasets
 ```{r}
-write.csv(stat_df, "../../data/preprocessed_stats_per_unque_round.csv", row.names=FALSE)
-write.csv(per_player_agg, "../../data/preprocessed_stats_per_career.csv", row.names=FALSE)
-write.csv(all_stats, "../../data/preprocessed_all_stats.csv", row.names=FALSE)
+write.csv(stat_df, "../../data/stats_per_unique_round.csv", row.names=FALSE)
+write.csv(per_player_agg, "../../data/stats_per_career.csv", row.names=FALSE)
+write.csv(all_stats, "../../data/all_stats.csv", row.names=FALSE)
 ```
 
 

@@ -24,9 +24,9 @@ library(benchmarkme)
 
 Load in the Raw Stats
 ```{r}
-stat_df = read.csv("../../data/preprocessed_stats_per_round.csv")
-per_player_agg = read.csv("../../data/preprocessed_stats_per_player.csv")
-all_stats = read.csv("../../data/preprocessed_all_stats.csv")
+stat_df = read.csv("../../data/stats_per_unique_round.csv")
+per_player_agg = read.csv("../../data/stats_per_career.csv")
+all_stats = read.csv("../../data/all_stats.csv")
 ```
 
 Splitting the raw_stats into train and test sets, with 10% test and 90% training data
@@ -43,9 +43,9 @@ split <- function(df, name, seed = 3456) {
   write.csv(df[testIndex,], paste("../../data/test_", name, ".csv", sep=""), row.names=FALSE)
 }
 
-split(stat_df, "preprocessed_stats_per_round")
-split(per_player_agg, "preprocessed_stats_per_player")
-split(all_stats, "preprocessed_all_stats")
+split(stat_df, "stats_per_unique_round")
+split(per_player_agg, "stats_per_career")
+split(all_stats, "all_stats")
 
 
 ```
