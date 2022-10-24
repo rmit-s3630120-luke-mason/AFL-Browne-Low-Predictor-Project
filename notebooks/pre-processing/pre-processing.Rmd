@@ -119,27 +119,90 @@ write.csv(all_stats, "../../data/all_stats.csv", row.names=FALSE)
 library(dplyr)
 
 # Read in the stats of the players
-raw_stats = read.csv("../../data/raw_stats.csv")
+all_stats = read.csv("../../data/all_stats.csv")
 
 # Group the rows into games, by game id
 # df = raw_stats %>% group_by(gameId)
-top = raw_stats %>% group_by(gameId) %>% summarise()
+top = all_stats %>% group_by(gameId) %>% summarise()
 
-gameIds = as.list(head(top, 10))
-print(gameIds)
-# game_stats = raw_stats[raw_stats$gameId %in% gameIds,]
-# game_stats = dplyr::filter(df, state %in% c("CA", "AZ", "PH"))
+gameIds = as.list(head(top, 1))
+game_stats_temp = all_stats[all_stats$gameId %in% unlist(gameIds),]
+drops <- c("team",	"year",	"round", "displayName",	"gameNumber")
+game_stats = game_stats_temp[ , !(names(game_stats_temp) %in% drops)]
 
-# print(game_stats)
+stat_cols = c(
+  "Behinds", 
+  "Bounces", 
+  "Clangers", 
+  "Clearances", 
+  "Contested.Marks", 
+  "Contested.Possessions",
+  "Disposals", 
+  "Frees", "Frees.Against", 
+  "Goal.Assists", 
+  "Goals", 
+  "Handballs",
+  "Hit.Outs", 
+  "Inside.50s", 
+  "Kicks", 
+  "Marks", 
+  "Marks.Inside.50", 
+  "One.Percenters", 
+  "Rebounds",
+  "Tackles", 
+  "Uncontested.Possessions"
+  )
+
+label = "Brownlow.Votes"
+xPlayed = "X..Played"
+
+# Column names.
+x <- c(stat_cols, c(xPlayed, label))
+
+# The new data frame to create.
+new_df <- data.frame(matrix(ncol = length(x), nrow = 0))
+
+# Assign column names.
+colnames(new_df) <- x
+
 # For each group
+for (id in gameIds) {
+  game = game_stats[game_stats$gameId == id,]
+  # For each player in the group, get the rest of the players in that group and aggregate their stats
+  for (row_index in 1:nrow(game)) {
+    player = game[c(row_index),]
+    rest_of_players = game[-c(row_index),]
+    
+    # Drop columns because they appeared again
+    rest_of_players_filtered = rest_of_players[ , names(rest_of_players) %in% stat_cols]
 
+    # Aggregate the rest of the player's stats
+    player_agg = rowMeans(rest_of_players_filtered)
+  
+    # For each stat create a new
+    row <- c()
+    for (stat in stat_cols) {
+      # print(stat)
+      # print(rest_of_players)
+      # Get the percentage difference between the player's stats and the rest of the player's
+      percentage_difference <- player[stat][0] / player_agg[stat][0]
+      diff = as.matrix(percentage_difference)
+      
+      # WIP WTFFFFFFFFFFF
+      print(diff)
+      # build row
+      append(row, diff)
+    }
+    append(row, as.matrix(player[xPlayed][0])/100)
+    
+    # Add label value to row
+    append(row, player[label][0])
 
-# For each player in the group, get the rest of the players in that group and aggregate their stats
+    new_df[nrow(new_df) + 1,] <- row
+  }
+}
 
-
-# Get the percentage difference between the player's stats and the rest of the player's
-percentage_differences = player_stats / other_players_stats
-
+new_df
 ```
 
 
