@@ -28,6 +28,7 @@ stat_df = read.csv("../../data/stats_per_unique_round.csv")
 per_player_agg = read.csv("../../data/stats_per_career.csv")
 all_stats = read.csv("../../data/all_stats.csv")
 raw_performance = read.csv("../../data/raw_performance.csv")
+performance = read.csv("../../data/performance.csv")
 ```
 
 Splitting the raw_stats into train and test sets, with 10% test and 90% training data
@@ -48,6 +49,7 @@ split(stat_df, "stats_per_unique_round")
 split(per_player_agg, "stats_per_career")
 split(all_stats, "all_stats")
 split(raw_performance, "raw_performance")
+split(performance, "performance")
 ```
 
 #### Analysis of Split
@@ -100,6 +102,10 @@ analyse("all_stats", n=100)
 
 ```{r}
 analyse("performance", n=100)
+```
+
+```{r}
+analyse("raw_performance", n=100)
 ```
 
 
