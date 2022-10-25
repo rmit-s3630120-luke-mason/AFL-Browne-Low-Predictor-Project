@@ -27,7 +27,7 @@ Load in the Raw Stats
 stat_df = read.csv("../../data/stats_per_unique_round.csv")
 per_player_agg = read.csv("../../data/stats_per_career.csv")
 all_stats = read.csv("../../data/all_stats.csv")
-performance = read.csv("../../data/performance.csv")
+raw_performance = read.csv("../../data/raw_performance.csv")
 ```
 
 Splitting the raw_stats into train and test sets, with 10% test and 90% training data
@@ -47,7 +47,7 @@ split <- function(df, name, seed = 3456) {
 split(stat_df, "stats_per_unique_round")
 split(per_player_agg, "stats_per_career")
 split(all_stats, "all_stats")
-split(performance, "performance")
+split(raw_performance, "raw_performance")
 ```
 
 #### Analysis of Split
