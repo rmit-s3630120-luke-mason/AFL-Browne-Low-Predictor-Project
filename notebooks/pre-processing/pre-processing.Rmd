@@ -104,12 +104,6 @@ ppa
 all_stats <- raw_stats[ raw_stats$round %in% valid_round_names, ]
 all_stats
 ```
-## Feature Engineering
-```{r}
-# We want to incorporate the statistics of the game in comparison to
-
-```
-
 
 # Pre processing the % average performance for each player per game
 ```{r}
@@ -137,7 +131,7 @@ create_performance_dataset <- function(number_of_games, balanced = FALSE){
   game_stats <- all_stats[all_stats$gameId %in% unlist(gameIds),]
   
   # Drop the redundant columns
-  drops <- c("team",	"year",	"round", "displayName",	"gameNumber")
+  drops <- c("team", "round", "displayName",	"gameNumber")
   game_stats <- game_stats[ , !(names(game_stats) %in% drops)]
   
   stat_cols <- c(
@@ -167,7 +161,7 @@ create_performance_dataset <- function(number_of_games, balanced = FALSE){
   xPlayed <- "X..Played"
   
   # Column names.
-  x <- c(stat_cols, c(xPlayed, label))
+  x <- c(stat_cols, c(xPlayed, label, "year"))
   
   # The new data frame to create.
   new_df <- data.frame(matrix(ncol = length(x), nrow = 0))
@@ -214,7 +208,11 @@ create_performance_dataset <- function(number_of_games, balanced = FALSE){
       
       # Shift the columns to rows but has a column header this time for both dataframes.
       player_filtered <- pivot_longer(player_filtered, names_to="stat", values_to="value", cols=all_of(stat_cols))
-  
+      
+      # Order by stat name so that each dataset can marry up their values correctly
+      player_filtered = player_filtered[order(player_filtered$stat),]
+      player_agg = player_agg[order(player_agg$stat),]
+      
       # Evaluate the performance of the player vs the rest of the players in the game
       performance <- data.frame(performance = (player_filtered$value / player_agg$value) - 1, stat = player_agg$stat)
   
@@ -230,7 +228,10 @@ create_performance_dataset <- function(number_of_games, balanced = FALSE){
   
       # Add label column
       performance[label] <- as.matrix(player[label])[1]
-  
+      
+      # Add year column to help splitting later
+      performance["year"] <- as.matrix(player["year"])[1]
+      # print(player)
       # Add the row to the new data frame.
       new_df[nrow(new_df) + 1,] <- performance[1,]
       
@@ -241,6 +242,7 @@ create_performance_dataset <- function(number_of_games, balanced = FALSE){
   return(new_df)
 }
 ```
+
 ### Create the performance dataset
 ```{r}
 performance_df = create_performance_dataset(100)
@@ -249,10 +251,9 @@ performance_df
 
 ### Create more balanced performance dataset
 ```{r}
-balanced_performance_df = create_performance_dataset(1000, TRUE)
+balanced_performance_df = create_performance_dataset(10000, TRUE)
 balanced_performance_df
 ```
-
 
 ## Save datasets
 ```{r}

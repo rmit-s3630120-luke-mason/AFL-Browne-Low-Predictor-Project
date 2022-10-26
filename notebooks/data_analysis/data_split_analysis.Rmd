@@ -8,8 +8,8 @@ This notebook analyzes the data split prior to preprocessing the training set.
 
 ## Load in the Raw Stats
 ```{r}
-train_set = read.csv("../../data/train_set.csv")
-test_set = read.csv("../../data/test_set.csv")
+train_set = read.csv("../../data/train_performance.csv")
+test_set = read.csv("../../data/test_performance.csv")
 ```
 
 ```{r}
@@ -22,7 +22,7 @@ histCompare <- function(train, test, title, xlabel, print=FALSE){
   test_set <- as.matrix(test)
   b <- min(c(train_set,test_set)) # Set the minimum for the breakpoints
   e <- max(c(train_set,test_set)) # Set the maximum for the breakpoints
-  ax <- pretty(b:e, n = 12) # Make a neat vector for the breakpoints
+  ax <- pretty(b-0.1:e+0.1, n = 100) # Make a neat vector for the breakpoints
   hgA <- hist(train_set, breaks = ax, plot = FALSE) # Save first histogram data
   hgB <- hist(test_set, breaks = ax, plot = FALSE) # Save 2nd histogram data
   plot(hgA, col = c1, main=title, xlab=xlabel) # Plot 1st histogram using a transparent color
@@ -41,7 +41,7 @@ for (val in 1:ncol(train_set)) {
   colName <- names(train_set)[val]
   
   
-  if (purrr::has_element(c("displayName", "gameId", "playerId", "team", "year", "round", "gameNumber", "Subs", "Brownlow.Votes"), colName)) {
+  if (purrr::has_element(c("displayName", "gameId", "playerId", "team", "year", "round", "gameNumber", "Subs"), colName)) {
     # Skip these fields
     next
   }

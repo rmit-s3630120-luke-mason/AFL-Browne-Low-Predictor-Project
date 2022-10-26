@@ -23,9 +23,7 @@ library(benchmarkme)
 
 ## Load in the Raw Stats
 ```{r}
-df = read.csv("../../data/train_preprocessed_stats_per_player.csv")
-dfr = read.csv("../../data/train_preprocessed_stats_per_round.csv")
-all_df = read.csv("../../data/train_preprocessed_all_stats.csv")
+df = read.csv("../../data/performance.csv")
 ```
 
 ## Exploratory Data Analysis
@@ -76,9 +74,11 @@ for (val in 1:ncol(df)) {
   }
   print(colName)
   title <- paste("Scatter plot of ", colName)
-  plot(unlist(df[val]), xlab=colName, main=title)
+  plot(unlist(df[val]), xlab="Player index", ylab = colName, main=title)
 }
 ```
+
+
 ```{r}
 library(car)
 
@@ -87,7 +87,7 @@ for (val in 1:ncol(df)) {
   colName <- names(df)[val]
   
   
-  if (purrr::has_element(c("displayName", "gameId", "playerId", "team", "year", "round", "gameNumber", "Subs", "Brownlow.Votes"), colName)) {
+  if (purrr::has_element(c("displayName", "gameId", "playerId", "team", "year", "round", "gameNumber", "Subs"), colName)) {
     # Skip these fields
     next
   }

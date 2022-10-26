@@ -48,9 +48,22 @@ split <- function(df, name, seed = 3456) {
 split(stat_df, "stats_per_unique_round")
 split(per_player_agg, "stats_per_career")
 split(all_stats, "all_stats")
-split(raw_performance, "raw_performance")
-split(performance, "performance")
+
+# Not going to split this randomly
+# split(raw_performance, "raw_performance")
+# split(performance, "performance")
 ```
+```{r}
+performance[performance$year == "2021",]
+```
+```{r}
+# Write train and test sets to files.
+name = "performance"
+
+write.csv(performance[performance$year != "2021",], paste("../../data/train_", name, ".csv", sep=""), row.names=FALSE)
+write.csv(performance[performance$year == "2021",], paste("../../data/test_", name, ".csv", sep=""), row.names=FALSE)
+```
+
 
 #### Analysis of Split
 Read train and test sets from files.
@@ -62,14 +75,11 @@ histCompare <- function(train, test, title, xlabel, print=TRUE, n=10) {
   test_set <- as.matrix(test)
   b <- min(c(train_set,test_set)) # Set the minimum for the breakpoints
   e <- max(c(train_set,test_set)) # Set the maximum for the breakpoints
-  
   ax <- seq(b-0.1,e+0.1, by=0.1) # Make a neat vector for the breakpoints
   hgA <- hist(train_set, breaks = ax, plot = FALSE) # Save first histogram data
   hgB <- hist(test_set, breaks = ax, plot = FALSE) # Save 2nd histogram data
   plot(hgA, col = c1, main=title, xlab=xlabel) # Plot 1st histogram using a transparent color
   plot(hgB, col = c2, add = TRUE) # Add 2nd histogram using different color
-  # axis(side=1,at=hgA$mids,labels=seq(b,e))
-  # axis(side=1,at=hgB$mids,labels=seq(b,e))
   legend("topright", c("Train Set", "Test Set"), col=c(c1, c2), lwd=10)
   if (print) {
     print(table(train_set))
@@ -80,9 +90,14 @@ histCompare <- function(train, test, title, xlabel, print=TRUE, n=10) {
 analyse <- function(name, n=10) {
   train <- read.csv(paste("../../data/train_", name, ".csv", sep=""))
   test <- read.csv(paste("../../data/test_", name, ".csv", sep=""))
-  
+  print(train)
   for (col in colnames(train)) {
-    histCompare(train[col], test[col], paste(col,"Train vs Test"), col, FALSE, n)  
+    if (purrr::has_element(c("displayName", "gameId", "playerId", "team", "year", "round", "gameNumber", "Subs"), col)) {
+      # Skip these fields
+      next
+    }
+    
+    histCompare(train[col], test[col], paste(col,"Train vs Test"), col, FALSE, n)
   }
 }
 ```
