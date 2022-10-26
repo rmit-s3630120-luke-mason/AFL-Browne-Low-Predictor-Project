@@ -35,15 +35,15 @@
 	  # Prior variances to reflect the expert information
 	  var0   <- 1.00000 # Set simply to 1
 	  for (i in 1:colCount) {
-	    var[i] <- 0.25
+	    Var[i] <- 0.25
 	  }
 	}
 	# Model
 	model {
 	  beta0   ~ dnorm(mu0,  1/var0)
 	  for (j in 1:colCount) {
-	    beta[j] ~ dnorm(mu[j], 1/var[j])
-	    }
+	    beta[j] ~ dnorm(mu[j], 1/Var[j])
+	  }
 	  
 	  
 	  # ... variance as it is ...

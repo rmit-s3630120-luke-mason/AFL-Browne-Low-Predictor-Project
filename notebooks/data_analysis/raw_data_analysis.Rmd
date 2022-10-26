@@ -23,6 +23,7 @@ library(benchmarkme)
 ## Load in the Raw Stats
 ```{r}
 raw_stats = read.csv("../../data/raw_stats.csv")
+column(raw_stats)
 ```
 
 

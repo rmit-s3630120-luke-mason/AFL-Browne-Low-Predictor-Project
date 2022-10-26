@@ -54,7 +54,7 @@ df1 <- agg[ agg$Group.3 %in% valid_round_names, ]
 stat_cols = c("Behinds", "Bounces", "Brownlow.Votes", "Clangers", "Clearances", "Contested.Marks", "Contested.Possessions",
     "Disposals", "Frees", "Frees.Against", "Goal.Assists", "Goals", "Handballs",
     "Hit.Outs", "Inside.50s", "Kicks", "Marks", "Marks.Inside.50", "One.Percenters", "Rebounds",
-    "Tackles", "Uncontested.Possessions")
+    "Tackles", "Uncontested.Possessions", "X..Played")
 
 df2 = pivot_longer(df1, names_to="stat", values_to="value", cols=all_of(stat_cols))
 df3 = pivot_wider(df2, id_cols = c("Group.1", "Group.2", "stat"), names_from = "Group.3")
@@ -101,6 +101,12 @@ ppa
 all_stats <- raw_stats[ raw_stats$round %in% valid_round_names, ]
 all_stats
 ```
+## Feature Engineering
+```{r}
+# We want to incorporate the statistics of the game in comparison to
+
+```
+
 
 
 ## Save datasets
