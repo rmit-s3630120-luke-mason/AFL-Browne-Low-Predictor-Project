@@ -82,6 +82,7 @@ names(df1)[names(df1) == 'Group.3'] <- 'round'
 stat_df <- df1[order(df1$playerId, df1$displayName, df1$round),]
 stat_df
 ```
+
 ```{r}
 filtered_df2 <- filtered_df[ , !(names(filtered_df) %in% c("rounds"))]
 # Aggregate all fields in the filtered data frame, but group them by the list of values in field columns:
@@ -97,6 +98,8 @@ names(per_player_agg)[names(per_player_agg) == 'Group.2'] <- 'displayName'
 ppa <- per_player_agg[order(per_player_agg$playerId, per_player_agg$displayName),]
 ppa
 ```
+
+
 ```{r}
 all_stats <- raw_stats[ raw_stats$round %in% valid_round_names, ]
 all_stats
@@ -108,14 +111,159 @@ all_stats
 ```
 
 
+# Pre processing the % average performance for each player per game
+```{r}
+library(dplyr)
+library(tidyr)
+
+# Convert the indices to integers
+convert_list_stoi <- function(list_str) {
+  redundant_rows <- c()
+  for(idx in 1:length(list_str)) {
+    redundant_rows <- c(redundant_rows, strtoi(list_str[idx], base=10))
+  }
+  
+  return(redundant_rows)
+}
+
+# Creates the performance dataset but from x number of games and optionally without many 0 votes.
+create_performance_dataset <- function(number_of_games, balanced = FALSE){
+  # Read in the stats of the players
+  all_stats <- read.csv("../../data/all_stats.csv")
+
+  # Group the rows into games, by game id
+  top <- all_stats %>% group_by(gameId) %>% summarise()
+  gameIds <- as.list(head(top, number_of_games))
+  game_stats <- all_stats[all_stats$gameId %in% unlist(gameIds),]
+  
+  # Drop the redundant columns
+  drops <- c("team",	"year",	"round", "displayName",	"gameNumber")
+  game_stats <- game_stats[ , !(names(game_stats) %in% drops)]
+  
+  stat_cols <- c(
+    "Behinds",
+    "Bounces",
+    "Clangers",
+    "Clearances",
+    "Contested.Marks",
+    "Contested.Possessions",
+    "Disposals",
+    "Frees", "Frees.Against",
+    "Goal.Assists",
+    "Goals",
+    "Handballs",
+    "Hit.Outs",
+    "Inside.50s",
+    "Kicks",
+    "Marks",
+    "Marks.Inside.50",
+    "One.Percenters",
+    "Rebounds",
+    "Tackles",
+    "Uncontested.Possessions"
+    )
+  
+  label <- "Brownlow.Votes"
+  xPlayed <- "X..Played"
+  
+  # Column names.
+  x <- c(stat_cols, c(xPlayed, label))
+  
+  # The new data frame to create.
+  new_df <- data.frame(matrix(ncol = length(x), nrow = 0))
+  
+  # Assign column names.
+  colnames(new_df) <- x
+  
+  # For each group
+  for (id in unlist(gameIds)) {
+    game <- game_stats[game_stats$gameId == id,]
+    
+      # Removed 40 of 41 the players with 0 brownlow votes.
+    if (balanced) {
+      # Read in the stats of the players
+      game$id <- 1:nrow(game)
+     
+      # Removed 40 of 41 the players with 0 brownlow votes.
+      indices <- unlist(game[game$Brownlow.Votes == 0,]$id)
+
+      # Select all but the first
+      indices <- indices[2:length(indices)]
+
+      # Remove the selected rows, to be left with a single 0, 1, 2, and 3 brownlow votes row
+      player_ids <- unlist(game[-indices,]$id)
+    }
+  
+    # For each player in the group, get the rest of the players in that group and aggregate their stats
+    for (row_index in player_ids) {
+  
+      # Get the player row
+      player <- game[c(row_index),]
+  
+      # Get the rest of the rows seperately.
+      rest_of_players <- game[-c(row_index),]
+  
+      # Drop columns because they appeared again
+      player_filtered <- player[,names(player) %in% stat_cols]
+      rest_of_players_filtered <- rest_of_players[ , names(rest_of_players) %in% stat_cols]
+  
+      # Get the mean value of each column, then add value and stats columns
+      player_agg <- data.frame(colMeans(rest_of_players_filtered))
+      player_agg$stat <- rownames(player_agg)
+      player_agg$value <- player_agg$colMeans.rest_of_players_filtered.
+      
+      # Shift the columns to rows but has a column header this time for both dataframes.
+      player_filtered <- pivot_longer(player_filtered, names_to="stat", values_to="value", cols=all_of(stat_cols))
+  
+      # Evaluate the performance of the player vs the rest of the players in the game
+      performance <- data.frame(performance = (player_filtered$value / player_agg$value) - 1, stat = player_agg$stat)
+  
+      # Replace the Inf values with 1 = 100%, 0 would not represent the player having beat all the other players.
+      is.na(performance)<-sapply(performance, is.infinite)
+      performance[is.na(performance)]<-1
+  
+      # Shift rows to columns
+      performance <- pivot_wider(data=performance, names_from="stat", values_from="performance")
+  
+      # Add % played column
+      performance[xPlayed] <- as.matrix(player[xPlayed])[1] /100
+  
+      # Add label column
+      performance[label] <- as.matrix(player[label])[1]
+  
+      # Add the row to the new data frame.
+      new_df[nrow(new_df) + 1,] <- performance[1,]
+      
+    }
+    print(paste("Finished Game ", id))
+  }
+  
+  return(new_df)
+}
+```
+### Create the performance dataset
+```{r}
+performance_df = create_performance_dataset(100)
+performance_df
+```
+
+### Create more balanced performance dataset
+```{r}
+balanced_performance_df = create_performance_dataset(1000, TRUE)
+balanced_performance_df
+```
+
 
 ## Save datasets
 ```{r}
-write.csv(stat_df, "../../data/preprocessed_stats_per_unque_round.csv", row.names=FALSE)
-write.csv(per_player_agg, "../../data/preprocessed_stats_per_career.csv", row.names=FALSE)
-write.csv(all_stats, "../../data/preprocessed_all_stats.csv", row.names=FALSE)
+write.csv(stat_df, "../../data/stats_per_unique_round.csv", row.names=FALSE)
+write.csv(per_player_agg, "../../data/stats_per_career.csv", row.names=FALSE)
+write.csv(all_stats, "../../data/all_stats.csv", row.names=FALSE)
+write.csv(performance_df, "../../data/raw_performance.csv", row.names=FALSE)
+write.csv(balanced_performance_df, "../../data/performance.csv", row.names=FALSE)
 ```
-    
+
+
 
 
 

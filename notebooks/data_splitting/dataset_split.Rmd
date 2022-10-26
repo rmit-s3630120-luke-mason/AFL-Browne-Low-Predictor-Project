@@ -24,9 +24,11 @@ library(benchmarkme)
 
 Load in the Raw Stats
 ```{r}
-stat_df = read.csv("../../data/preprocessed_stats_per_round.csv")
-per_player_agg = read.csv("../../data/preprocessed_stats_per_player.csv")
-all_stats = read.csv("../../data/preprocessed_all_stats.csv")
+stat_df = read.csv("../../data/stats_per_unique_round.csv")
+per_player_agg = read.csv("../../data/stats_per_career.csv")
+all_stats = read.csv("../../data/all_stats.csv")
+raw_performance = read.csv("../../data/raw_performance.csv")
+performance = read.csv("../../data/performance.csv")
 ```
 
 Splitting the raw_stats into train and test sets, with 10% test and 90% training data
@@ -36,44 +38,32 @@ Splitting the raw_stats into train and test sets, with 10% test and 90% training
 
 split <- function(df, name, seed = 3456) {
   set.seed(seed)
-  trainIndex <- createDataPartition(df$Brownlow.Votes, p = .9, list = FALSE, times = 1)
+  testIndex <- createDataPartition(df$Brownlow.Votes, p = .1, list = FALSE, times = 1)
   
   # Write train and test sets to files.
-  write.csv(raw_stats[ trainIndex,], paste("../../data/train_", name, ".csv"), row.names=FALSE)
-  write.csv(raw_stats[-trainIndex,], paste("../../data/test_", name, ".csv"), row.names=FALSE)
+  write.csv(df[-testIndex,], paste("../../data/train_", name, ".csv", sep=""), row.names=FALSE)
+  write.csv(df[testIndex,], paste("../../data/test_", name, ".csv", sep=""), row.names=FALSE)
 }
 
-split(stat_df, "preprocessed_stats_per_round")
-split(per_player_agg, "preprocessed_stats_per_player")
-split(all_stats, "preprocessed_all_stats")
-
-
+split(stat_df, "stats_per_unique_round")
+split(per_player_agg, "stats_per_career")
+split(all_stats, "all_stats")
+split(raw_performance, "raw_performance")
+split(performance, "performance")
 ```
 
 #### Analysis of Split
 Read train and test sets from files.
 ```{r}
-
-analyse <- function(df, name) {
-  train <- read.csv(paste("../../data/", name, ".csv"))
-  test <- read.csv(paste("../../data/", name, ".csv"))
-  
-  histCompare(train$Disposals, test$Disposals, "Disposals Train vs Test", "Disposals")
-
-}
-
-```
-
-
-```{r}
-histCompare <- function(train, test, title, xlabel, print=TRUE) {
+histCompare <- function(train, test, title, xlabel, print=TRUE, n=10) {
   c1 <- rgb(173,216,230,max = 255, alpha = 80, names = "lt.blue")
   c2 <- rgb(255,192,203, max = 255, alpha = 80, names = "lt.pink")
   train_set <- as.matrix(train)
   test_set <- as.matrix(test)
   b <- min(c(train_set,test_set)) # Set the minimum for the breakpoints
   e <- max(c(train_set,test_set)) # Set the maximum for the breakpoints
-  ax <- pretty(b:e, n = 12) # Make a neat vector for the breakpoints
+  
+  ax <- seq(b-0.1,e+0.1, by=0.1) # Make a neat vector for the breakpoints
   hgA <- hist(train_set, breaks = ax, plot = FALSE) # Save first histogram data
   hgB <- hist(test_set, breaks = ax, plot = FALSE) # Save 2nd histogram data
   plot(hgA, col = c1, main=title, xlab=xlabel) # Plot 1st histogram using a transparent color
@@ -86,6 +76,36 @@ histCompare <- function(train, test, title, xlabel, print=TRUE) {
     print(table(test_set))
   }
 }
+
+analyse <- function(name, n=10) {
+  train <- read.csv(paste("../../data/train_", name, ".csv", sep=""))
+  test <- read.csv(paste("../../data/test_", name, ".csv", sep=""))
+  
+  for (col in colnames(train)) {
+    histCompare(train[col], test[col], paste(col,"Train vs Test"), col, FALSE, n)  
+  }
+}
+```
+
+
+```{r}
+analyse("stats_per_unique_round", n=100)
+```
+
+```{r}
+analyse("stats_per_career", n=100)
+```
+
+```{r}
+analyse("all_stats", n=100)
+```
+
+```{r}
+analyse("performance", n=100)
+```
+
+```{r}
+analyse("raw_performance", n=100)
 ```
 
 

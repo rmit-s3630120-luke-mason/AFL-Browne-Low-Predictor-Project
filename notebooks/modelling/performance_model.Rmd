@@ -1,0 +1,241 @@
+---
+title: "AFL Modelling"
+output: html_notebook
+---
+
+```{r}
+install.packages("dplyr")
+```
+
+
+Read train and test sets from files.
+```{r}
+library(dplyr)
+
+dataset_name = "all_stats"
+# dataset_name = "stats_per_player"
+# dataset_name = "stats_per_round"
+
+# Round training data contains brownlow (target label) values including 3.
+# Process the data so that it isn't so skewed
+train <- read.csv(paste("../../data/train_preprocessed_", dataset_name,".csv"))
+test <- read.csv(paste("../../data/test_preprocessed_", dataset_name,".csv"))
+
+# Move target column to first
+train <- train %>% select(Brownlow.Votes, everything())
+test <- test %>% select(Brownlow.Votes, everything())
+```
+
+#============================== Create Data List =============================
+```{r}
+# summary(as.matrix(train[,2:6]))
+# print(as.matrix(train[,2:6]))
+
+y <- train$SalePrice.100K.
+x <- as.matrix(train[,2:6])
+xPred = as.matrix(test[,2:6])
+
+# The evaluation Guesses as per the assignment.
+# guesses <- data.frame(
+#   "Area" =         c(600, 800, 1500, 2500, 250), 
+#   "Bedrooms" =     c(2,   3,   2,    5,    3),
+#   "Bathrooms" =    c(2,   1,   1,    4,    2),
+#   "CarParks" =     c(1,   2,   1,    4,    1),
+#   "PropertyType" = c(1,   0,   0,    0,    1)
+# )
+
+xGuess = as.matrix(guesses)
+
+dataList = list(
+  x = x,
+  y = y,
+  xPred = xPred,
+  xGuess = xGuess,
+  rowCount = length(y),
+  colCount = ncol(x), 
+  predCount = nrow(xPred),
+  guessCount = nrow(xGuess)
+)
+```
+
+
+#======================= Writing the Model to Text File =======================
+```{r}
+modelString = "
+data {
+  yMean <- mean(y)
+ 
+  # Specify the priors for original beta parameters
+  # Prior locations to reflect the expert information
+  # Regression coeffient in LR indicates how much 1 unit of change of the 
+  # predictor increases the log odds of outcome 1.
+  # Set to overall mean a priori based on the interpretation of constant term in regression
+  
+  mu0 <- yMean 
+  mu[1] <- 90/100000  # Area         -   90 AUD per sqr meter       discrete
+  mu[2] <- 1          # Bedrooms     -   100,000 AUD per bedroom    ordinal variable
+  mu[3] <- 0          # Bathrooms    -   0 no expert knowledge      ordinal variable
+  mu[4] <- 1.2        # CarParks     -   120,000 AUD per car park   ordinal variable
+  mu[5] <- -1.5       # PropertyType -  -150,000 AUD for 1, 0 for 0 categorical
+  # Prior variances to reflect the expert information
+  Var0   <- 1.00000 # Set simply to 1
+  Var[1] <- 0.0000000001  # Area         - Very Strong
+  Var[2] <- 0.00300   # Bedrooms     - Weak
+  Var[3] <- 1000.00  # Bathrooms    - None
+  Var[4] <- 0.00010   # CarParks     - Strong
+  Var[5] <- 0.000001  # PropertyType - Very Strong
+}
+# Model
+model {
+  beta0   ~ dnorm(mu0,  1/Var0)  
+  beta[1] ~ dnorm(mu[1], 1/Var[1])
+  beta[2] ~ dnorm(mu[2], 1/Var[2])
+  beta[3] ~ dnorm(mu[3], 1/Var[3])
+  beta[4] ~ dnorm(mu[4], 1/Var[4])
+  beta[5] ~ dnorm(mu[5], 1/Var[5])
+  # High variance as it is unknown
+  precision ~ dexp(1/30.0) 
+  
+  for (i in 1:rowCount) {
+  
+    # Normal Likelihood
+    y[i] ~ dnorm(beta0 + 
+          (beta[1] * x[i,1]) +
+          (beta[2] * x[i,2]) +
+          (beta[3] * x[i,3]) +
+          (beta[4] * x[i,4]) +
+          (beta[5] * x[i,5]), precision)
+  }
+  # Compute predictions at every step of the MCMC
+  for (k in 1:predCount) {
+    pred[k] <- beta0 + 
+        (beta[1] * xPred[k,1]) + 
+        (beta[2] * xPred[k,2]) + 
+        (beta[3] * xPred[k,3]) + 
+        (beta[4] * xPred[k,4]) +
+        (beta[5] * xPred[k,5])
+  }
+  
+  for (k in 1:guessCount) {
+    guess[k] <- beta0 + 
+        (beta[1] * xGuess[k,1]) + 
+        (beta[2] * xGuess[k,2]) + 
+        (beta[3] * xGuess[k,3]) + 
+        (beta[4] * xGuess[k,4]) +
+        (beta[5] * xGuess[k,5])
+  }
+}"
+
+writeLines(modelString, con="TEMPmodel.txt")
+```
+
+# Linear Regression
+```{r}
+parameters = c("beta0")
+for ( i in 1:5){
+  parameters = c(parameters, paste0("beta[",i,"]"))
+}
+for ( i in 1:nrow(xGuess)){
+  parameters = c(parameters, paste0("guess[",i,"]"))
+}
+for ( i in 1:nrow(xPred)){
+  parameters = c(parameters, paste0("pred[",i,"]"))
+}
+
+
+adaptSteps = 50
+burnInSteps = 100
+nChains = 2
+thinSteps = 17
+numSavedSteps = 15000
+
+nIter = ceiling( ( numSavedSteps * thinSteps ) / nChains )
+
+startTime = proc.time()
+# sink("debug2.txt")
+runJagsOut <- run.jags( method="parallel" ,
+                        model="TEMPmodel.txt" ,
+                        monitor=parameters  ,
+                        data=dataList ,
+                        n.chains=nChains ,
+                        adapt=adaptSteps ,
+                        burnin=burnInSteps ,
+                        sample=numSavedSteps ,
+                        thin=thinSteps , summarise=FALSE , plots=FALSE )
+stopTime = proc.time()
+duration = stopTime - startTime
+show(duration)
+codaSamples = as.mcmc.list( runJagsOut )
+# sink()
+# save( codaSamples , file=paste("A2Run4","Mcmc.Rdata",sep="") )
+# save.image(file='A2Run4.RData')
+```
+
+# ============= Display Results ============
+```{r}
+diagMCMC( codaSamples , parName="beta0" )
+for ( i in 1:5){
+  diagMCMC( codaSamples , parName=paste0("beta[",i,"]") )
+}
+
+
+graphics.off()
+
+compVal <- data.frame("beta0" = 1, "beta[1]" = 90/100000, "beta[2]" = 1, "beta[3]" = 2, "beta[4]" =  1.2, "beta[5]" =  -1.5, check.names=FALSE)
+summaryInfo <- smryMCMC( codaSamples = codaSamples , compVal = compVal, saveName="SummaryInfo" )
+
+
+plotMCMC_HD( codaSamples = codaSamples, data = price_data, xName=c("Area","Bedrooms","Bathrooms","CarParks", "PropertyType") ,
+             yName="SalePrice.100K.", compVal = compVal, preds = TRUE)
+```
+
+# ============ Predictive check ============
+```{r}
+modes = summaryInfo[,"Mode"]
+# 14 is the number of rows skipping beta and heading rows = (6 + 5 + 2)
+predictions = modes[13:length(modes) - 1]
+real = c(test$SalePrice.100K.)
+length(predictions)
+length(real)
+n = length(real)
+# MAE
+sum(abs(predictions - real))/n
+# MSE
+mse = sum((real - predictions)^2)
+mse
+# RMSE
+sqrt(mse/n)
+```
+
+
+#========= Guess Check ===============
+```{r}
+print(modes[8:12])
+```
+
+#=============================RUN 1 EXAMPLE Overwrite================================
+Var0 <- 1 # Set simply to 1
+Var[1] <- 0.01  # Area         - Very Strong
+Var[2] <- 1   # Bedrooms     - Weak
+Var[3] <- 1000  # Bathrooms    - None
+Var[4] <- 0.1   # CarParks     - Strong
+Var[5] <- 0.01  # PropertyType - Very Strong
+Simple models move away from the starting values fairly quickly and so there 
+is no need to have a lot of burn in after the adaptation, as the iterations discarded during adaptation is ususally enough.
+
+adaptSteps = 50
+burnInSteps = 100
+nChains = 2
+thinSteps = 23
+numSavedSteps = 5000
+
+user  system elapsed 
+8.42    1.50  419.23 
+
+MAE = 3.359888
+MSE = 30779.89
+RMSE = 5.550739
+
+save( codaSamples , file=paste("A2Run1","Mcmc.Rdata",sep="") )
+save.image(file='A2Run1.RData')
+load('A2Run1.RData')
