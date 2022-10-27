@@ -1,0 +1,38 @@
+
+	data {
+	  yMean <- mean(y)
+	  
+	  # There was no expert information and because we have a lot of data, we 
+	  # made the variances very high and mu = 0 so that the model can converge 
+	  # without priors effecting the results much.
+	  mu0 <- yMean
+	  for (i in 1:colCount) {
+	    mu[i] <- 0
+	  }
+	  
+	  Var0   <- 1000 # Set simply to 1
+	  for (i in 1:colCount) {
+	    Var[i] <- 1000
+	  }
+	}
+	
+	# Model
+	model {
+	  beta0   ~ dnorm(mu0,  1/Var0)
+	  for (j in 1:colCount) {
+	    beta[j] ~ dnorm(mu[j], 1/Var[j])
+	  }
+	  
+	  precision ~ dexp(1/0.25) 
+	  
+	  for (i in 1:rowCount) {
+	  
+	    # Normal Likelihood
+	    y[i] ~ dnorm(beta0 + sum(beta[1:colCount]*x[i,1:colCount]), precision)
+	  }
+
+    for (k in 1:predCount) {
+      pred[k] <- beta0 + sum(beta[1:colCount]*xPred[k,1:colCount])
+    }
+}
+
