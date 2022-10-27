@@ -124,7 +124,9 @@ codaSamples = as.mcmc.list( runJagsOut )
 save( codaSamples , file=paste("Run1","Mcmc.Rdata",sep="") )
 save.image(file='Run1.RData')
 ```
-
+```{r}
+load.image(file='Run1.RData')
+```
 ### Results
 ```{r}
 
