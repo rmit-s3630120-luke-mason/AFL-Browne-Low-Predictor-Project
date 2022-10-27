@@ -17,6 +17,7 @@ library(benchmarkme)
 ```{r}
 train <- read.csv("../../data/train_performance.csv")
 test <- read.csv("../../data/test_performance.csv")
+test_balanced <- read.csv("../../data/test_balanced_performance.csv")
 performance <- read.csv("../../data/performance.csv")
 ```
 
@@ -42,7 +43,9 @@ summary(x)
 ```
 
 
-
+```{r}
+table(x)
+```
 ### JAGS Model
 ```{r}
 	modelString = "
@@ -124,15 +127,17 @@ codaSamples = as.mcmc.list( runJagsOut )
 save( codaSamples , file=paste("Run1","Mcmc.Rdata",sep="") )
 save.image(file='Run1.RData')
 ```
+# Load save
 ```{r}
 load.image(file='Run1.RData')
 ```
+
 ### Results
 ```{r}
 
 # ============= Display Results ============
 diagMCMC( codaSamples , parName="beta0" )
-for ( i in 1:22){
+for ( i in 1:22) {
   diagMCMC( codaSamples , parName=paste0("beta[",i,"]") )
 }
 
@@ -166,50 +171,116 @@ compVal <- data.frame(
 summaryInfo <- smryMCMC( codaSamples = codaSamples , compVal = compVal, saveName="SummaryInfo" )
 
 
-plotMCMC_HD( codaSamples = codaSamples, data = performance, xName=c(
-  "Behinds",
-  "Bounces",
-  "Clangers",
-  "Clearances",
-  "Contested.Marks",
-  "Contested.Possessions",
+plotMCMC_HD( codaSamples = codaSamples, data = train_balanced, xName=c(
   "Disposals",
-  "Frees",
-  "Frees.Against",
-  "Goal.Assists",
-  "Goals",
-  "Handballs",
-  "Hit.Outs",
-  "Inside.50s",
   "Kicks",
   "Marks",
+  "Handballs",
+  "Goals",
+  "Behinds",
+  "Hit.Outs",
+  "Tackles",
+  "Rebounds",
+  "Inside.50s",
+  "Clearances",
+  "Clangers",
+  "Frees",
+  "Frees.Against",
+  "Contested.Possessions",
+  "Uncontested.Possessions",
+  "Contested.Marks",
   "Marks.Inside.50",
   "One.Percenters",
-  "Rebounds",
-  "Tackles",
-  "Uncontested.Possessions",
+  "Bounces",
+  "Goal.Assists",
   "X..Played"
  ),
  yName="Brownlow.Votes", compVal = compVal, preds = TRUE)
+```
 
+```{r}
+plotMCMC_HD( codaSamples = codaSamples, data = train_balanced, xName=c("Behinds", "Bounces", "Clangers", "Clearances", "Contested.Marks", "Contested.Possessions",
+    "Disposals", "Frees", "Frees.Against", "Goal.Assists", "Goals", "Handballs",
+    "Hit.Outs", "Inside.50s", "Kicks", "Marks", "Marks.Inside.50", "One.Percenters", "Rebounds",
+    "Tackles", "Uncontested.Possessions"), yName="Brownlow.Votes", compVal = compVal, preds = TRUE)
+```
+
+```{r}
+pred <- c()
+mode <- summaryInfo[,"Mode"]
+xPred2 = as.matrix(test_balanced[,1:22])
+for (k in 1:nrow(xPred)) {
+ 
+  pred[k] <- mode["beta0"] +
+    (mode["beta[1]"]*xPred2[k,1]) +
+    (mode["beta[2]"]*xPred2[k,2]) + 
+    (mode["beta[3]"]*xPred2[k,3]) + 
+    (mode["beta[4]"]*xPred2[k,4]) + 
+    (mode["beta[5]"]*xPred2[k,5]) +
+    (mode["beta[6]"]*xPred2[k,6]) +
+    (mode["beta[7]"]*xPred2[k,7]) +
+    (mode["beta[8]"]*xPred2[k,8]) +
+    (mode["beta[9]"]*xPred2[k,9]) +
+    (mode["beta[10]"]*xPred2[k,10]) +
+    (mode["beta[11]"]*xPred2[k,11]) +
+    (mode["beta[12]"]*xPred2[k,12]) +
+    (mode["beta[13]"]*xPred2[k,13]) +
+    (mode["beta[14]"]*xPred2[k,14]) +
+    (mode["beta[15]"]*xPred2[k,15]) +
+    (mode["beta[16]"]*xPred2[k,16]) +
+    (mode["beta[17]"]*xPred2[k,17]) +
+    (mode["beta[18]"]*xPred2[k,18]) +
+    (mode["beta[19]"]*xPred2[k,19]) +
+    (mode["beta[20]"]*xPred2[k,20]) +
+    (mode["beta[21]"]*xPred2[k,21]) +
+    (mode["beta[22]"]*xPred2[k,22])
+}
 ```
 
 # ============ Predictive check ============
 ```{r}
-# modes = summaryInfo[,"Mode"]
-# # 14 is the number of rows skipping beta and heading rows = (6 + 5 + 2)
-# predictions = modes[13:length(modes) - 1]
-# real = c(test$SalePrice.100K.)
-# length(predictions)
-# length(real)
-# n = length(real)
-# # MAE
-# sum(abs(predictions - real))/n
-# # MSE
-# mse = sum((real - predictions)^2)
-# mse
-# # RMSE
-# sqrt(mse/n)
+performance_test <- function (predictions) {
+  real = c(test$Brownlow.Votes)
+  length(predictions)
+  length(real)
+  n = length(real)
+  print(paste("MAE:", sum(abs(predictions - real))/n))
+  print(paste("MSE:", sum((real - predictions)^2)))
+  print(paste("RMSE:", sqrt(mse/n)))
+}
 
-failed.JAGS("model")
+performance_test(pred)
+```
+
+
+```{r}
+library(dplyr)
+library(tidyr)
+
+test$pred <- pred
+
+
+leaderboard = c()
+for (id in unlist(test$gameId[1])) {
+  game <- test[test$gameId == id,]
+  ordered <- game[order(-game$pred),]
+  top_3_rows <- head(ordered, 3)
+  
+  # Reverse order so that brownlow predictions can be equal to index
+  top_3_rows <- top_3_rows[order(top_3_rows$pred),]
+  for (row in top_3_rows) {
+    id_name = paste(row$displayName, row$playerId, sep="_")
+    score <- 0
+    if (!is.null(leaderboard[id_name])) {
+      score <- leaderboard[id_name]
+    }
+
+    leaderboard[id_name] <- score +
+  }
+}
+```
+
+```{r}
+hi = c()
+!is.null(hi["yo"])
 ```
