@@ -1,5 +1,5 @@
 ---
-title: "AFL Modelling"
+title: "AFL Modelling of Performance Per Game"
 output: html_notebook
 ---
 ```{r}
@@ -17,29 +17,28 @@ library(benchmarkme)
 ```{r}
 train <- read.csv("../../data/train_performance.csv")
 test <- read.csv("../../data/test_performance.csv")
+performance <- read.csv("../../data/performance.csv")
 ```
 
 # Modelling
 ```{r}
+colnames(train[,1:22])
 y <- train$Brownlow.Votes
 x <- as.matrix(train[,1:22])
-x <- x[,-15]
 xPred = as.matrix(test[,1:22])
-xPred <- -xPred[,-15]
 
 dataList = list(
   x = x,
-  y = y,
-  xPred = xPred,
-  rowCount = length(y),
   colCount = ncol(x), 
+  
+  y = y,
+  rowCount = length(y),
+  
+  xPred = xPred,
   predCount = nrow(xPred)
 )
 
 summary(x)
-
-
-
 ```
 
 
@@ -49,41 +48,16 @@ summary(x)
 	modelString = "
 	data {
 	  yMean <- mean(y)
-	 
-	  # Specify the priors for original beta parameters
-	  # Prior locations to reflect the expert information
-	  # Regression coeffient in LR indicates how much 1 unit of change of the 
-	  # predictor increases the log odds of outcome 1.
-	  # Set to overall mean a priori based on the interpretation of constant term in regression
 	  
+	  # There was no expert information and because we have a lot of data, we 
+	  # made the variances very high and mu = 0 so that the model can converge 
+	  # without priors effecting the results much.
 	  mu0 <- yMean
-	  mu[1] <- 0
-	  mu[2] <- 0
-	  mu[3] <- 0
-	  mu[4] <- 0
-	  mu[5] <- 0
-	  mu[6] <- 0
-	  mu[7] <- 0
-	  mu[8] <- 0
-	  mu[9] <- 0
-	  mu[10] <- 0
-	  mu[11] <- 0
-	  mu[12] <- 0
-	  mu[13] <- 0
-	  mu[14] <- 0
-	  mu[15] <- 0
-	  mu[16] <- 0
-	  mu[17] <- 0
-	  mu[18] <- 0
-	  mu[19] <- 0
-	  mu[20] <- 0
-	  mu[21] <- 0
-	  mu[22] <- 0
+	  for (i in 1:colCount) {
+	    mu[i] <- 0
+	  }
 	  
-	  
-	  
-	  # Prior Variances to reflect the expert information
-	  Var0   <- 1000.00000 # Set simply to 1
+	  Var0   <- 1000 # Set simply to 1
 	  for (i in 1:colCount) {
 	    Var[i] <- 1000
 	  }
@@ -94,28 +68,23 @@ summary(x)
 	  beta0   ~ dnorm(mu0,  1/Var0)
 	  for (j in 1:colCount) {
 	    beta[j] ~ dnorm(mu[j], 1/Var[j])
-	    }
+	  }
 	  
-	  
-	  # ... Variance as it is ...
 	  precision ~ dexp(1/0.25) 
 	  
 	  for (i in 1:rowCount) {
 	  
 	    # Normal Likelihood
-	    #for (i in 1:rowCount) {
-	    #beta0   ~ dnorm(mu0,  1/Var0) + a 
-	    y[i] ~ dnorm(beta0 + sum(beta[1:colCount]*x[i,1:colCount]) , precision)
+	    y[i] ~ dnorm(beta0 + sum(beta[1:colCount]*x[i,1:colCount]), precision)
 	  }
-	    # Compute predictions at every step of the MCMC
-	    # HOW DO I MAKE THIS INTO A FOR LOOP AAAAAAA
-  for (k in 1:predCount) {
-    pred[k] <- beta0 + sum(beta[1:colCount]*xPred[k,1:colCount])
-  }
+
+    for (k in 1:predCount) {
+      pred[k] <- beta0 + sum(beta[1:colCount]*xPred[k,1:colCount])
+    }
 }
 "
 	
-	writeLines(modelString, con="TEMPmodel.txt")
+	writeLines(modelString, con="TEMPmodel2.txt")
 ```
 ### Run JAGS
 ```{r}
@@ -139,25 +108,26 @@ nIter = ceiling( ( numSavedSteps * thinSteps ) / nChains )
 startTime = proc.time()
 # sink("debug2.txt")
 runJagsOut <- run.jags( method="parallel" ,
-                        model="TEMPmodel.txt" ,
-                        monitor=parameters  ,
-                        data=dataList ,
-                        n.chains=nChains ,
-                        adapt=adaptSteps ,
-                        burnin=burnInSteps ,
-                        sample=numSavedSteps ,
+                        model="TEMPmodel2.txt",
+                        monitor=parameters,
+                        data=dataList,
+                        n.chains=nChains,
+                        adapt=adaptSteps,
+                        burnin=burnInSteps,
+                        sample=numSavedSteps,
                         thin=thinSteps , summarise=FALSE , plots=FALSE )
 stopTime = proc.time()
 duration = stopTime - startTime
 show(duration)
 codaSamples = as.mcmc.list( runJagsOut )
 # sink()
-# save( codaSamples , file=paste("A2Run4","Mcmc.Rdata",sep="") )
-# save.image(file='A2Run4.RData')
+save( codaSamples , file=paste("Run1","Mcmc.Rdata",sep="") )
+save.image(file='Run1.RData')
 ```
 
 ### Results
 ```{r}
+
 # ============= Display Results ============
 diagMCMC( codaSamples , parName="beta0" )
 for ( i in 1:22){
@@ -165,44 +135,65 @@ for ( i in 1:22){
 }
 
 compVal <- data.frame(
-  "beta0" = 1, 
-  "beta[1]" = 15,
-  "beta[2]" = 10, 
-  "beta[3]" = 5, 
-  "beta[4]" =  0.7, 
-  "beta[5]" =  0.5,
-  "beta[6]" =  2,
-  "beta[7]" =  4,
-  "beta[8]" =  1,
-  "beta[9]" =  2,
-  "beta[10]" =  4,
-  "beta[11]" =  1,
-  "beta[12]" =  2,
-  "beta[13]" =  1,
-  "beta[14]" =  1.5,
-  "beta[15]" =  1.3,
-  "beta[16]" =  1.3,
-  "beta[17]" =  7,
-  "beta[18]" =  10,
-  "beta[19]" =  1,
-  "beta[20]" =  3,
-  "beta[21]" =  0.8,
+  "beta0" = 0, 
+  "beta[1]" = 0,
+  "beta[2]" = 0, 
+  "beta[3]" = 0, 
+  "beta[4]" =  0, 
+  "beta[5]" =  0,
+  "beta[6]" =  0,
+  "beta[7]" =  0,
+  "beta[8]" =  0,
+  "beta[9]" =  0,
+  "beta[10]" =  0,
+  "beta[11]" =  0,
+  "beta[12]" =  0,
+  "beta[13]" =  0,
+  "beta[14]" =  0,
+  "beta[15]" =  0,
+  "beta[16]" =  0,
+  "beta[17]" =  0,
+  "beta[18]" =  0,
+  "beta[19]" =  0,
+  "beta[20]" =  0,
+  "beta[21]" =  0,
+  "beta[22]" =  0,
   check.names=FALSE)
-
-#===============================================================================
-#smryMCMC = function()
-
-#===============================================================================
 
 
 summaryInfo <- smryMCMC( codaSamples = codaSamples , compVal = compVal, saveName="SummaryInfo" )
 
 
-plotMCMC_HD( codaSamples = codaSamples, data = price_data, xName=c("disposals","kicks","handballs","goals", "behind","hitouts", "tackles", "rebound", "inside50s","clearances","clangers","frees","frees_against","contested_possessions","uncontested_possesions","contested_marks","marks","marks_inside50") ,
-             yName="Brownlow.", compVal = compVal, preds = TRUE)
-# 
-# 
-# # ============ Predictive check ============
+plotMCMC_HD( codaSamples = codaSamples, data = performance, xName=c(
+  "Behinds",
+  "Bounces",
+  "Clangers",
+  "Clearances",
+  "Contested.Marks",
+  "Contested.Possessions",
+  "Disposals",
+  "Frees",
+  "Frees.Against",
+  "Goal.Assists",
+  "Goals",
+  "Handballs",
+  "Hit.Outs",
+  "Inside.50s",
+  "Kicks",
+  "Marks",
+  "Marks.Inside.50",
+  "One.Percenters",
+  "Rebounds",
+  "Tackles",
+  "Uncontested.Possessions",
+  "X..Played"
+ ),
+ yName="Brownlow.Votes", compVal = compVal, preds = TRUE)
+
+```
+
+# ============ Predictive check ============
+```{r}
 # modes = summaryInfo[,"Mode"]
 # # 14 is the number of rows skipping beta and heading rows = (6 + 5 + 2)
 # predictions = modes[13:length(modes) - 1]
