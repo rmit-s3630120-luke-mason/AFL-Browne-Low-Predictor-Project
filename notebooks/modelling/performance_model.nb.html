@@ -1770,8 +1770,8 @@ pre code {
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc291cmNlKFwiLi4vLi4vdXRpbGl0aWVzL0RCREEyRS11dGlsaXRpZXMuUlwiKVxuYGBgIn0= -->
-<pre class="r"><code>source(&quot;../../utilities/DBDA2E-utilities.R&quot;)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc291cmNlKFwiLi4vLi4vdXRpbGl0aWVzL01vZGVsMlNjcmlwdHMuUlwiKVxuYGBgIn0= -->
+<pre class="r"><code>source(&quot;../../utilities/Model2Scripts.R&quot;)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-begin eyJkYXRhIjoiXG4qKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKipcbktydXNjaGtlLCBKLiBLLiAoMjAxNSkuIERvaW5nIEJheWVzaWFuIERhdGEgQW5hbHlzaXMsIFNlY29uZCBFZGl0aW9uOlxuQSBUdXRvcmlhbCB3aXRoIFIsIEpBR1MsIGFuZCBTdGFuLiBBY2FkZW1pYyBQcmVzcyAvIEVsc2V2aWVyLlxuKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqXG4ifQ== -->
 <pre><code>
@@ -1780,405 +1780,122 @@ Kruschke, J. K. (2015). Doing Bayesian Data Analysis, Second Edition:
 A Tutorial with R, JAGS, and Stan. Academic Press / Elsevier.
 *********************************************************************</code></pre>
 <!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiTG9hZGluZyByZXF1aXJlZCBwYWNrYWdlOiBjb2RhXG5MaW5rZWQgdG8gSkFHUyA0LjMuMVxuTG9hZGVkIG1vZHVsZXM6IGJhc2Vtb2QsYnVnc1xuIn0= -->
-<pre><code>Loading required package: coda
-Linked to JAGS 4.3.1
-Loaded modules: basemod,bugs</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc291cmNlKFwiLi4vLi4vdXRpbGl0aWVzL01vcmVVdGlsaXRpZXMuUlwiKVxubGlicmFyeShnZ3Bsb3QyKVxubGlicmFyeShnZ3B1YnIpXG5saWJyYXJ5KGtzKVxubGlicmFyeShyamFncylcbmxpYnJhcnkocnVuamFncylcbmxpYnJhcnkoYmVuY2htYXJrbWUpXG5gYGAifQ== -->
-<pre class="r"><code>source(&quot;../../utilities/MoreUtilities.R&quot;)
-library(ggplot2)
-library(ggpubr)
-library(ks)
-library(rjags)
-library(runjags)
-library(benchmarkme)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<div id="read-train-and-test-sets-from-files." class="section level2">
-<h2>Read train and test sets from files.</h2>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudGVzdF9iYWxhbmNlZCA8LSByZWFkLmNzdihcIi4uLy4uL2RhdGEvdGVzdF9iYWxhbmNlZF9wZXJmb3JtYW5jZS5jc3ZcIilcblxuYGBgIn0= -->
-<pre class="r"><code>test_balanced &lt;- read.csv(&quot;../../data/test_balanced_performance.csv&quot;)
-</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiV2FybmluZzogY2Fubm90IG9wZW4gZmlsZSAnLi4vLi4vZGF0YS90ZXN0X2JhbGFuY2VkX3BlcmZvcm1hbmNlLmNzdic6IE5vIHN1Y2ggZmlsZSBvciBkaXJlY3RvcnlFcnJvciBpbiBmaWxlKGZpbGUsIFwicnRcIikgOiBjYW5ub3Qgb3BlbiB0aGUgY29ubmVjdGlvblxuIn0= -->
-<pre><code>Warning: cannot open file &#39;../../data/test_balanced_performance.csv&#39;: No such file or directoryError in file(file, &quot;rt&quot;) : cannot open the connection</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-</div>
-<div id="modelling" class="section level1">
-<h1>Modelling</h1>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY29sbmFtZXModHJhaW5bLDE6MjJdKVxuYGBgIn0= -->
-<pre class="r"><code>colnames(train[,1:22])</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiIFsxXSBcIkJlaGluZHNcIiAgICAgICAgICAgICAgICAgXCJCb3VuY2VzXCIgICAgICAgICAgICAgICAgIFwiQ2xhbmdlcnNcIiAgICAgICAgICAgICAgICBcIkNsZWFyYW5jZXNcIiAgICAgICAgICAgICAgXCJDb250ZXN0ZWQuTWFya3NcIiAgICAgICAgXG4gWzZdIFwiQ29udGVzdGVkLlBvc3Nlc3Npb25zXCIgICBcIkRpc3Bvc2Fsc1wiICAgICAgICAgICAgICAgXCJGcmVlc1wiICAgICAgICAgICAgICAgICAgIFwiRnJlZXMuQWdhaW5zdFwiICAgICAgICAgICBcIkdvYWwuQXNzaXN0c1wiICAgICAgICAgICBcblsxMV0gXCJHb2Fsc1wiICAgICAgICAgICAgICAgICAgIFwiSGFuZGJhbGxzXCIgICAgICAgICAgICAgICBcIkhpdC5PdXRzXCIgICAgICAgICAgICAgICAgXCJJbnNpZGUuNTBzXCIgICAgICAgICAgICAgIFwiS2lja3NcIiAgICAgICAgICAgICAgICAgIFxuWzE2XSBcIk1hcmtzXCIgICAgICAgICAgICAgICAgICAgXCJNYXJrcy5JbnNpZGUuNTBcIiAgICAgICAgIFwiT25lLlBlcmNlbnRlcnNcIiAgICAgICAgICBcIlJlYm91bmRzXCIgICAgICAgICAgICAgICAgXCJUYWNrbGVzXCIgICAgICAgICAgICAgICAgXG5bMjFdIFwiVW5jb250ZXN0ZWQuUG9zc2Vzc2lvbnNcIiBcIlguLlBsYXllZFwiICAgICAgICAgICAgICBcbiJ9 -->
-<pre><code> [1] &quot;Behinds&quot;                 &quot;Bounces&quot;                 &quot;Clangers&quot;                &quot;Clearances&quot;              &quot;Contested.Marks&quot;        
- [6] &quot;Contested.Possessions&quot;   &quot;Disposals&quot;               &quot;Frees&quot;                   &quot;Frees.Against&quot;           &quot;Goal.Assists&quot;           
-[11] &quot;Goals&quot;                   &quot;Handballs&quot;               &quot;Hit.Outs&quot;                &quot;Inside.50s&quot;              &quot;Kicks&quot;                  
-[16] &quot;Marks&quot;                   &quot;Marks.Inside.50&quot;         &quot;One.Percenters&quot;          &quot;Rebounds&quot;                &quot;Tackles&quot;                
-[21] &quot;Uncontested.Possessions&quot; &quot;X..Played&quot;              </code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxueSA8LSB0cmFpbiRCcm93bmxvdy5Wb3Rlc1xueCA8LSBhcy5tYXRyaXgodHJhaW5bLDE6MjJdKVxueFByZWQgPSBhcy5tYXRyaXgodGVzdFssMToyMl0pXG5cbmRhdGFMaXN0ID0gbGlzdChcbiAgeCA9IHgsXG4gIGNvbENvdW50ID0gbmNvbCh4KSwgXG4gIFxuICB5ID0geSxcbiAgcm93Q291bnQgPSBsZW5ndGgoeSksXG4gIFxuICB4UHJlZCA9IHhQcmVkLFxuICBwcmVkQ291bnQgPSBucm93KHhQcmVkKVxuKVxuXG5zdW1tYXJ5KHgpXG5gYGAifQ== -->
-<pre class="r"><code>y &lt;- train$Brownlow.Votes
-x &lt;- as.matrix(train[,1:22])
-xPred = as.matrix(test[,1:22])
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBSZWFkIHRyYWluIGFuZCB0ZXN0IHNldHMgZnJvbSBmaWxlcy5cbnRyYWluIDwtIHJlYWQuY3N2KFwiLi4vLi4vZGF0YS90cmFpbl9wZXJmb3JtYW5jZS5jc3ZcIilcbnRlc3QgPC0gcmVhZC5jc3YoXCIuLi8uLi9kYXRhL3Rlc3RfcGVyZm9ybWFuY2UuY3N2XCIpXG5cbnZhcl9jb2xfY291bnQgPC0gMjJcbmBgYCJ9 -->
+<pre class="r"><code># Read train and test sets from files.
+train &lt;- read.csv(&quot;../../data/train_performance.csv&quot;)
+test &lt;- read.csv(&quot;../../data/test_performance.csv&quot;)
 
-dataList = list(
-  x = x,
-  colCount = ncol(x), 
-  
-  y = y,
-  rowCount = length(y),
-  
-  xPred = xPred,
-  predCount = nrow(xPred)
-)
-
-summary(x)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiICAgIEJlaGluZHMgICAgICAgICAgIEJvdW5jZXMgICAgICAgICAgICBDbGFuZ2VycyAgICAgICAgIENsZWFyYW5jZXMgICAgICBDb250ZXN0ZWQuTWFya3MgICBDb250ZXN0ZWQuUG9zc2Vzc2lvbnMgICBEaXNwb3NhbHMgICAgICAgICAgICBGcmVlcyAgICAgICAgXG4gTWluLiAgIDotMS4wMDAwICAgTWluLiAgIDogLTEuMDAwMCAgIE1pbi4gICA6LTEuMDAwMCAgIE1pbi4gICA6LTEuMDAwMCAgIE1pbi4gICA6LTEuMDAwMCAgIE1pbi4gICA6LTEuMDAwMDAgICAgICBNaW4uICAgOi0wLjk0MzcyICAgTWluLiAgIDotMS4wMDAwICBcbiAxc3QgUXUuOi0xLjAwMDAgICAxc3QgUXUuOiAtMS4wMDAwICAgMXN0IFF1LjotMC40MzQyICAgMXN0IFF1LjotMC40NjkxICAgMXN0IFF1LjotMS4wMDAwICAgMXN0IFF1LjotMC4wMzAwOCAgICAgIDFzdCBRdS46IDAuMDY1MDUgICAxc3QgUXUuOi0xLjAwMDAgIFxuIE1lZGlhbiA6LTEuMDAwMCAgIE1lZGlhbiA6IC0xLjAwMDAgICBNZWRpYW4gOiAwLjE0NjcgICBNZWRpYW4gOiAwLjc0MzIgICBNZWRpYW4gOi0xLjAwMDAgICBNZWRpYW4gOiAwLjUyMzYyICAgICAgTWVkaWFuIDogMC41NTY1NiAgIE1lZGlhbiA6IDAuMjY0NyAgXG4gTWVhbiAgIDogMC42ODU4ICAgTWVhbiAgIDogIDAuOTcwMiAgIE1lYW4gICA6IDAuMjU2NiAgIE1lYW4gICA6IDEuMjY0NCAgIE1lYW4gICA6IDAuNTYzNSAgIE1lYW4gICA6IDAuNTk2OTkgICAgICBNZWFuICAgOiAwLjQ5MTI0ICAgTWVhbiAgIDogMC41ODMzICBcbiAzcmQgUXUuOiAxLjY4NzUgICAzcmQgUXUuOiAgMC44Njk2ICAgM3JkIFF1LjogMC43NTUxICAgM3JkIFF1LjogMi42OTg5ICAgM3JkIFF1LjogMS4yNjMyICAgM3JkIFF1LjogMS4xMDYxMiAgICAgIDNyZCBRdS46IDAuODkwMjggICAzcmQgUXUuOiAxLjQzOTggIFxuIE1heC4gICA6NTYuMzMzMyAgIE1heC4gICA6MjE0LjAwMDAgICBNYXguICAgOiA0Ljg5MDQgICBNYXguICAgOjEzLjYyMDAgICBNYXguICAgOjI5LjcxNDMgICBNYXguICAgOiA0LjE3NDI3ICAgICAgTWF4LiAgIDogMi4yNjU4MiAgIE1heC4gICA6MTIuNDM3NSAgXG4gRnJlZXMuQWdhaW5zdCAgICAgICBHb2FsLkFzc2lzdHMgICAgICAgICBHb2FscyAgICAgICAgICAgSGFuZGJhbGxzICAgICAgICAgIEhpdC5PdXRzICAgICAgICAgIEluc2lkZS41MHMgICAgICAgICAgS2lja3MgICAgICAgICAgICAgIE1hcmtzICAgICAgICBcbiBNaW4uICAgOi0xLjAwMDAwICAgTWluLiAgIDotMS4wMDAwICAgTWluLiAgIDotMS4wMDAwICAgTWluLiAgIDotMS4wMDAwICAgTWluLiAgIDogLTEuMDAwMCAgIE1pbi4gICA6LTEuMDAwMCAgIE1pbi4gICA6LTEuMDAwMDAgICBNaW4uICAgOi0xLjAwMDAgIFxuIDFzdCBRdS46LTEuMDAwMDAgICAxc3QgUXUuOi0xLjAwMDAgICAxc3QgUXUuOi0xLjAwMDAgICAxc3QgUXUuOi0wLjE1NjkgICAxc3QgUXUuOiAtMS4wMDAwICAgMXN0IFF1LjotMC4xNTY5ICAgMXN0IFF1LjogMC4wOTEzNyAgIDFzdCBRdS46LTAuMjEzNyAgXG4gTWVkaWFuIDogMC4wNDg3OCAgIE1lZGlhbiA6LTEuMDAwMCAgIE1lZGlhbiA6IDAuNTkyNiAgIE1lZGlhbiA6IDAuNDI4OCAgIE1lZGlhbiA6IC0xLjAwMDAgICBNZWRpYW4gOiAwLjU0OTUgICBNZWRpYW4gOiAwLjQ5MDEwICAgTWVkaWFuIDogMC4yMTk5ICBcbiBNZWFuICAgOiAwLjEzNzkyICAgTWVhbiAgIDogMC44MDI4ICAgTWVhbiAgIDogMS41NDk4ICAgTWVhbiAgIDogMC41MTEwICAgTWVhbiAgIDogIDAuOTIzMSAgIE1lYW4gICA6IDAuNjU4MyAgIE1lYW4gICA6IDAuNDgzNTEgICBNZWFuICAgOiAwLjMyMDUgIFxuIDNyZCBRdS46IDAuNzIwMDAgICAzcmQgUXUuOiAyLjA3MTQgICAzcmQgUXUuOiAyLjczOTEgICAzcmQgUXUuOiAxLjA3NDcgICAzcmQgUXUuOiAtMS4wMDAwICAgM3JkIFF1LjogMS4zMzcwICAgM3JkIFF1LjogMC44NjAwNSAgIDNyZCBRdS46IDAuNzU1MSAgXG4gTWF4LiAgIDoxMS4yODU3MSAgIE1heC4gICA6MjkuNzE0MyAgIE1heC4gICA6MjUuODc1MCAgIE1heC4gICA6IDQuMDAwMCAgIE1heC4gICA6MzEwLjc1MDAgICBNYXguICAgOiA3LjAwMDAgICBNYXguICAgOiAyLjgyMjIyICAgTWF4LiAgIDogNC4wNzQ1ICBcbiBNYXJrcy5JbnNpZGUuNTAgIE9uZS5QZXJjZW50ZXJzICAgICAgIFJlYm91bmRzICAgICAgICAgIFRhY2tsZXMgICAgICAgIFVuY29udGVzdGVkLlBvc3Nlc3Npb25zICAgWC4uUGxheWVkICAgICBcbiBNaW4uICAgOi0xLjAwMCAgIE1pbi4gICA6LTEuMDAwMCAgIE1pbi4gICA6LTEuMDAwMCAgIE1pbi4gICA6LTEuMDAwMCAgIE1pbi4gICA6LTEuMDAwMDAgICAgICAgIE1pbi4gICA6MC4wNTAwICBcbiAxc3QgUXUuOi0xLjAwMCAgIDFzdCBRdS46LTEuMDAwMCAgIDFzdCBRdS46LTEuMDAwMCAgIDFzdCBRdS46LTAuMzQ4NSAgIDFzdCBRdS46LTAuMDQ2NTYgICAgICAgIDFzdCBRdS46MC44MTAwICBcbiBNZWRpYW4gOi0xLjAwMCAgIE1lZGlhbiA6LTAuNDQxNiAgIE1lZGlhbiA6LTAuMjcxMiAgIE1lZGlhbiA6IDAuMTcyNyAgIE1lZGlhbiA6IDAuNDE4MDcgICAgICAgIE1lZGlhbiA6MC44NTAwICBcbiBNZWFuICAgOiAxLjEwMCAgIE1lYW4gICA6LTAuMTM3NyAgIE1lYW4gICA6IDAuMTQ4MyAgIE1lYW4gICA6IDAuMzU0NyAgIE1lYW4gICA6IDAuNDMxMjYgICAgICAgIE1lYW4gICA6MC44NDI5ICBcbiAzcmQgUXUuOiAxLjY4OCAgIDNyZCBRdS46IDAuMTYyMiAgIDNyZCBRdS46IDAuNzIwMCAgIDNyZCBRdS46IDAuODg2MCAgIDNyZCBRdS46IDAuODY0NTcgICAgICAgIDNyZCBRdS46MC44OTAwICBcbiBNYXguICAgOjM4LjkyOSAgIE1heC4gICA6MTAuNDY2NyAgIE1heC4gICA6MTAuODYyMSAgIE1heC4gICA6IDUuODk2MiAgIE1heC4gICA6IDMuMjcyNDQgICAgICAgIE1heC4gICA6MS4wMDAwICBcbiJ9 -->
-<pre><code>    Behinds           Bounces            Clangers         Clearances      Contested.Marks   Contested.Possessions   Disposals            Frees        
- Min.   :-1.0000   Min.   : -1.0000   Min.   :-1.0000   Min.   :-1.0000   Min.   :-1.0000   Min.   :-1.00000      Min.   :-0.94372   Min.   :-1.0000  
- 1st Qu.:-1.0000   1st Qu.: -1.0000   1st Qu.:-0.4342   1st Qu.:-0.4691   1st Qu.:-1.0000   1st Qu.:-0.03008      1st Qu.: 0.06505   1st Qu.:-1.0000  
- Median :-1.0000   Median : -1.0000   Median : 0.1467   Median : 0.7432   Median :-1.0000   Median : 0.52362      Median : 0.55656   Median : 0.2647  
- Mean   : 0.6858   Mean   :  0.9702   Mean   : 0.2566   Mean   : 1.2644   Mean   : 0.5635   Mean   : 0.59699      Mean   : 0.49124   Mean   : 0.5833  
- 3rd Qu.: 1.6875   3rd Qu.:  0.8696   3rd Qu.: 0.7551   3rd Qu.: 2.6989   3rd Qu.: 1.2632   3rd Qu.: 1.10612      3rd Qu.: 0.89028   3rd Qu.: 1.4398  
- Max.   :56.3333   Max.   :214.0000   Max.   : 4.8904   Max.   :13.6200   Max.   :29.7143   Max.   : 4.17427      Max.   : 2.26582   Max.   :12.4375  
- Frees.Against       Goal.Assists         Goals           Handballs          Hit.Outs          Inside.50s          Kicks              Marks        
- Min.   :-1.00000   Min.   :-1.0000   Min.   :-1.0000   Min.   :-1.0000   Min.   : -1.0000   Min.   :-1.0000   Min.   :-1.00000   Min.   :-1.0000  
- 1st Qu.:-1.00000   1st Qu.:-1.0000   1st Qu.:-1.0000   1st Qu.:-0.1569   1st Qu.: -1.0000   1st Qu.:-0.1569   1st Qu.: 0.09137   1st Qu.:-0.2137  
- Median : 0.04878   Median :-1.0000   Median : 0.5926   Median : 0.4288   Median : -1.0000   Median : 0.5495   Median : 0.49010   Median : 0.2199  
- Mean   : 0.13792   Mean   : 0.8028   Mean   : 1.5498   Mean   : 0.5110   Mean   :  0.9231   Mean   : 0.6583   Mean   : 0.48351   Mean   : 0.3205  
- 3rd Qu.: 0.72000   3rd Qu.: 2.0714   3rd Qu.: 2.7391   3rd Qu.: 1.0747   3rd Qu.: -1.0000   3rd Qu.: 1.3370   3rd Qu.: 0.86005   3rd Qu.: 0.7551  
- Max.   :11.28571   Max.   :29.7143   Max.   :25.8750   Max.   : 4.0000   Max.   :310.7500   Max.   : 7.0000   Max.   : 2.82222   Max.   : 4.0745  
- Marks.Inside.50  One.Percenters       Rebounds          Tackles        Uncontested.Possessions   X..Played     
- Min.   :-1.000   Min.   :-1.0000   Min.   :-1.0000   Min.   :-1.0000   Min.   :-1.00000        Min.   :0.0500  
- 1st Qu.:-1.000   1st Qu.:-1.0000   1st Qu.:-1.0000   1st Qu.:-0.3485   1st Qu.:-0.04656        1st Qu.:0.8100  
- Median :-1.000   Median :-0.4416   Median :-0.2712   Median : 0.1727   Median : 0.41807        Median :0.8500  
- Mean   : 1.100   Mean   :-0.1377   Mean   : 0.1483   Mean   : 0.3547   Mean   : 0.43126        Mean   :0.8429  
- 3rd Qu.: 1.688   3rd Qu.: 0.1622   3rd Qu.: 0.7200   3rd Qu.: 0.8860   3rd Qu.: 0.86457        3rd Qu.:0.8900  
- Max.   :38.929   Max.   :10.4667   Max.   :10.8621   Max.   : 5.8962   Max.   : 3.27244        Max.   :1.0000  </code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY291bnQoeClcblxuYGBgIn0= -->
-<pre class="r"><code>count(x)
-</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3IgaW4gY291bnQoeCkgOiBjb3VsZCBub3QgZmluZCBmdW5jdGlvbiBcImNvdW50XCJcbiJ9 -->
-<pre><code>Error in count(x) : could not find function &quot;count&quot;</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<div id="jags-model" class="section level3">
-<h3>JAGS Model</h3>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXHRtb2RlbFN0cmluZyA9IFwiXG5cdGRhdGEge1xuXHQgIHlNZWFuIDwtIG1lYW4oeSlcblx0ICBcblx0ICAjIFRoZXJlIHdhcyBubyBleHBlcnQgaW5mb3JtYXRpb24gYW5kIGJlY2F1c2Ugd2UgaGF2ZSBhIGxvdCBvZiBkYXRhLCB3ZSBcblx0ICAjIG1hZGUgdGhlIHZhcmlhbmNlcyB2ZXJ5IGhpZ2ggYW5kIG11ID0gMCBzbyB0aGF0IHRoZSBtb2RlbCBjYW4gY29udmVyZ2UgXG5cdCAgIyB3aXRob3V0IHByaW9ycyBlZmZlY3RpbmcgdGhlIHJlc3VsdHMgbXVjaC5cblx0ICBtdTAgPC0geU1lYW5cblx0ICBmb3IgKGkgaW4gMTpjb2xDb3VudCkge1xuXHQgICAgbXVbaV0gPC0gMFxuXHQgIH1cblx0ICBcblx0ICBWYXIwICAgPC0gMTAwMCAjIFNldCBzaW1wbHkgdG8gMVxuXHQgIGZvciAoaSBpbiAxOmNvbENvdW50KSB7XG5cdCAgICBWYXJbaV0gPC0gMTAwMFxuXHQgIH1cblx0fVxuXHRcblx0IyBNb2RlbFxuXHRtb2RlbCB7XG5cdCAgYmV0YTAgICB+IGRub3JtKG11MCwgIDEvVmFyMClcblx0ICBmb3IgKGogaW4gMTpjb2xDb3VudCkge1xuXHQgICAgYmV0YVtqXSB+IGRub3JtKG11W2pdLCAxL1ZhcltqXSlcblx0ICB9XG5cdCAgXG5cdCAgcHJlY2lzaW9uIH4gZGV4cCgxLzAuMjUpIFxuXHQgIFxuXHQgIGZvciAoaSBpbiAxOnJvd0NvdW50KSB7XG5cdCAgXG5cdCAgICAjIE5vcm1hbCBMaWtlbGlob29kXG5cdCAgICB5W2ldIH4gZG5vcm0oYmV0YTAgKyBzdW0oYmV0YVsxOmNvbENvdW50XSp4W2ksMTpjb2xDb3VudF0pLCBwcmVjaXNpb24pXG5cdCAgfVxuXG4gICAgZm9yIChrIGluIDE6cHJlZENvdW50KSB7XG4gICAgICBwcmVkW2tdIDwtIGJldGEwICsgc3VtKGJldGFbMTpjb2xDb3VudF0qeFByZWRbaywxOmNvbENvdW50XSlcbiAgICB9XG59XG5cIlxuXHRcblx0d3JpdGVMaW5lcyhtb2RlbFN0cmluZywgY29uPVwiVEVNUG1vZGVsMi50eHRcIilcbmBgYCJ9 -->
-<pre class="r"><code>    modelString = &quot;
-    data {
-      yMean &lt;- mean(y)
-      
-      # There was no expert information and because we have a lot of data, we 
-      # made the variances very high and mu = 0 so that the model can converge 
-      # without priors effecting the results much.
-      mu0 &lt;- yMean
-      for (i in 1:colCount) {
-        mu[i] &lt;- 0
-      }
-      
-      Var0   &lt;- 1000 # Set simply to 1
-      for (i in 1:colCount) {
-        Var[i] &lt;- 1000
-      }
-    }
-    
-    # Model
-    model {
-      beta0   ~ dnorm(mu0,  1/Var0)
-      for (j in 1:colCount) {
-        beta[j] ~ dnorm(mu[j], 1/Var[j])
-      }
-      
-      precision ~ dexp(1/0.25) 
-      
-      for (i in 1:rowCount) {
-      
-        # Normal Likelihood
-        y[i] ~ dnorm(beta0 + sum(beta[1:colCount]*x[i,1:colCount]), precision)
-      }
-
-    for (k in 1:predCount) {
-      pred[k] &lt;- beta0 + sum(beta[1:colCount]*xPred[k,1:colCount])
-    }
-}
-&quot;
-    
-    writeLines(modelString, con=&quot;TEMPmodel2.txt&quot;)</code></pre>
+var_col_count &lt;- 22</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-</div>
-<div id="run-jags" class="section level3">
-<h3>Run JAGS</h3>
+<div id="load-save" class="section level1">
+<h1>Load save</h1>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG5wYXJhbWV0ZXJzID0gYyhcImJldGEwXCIpXG5mb3IgKCBpIGluIDE6MjIpe1xuICBwYXJhbWV0ZXJzID0gYyhwYXJhbWV0ZXJzLCBwYXN0ZTAoXCJiZXRhW1wiLGksXCJdXCIpKVxufVxuZm9yICggaSBpbiAxOm5yb3coeFByZWQpKXtcbiAgcGFyYW1ldGVycyA9IGMocGFyYW1ldGVycywgcGFzdGUwKFwicHJlZFtcIixpLFwiXVwiKSlcbn1cblxuYWRhcHRTdGVwcyA9IDUwXG5idXJuSW5TdGVwcyA9IDEwMFxubkNoYWlucyA9IDJcbnRoaW5TdGVwcyA9IDE3XG5udW1TYXZlZFN0ZXBzID0gMjUwXG5cbm5JdGVyID0gY2VpbGluZyggKCBudW1TYXZlZFN0ZXBzICogdGhpblN0ZXBzICkgLyBuQ2hhaW5zIClcblxuc3RhcnRUaW1lID0gcHJvYy50aW1lKClcbiMgc2luayhcImRlYnVnMi50eHRcIilcbnJ1bkphZ3NPdXQgPC0gcnVuLmphZ3MoIG1ldGhvZD1cInBhcmFsbGVsXCIgLFxuICAgICAgICAgICAgICAgICAgICAgICAgbW9kZWw9XCJURU1QbW9kZWwyLnR4dFwiLFxuICAgICAgICAgICAgICAgICAgICAgICAgbW9uaXRvcj1wYXJhbWV0ZXJzLFxuICAgICAgICAgICAgICAgICAgICAgICAgZGF0YT1kYXRhTGlzdCxcbiAgICAgICAgICAgICAgICAgICAgICAgIG4uY2hhaW5zPW5DaGFpbnMsXG4gICAgICAgICAgICAgICAgICAgICAgICBhZGFwdD1hZGFwdFN0ZXBzLFxuICAgICAgICAgICAgICAgICAgICAgICAgYnVybmluPWJ1cm5JblN0ZXBzLFxuICAgICAgICAgICAgICAgICAgICAgICAgc2FtcGxlPW51bVNhdmVkU3RlcHMsXG4gICAgICAgICAgICAgICAgICAgICAgICB0aGluPXRoaW5TdGVwcyAsIHN1bW1hcmlzZT1GQUxTRSAsIHBsb3RzPUZBTFNFIClcbnN0b3BUaW1lID0gcHJvYy50aW1lKClcbmR1cmF0aW9uID0gc3RvcFRpbWUgLSBzdGFydFRpbWVcbnNob3coZHVyYXRpb24pXG5jb2RhU2FtcGxlcyA9IGFzLm1jbWMubGlzdCggcnVuSmFnc091dCApXG4jIHNpbmsoKVxuc2F2ZSggY29kYVNhbXBsZXMgLCBmaWxlPXBhc3RlKFwiUnVuMVwiLFwiTWNtYy5SZGF0YVwiLHNlcD1cIlwiKSApXG5zYXZlLmltYWdlKGZpbGU9J1J1bjEuUkRhdGEnKVxuYGBgIn0= -->
-<pre class="r"><code>
-parameters = c(&quot;beta0&quot;)
-for ( i in 1:22){
-  parameters = c(parameters, paste0(&quot;beta[&quot;,i,&quot;]&quot;))
-}
-for ( i in 1:nrow(xPred)){
-  parameters = c(parameters, paste0(&quot;pred[&quot;,i,&quot;]&quot;))
-}
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBsb2FkX3J1bl9zdGF0ZShydW5fbnVtYmVyKVxuYGBgIn0= -->
+<pre class="r"><code># load_run_state(run_number)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<div id="jags-run-1" class="section level3">
+<h3>JAGS Run 1</h3>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBSdW4gMVxucnVuX251bWJlciA8LSAxXG5cbiMgSHlwZXIgUGFyYW1ldGVyc1xuYWRhcHRTdGVwcyA9IDUwXG5idXJuSW5TdGVwcyA9IDEwMFxubkNoYWlucyA9IDJcbnRoaW5TdGVwcyA9IDE3XG5udW1TYXZlZFN0ZXBzID0gMjUwXG5cbiMgUnVuIEpBR1NcbmNvZGFTYW1wbGVzIDwtIHJ1bl9qYWdzX21vZGVsXzIodHJhaW4sIHRlc3QsIHZhcl9jb2xfY291bnQsIHJ1bl9udW1iZXIgPSBydW5fbnVtYmVyLCBhZGFwdFN0ZXBzID0gYWRhcHRTdGVwcywgYnVybkluU3RlcHMgPSBidXJuSW5TdGVwcywgbkNoYWlucyA9IG5DaGFpbnMsIHRoaW5TdGVwcyA9IHRoaW5TdGVwcywgbnVtU2F2ZWRTdGVwcyA9IG51bVNhdmVkU3RlcHMpXG5cbiMgU2F2ZSBTdGF0ZVxuc2F2ZV9ydW5fc3RhdGUoY29kYVNhbXBsZXMsIHJ1bl9udW1iZXIpXG5cbiMgRGlhZ25vc3RpY3NcbnN1bW1hcnlJbmZvIDwtIGdlbmVyYXRlX2RpYWdub3N0aWNzKGNvZGFTYW1wbGVzLCBydW5fbnVtYmVyLCB2YXJfY29sX2NvdW50KVxuXG4jIExlYWRlciBCb2FyZFxuY3JlYXRlX2xlYWRlcmJvYXJkKHRlc3QsIHN1bW1hcnlJbmZvLCB2YXJfY29sX2NvdW50KVxuYGBgIn0= -->
+<pre class="r"><code># Run 1
+run_number &lt;- 1
 
+# Hyper Parameters
 adaptSteps = 50
 burnInSteps = 100
 nChains = 2
 thinSteps = 17
 numSavedSteps = 250
 
-nIter = ceiling( ( numSavedSteps * thinSteps ) / nChains )
+# Run JAGS
+codaSamples &lt;- run_jags_model_2(train, test, var_col_count, run_number = run_number, adaptSteps = adaptSteps, burnInSteps = burnInSteps, nChains = nChains, thinSteps = thinSteps, numSavedSteps = numSavedSteps)
 
-startTime = proc.time()
-# sink(&quot;debug2.txt&quot;)
-runJagsOut &lt;- run.jags( method=&quot;parallel&quot; ,
-                        model=&quot;TEMPmodel2.txt&quot;,
-                        monitor=parameters,
-                        data=dataList,
-                        n.chains=nChains,
-                        adapt=adaptSteps,
-                        burnin=burnInSteps,
-                        sample=numSavedSteps,
-                        thin=thinSteps , summarise=FALSE , plots=FALSE )
-stopTime = proc.time()
-duration = stopTime - startTime
-show(duration)
-codaSamples = as.mcmc.list( runJagsOut )
-# sink()
-save( codaSamples , file=paste(&quot;Run1&quot;,&quot;Mcmc.Rdata&quot;,sep=&quot;&quot;) )
-save.image(file=&#39;Run1.RData&#39;)</code></pre>
+# Save State
+save_run_state(codaSamples, run_number)
+
+# Diagnostics
+summaryInfo &lt;- generate_diagnostics(codaSamples, run_number, var_col_count)
+
+# Leader Board
+create_leaderboard(test, summaryInfo, var_col_count)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
-</div>
-<div id="load-save" class="section level1">
-<h1>Load save</h1>
+<div id="jags-run-2" class="section level3">
+<h3>JAGS Run 2</h3>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubG9hZC5pbWFnZShmaWxlPSdSdW4xLlJEYXRhJylcbmBgYCJ9 -->
-<pre class="r"><code>load.image(file=&#39;Run1.RData&#39;)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBEaWFnbm9zdGljc1xuc3VtbWFyeUluZm8gPC0gZ2VuZXJhdGVfZGlhZ25vc3RpY3MoY29kYVNhbXBsZXMsIHJ1bl9udW1iZXIsIHZhcl9jb2xfY291bnQpXG5cbmBgYCJ9 -->
+<pre class="r"><code># Diagnostics
+summaryInfo &lt;- generate_diagnostics(codaSamples, run_number, var_col_count)
+</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<div id="results" class="section level3">
-<h3>Results</h3>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG4jID09PT09PT09PT09PT0gRGlzcGxheSBSZXN1bHRzID09PT09PT09PT09PVxuZGlhZ01DTUMoIGNvZGFTYW1wbGVzICwgcGFyTmFtZT1cImJldGEwXCIgKVxuZm9yICggaSBpbiAxOjIyKSB7XG4gIGRpYWdNQ01DKCBjb2RhU2FtcGxlcyAsIHBhck5hbWU9cGFzdGUwKFwiYmV0YVtcIixpLFwiXVwiKSApXG59XG5cbmNvbXBWYWwgPC0gZGF0YS5mcmFtZShcbiAgXCJiZXRhMFwiID0gMCwgXG4gIFwiYmV0YVsxXVwiID0gMCxcbiAgXCJiZXRhWzJdXCIgPSAwLCBcbiAgXCJiZXRhWzNdXCIgPSAwLCBcbiAgXCJiZXRhWzRdXCIgPSAgMCwgXG4gIFwiYmV0YVs1XVwiID0gIDAsXG4gIFwiYmV0YVs2XVwiID0gIDAsXG4gIFwiYmV0YVs3XVwiID0gIDAsXG4gIFwiYmV0YVs4XVwiID0gIDAsXG4gIFwiYmV0YVs5XVwiID0gIDAsXG4gIFwiYmV0YVsxMF1cIiA9ICAwLFxuICBcImJldGFbMTFdXCIgPSAgMCxcbiAgXCJiZXRhWzEyXVwiID0gIDAsXG4gIFwiYmV0YVsxM11cIiA9ICAwLFxuICBcImJldGFbMTRdXCIgPSAgMCxcbiAgXCJiZXRhWzE1XVwiID0gIDAsXG4gIFwiYmV0YVsxNl1cIiA9ICAwLFxuICBcImJldGFbMTddXCIgPSAgMCxcbiAgXCJiZXRhWzE4XVwiID0gIDAsXG4gIFwiYmV0YVsxOV1cIiA9ICAwLFxuICBcImJldGFbMjBdXCIgPSAgMCxcbiAgXCJiZXRhWzIxXVwiID0gIDAsXG4gIFwiYmV0YVsyMl1cIiA9ICAwLFxuICBjaGVjay5uYW1lcz1GQUxTRSlcblxuXG5zdW1tYXJ5SW5mbyA8LSBzbXJ5TUNNQyggY29kYVNhbXBsZXMgPSBjb2RhU2FtcGxlcyAsIGNvbXBWYWwgPSBjb21wVmFsLCBzYXZlTmFtZT1cIlN1bW1hcnlJbmZvXCIgKVxuXG5cbnBsb3RNQ01DX0hEKCBjb2RhU2FtcGxlcyA9IGNvZGFTYW1wbGVzLCBkYXRhID0gdHJhaW5fYmFsYW5jZWQsIHhOYW1lPWMoXG4gIFwiRGlzcG9zYWxzXCIsXG4gIFwiS2lja3NcIixcbiAgXCJNYXJrc1wiLFxuICBcIkhhbmRiYWxsc1wiLFxuICBcIkdvYWxzXCIsXG4gIFwiQmVoaW5kc1wiLFxuICBcIkhpdC5PdXRzXCIsXG4gIFwiVGFja2xlc1wiLFxuICBcIlJlYm91bmRzXCIsXG4gIFwiSW5zaWRlLjUwc1wiLFxuICBcIkNsZWFyYW5jZXNcIixcbiAgXCJDbGFuZ2Vyc1wiLFxuICBcIkZyZWVzXCIsXG4gIFwiRnJlZXMuQWdhaW5zdFwiLFxuICBcIkNvbnRlc3RlZC5Qb3NzZXNzaW9uc1wiLFxuICBcIlVuY29udGVzdGVkLlBvc3Nlc3Npb25zXCIsXG4gIFwiQ29udGVzdGVkLk1hcmtzXCIsXG4gIFwiTWFya3MuSW5zaWRlLjUwXCIsXG4gIFwiT25lLlBlcmNlbnRlcnNcIixcbiAgXCJCb3VuY2VzXCIsXG4gIFwiR29hbC5Bc3Npc3RzXCIsXG4gIFwiWC4uUGxheWVkXCJcbiApLFxuIHlOYW1lPVwiQnJvd25sb3cuVm90ZXNcIiwgY29tcFZhbCA9IGNvbXBWYWwsIHByZWRzID0gVFJVRSlcbmBgYCJ9 -->
-<pre class="r"><code>
-# ============= Display Results ============
-diagMCMC( codaSamples , parName=&quot;beta0&quot; )
-for ( i in 1:22) {
-  diagMCMC( codaSamples , parName=paste0(&quot;beta[&quot;,i,&quot;]&quot;) )
-}
-
-compVal &lt;- data.frame(
-  &quot;beta0&quot; = 0, 
-  &quot;beta[1]&quot; = 0,
-  &quot;beta[2]&quot; = 0, 
-  &quot;beta[3]&quot; = 0, 
-  &quot;beta[4]&quot; =  0, 
-  &quot;beta[5]&quot; =  0,
-  &quot;beta[6]&quot; =  0,
-  &quot;beta[7]&quot; =  0,
-  &quot;beta[8]&quot; =  0,
-  &quot;beta[9]&quot; =  0,
-  &quot;beta[10]&quot; =  0,
-  &quot;beta[11]&quot; =  0,
-  &quot;beta[12]&quot; =  0,
-  &quot;beta[13]&quot; =  0,
-  &quot;beta[14]&quot; =  0,
-  &quot;beta[15]&quot; =  0,
-  &quot;beta[16]&quot; =  0,
-  &quot;beta[17]&quot; =  0,
-  &quot;beta[18]&quot; =  0,
-  &quot;beta[19]&quot; =  0,
-  &quot;beta[20]&quot; =  0,
-  &quot;beta[21]&quot; =  0,
-  &quot;beta[22]&quot; =  0,
-  check.names=FALSE)
-
-
-summaryInfo &lt;- smryMCMC( codaSamples = codaSamples , compVal = compVal, saveName=&quot;SummaryInfo&quot; )
-
-
-plotMCMC_HD( codaSamples = codaSamples, data = train_balanced, xName=c(
-  &quot;Disposals&quot;,
-  &quot;Kicks&quot;,
-  &quot;Marks&quot;,
-  &quot;Handballs&quot;,
-  &quot;Goals&quot;,
-  &quot;Behinds&quot;,
-  &quot;Hit.Outs&quot;,
-  &quot;Tackles&quot;,
-  &quot;Rebounds&quot;,
-  &quot;Inside.50s&quot;,
-  &quot;Clearances&quot;,
-  &quot;Clangers&quot;,
-  &quot;Frees&quot;,
-  &quot;Frees.Against&quot;,
-  &quot;Contested.Possessions&quot;,
-  &quot;Uncontested.Possessions&quot;,
-  &quot;Contested.Marks&quot;,
-  &quot;Marks.Inside.50&quot;,
-  &quot;One.Percenters&quot;,
-  &quot;Bounces&quot;,
-  &quot;Goal.Assists&quot;,
-  &quot;X..Played&quot;
- ),
- yName=&quot;Brownlow.Votes&quot;, compVal = compVal, preds = TRUE)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGxvdE1DTUNfSEQoIGNvZGFTYW1wbGVzID0gY29kYVNhbXBsZXMsIGRhdGEgPSB0cmFpbiwgeE5hbWU9YyhcIkJlaGluZHNcIiwgXCJCb3VuY2VzXCIsIFwiQ2xhbmdlcnNcIiwgXCJDbGVhcmFuY2VzXCIsIFwiQ29udGVzdGVkLk1hcmtzXCIsIFwiQ29udGVzdGVkLlBvc3Nlc3Npb25zXCIsXG4gICAgXCJEaXNwb3NhbHNcIiwgXCJGcmVlc1wiLCBcIkZyZWVzLkFnYWluc3RcIiwgXCJHb2FsLkFzc2lzdHNcIiwgXCJHb2Fsc1wiLCBcIkhhbmRiYWxsc1wiLFxuICAgIFwiSGl0Lk91dHNcIiwgXCJJbnNpZGUuNTBzXCIsIFwiS2lja3NcIiwgXCJNYXJrc1wiLCBcIk1hcmtzLkluc2lkZS41MFwiLCBcIk9uZS5QZXJjZW50ZXJzXCIsIFwiUmVib3VuZHNcIixcbiAgICBcIlRhY2tsZXNcIiwgXCJVbmNvbnRlc3RlZC5Qb3NzZXNzaW9uc1wiKSAsXG4gICAgICAgICAgICAgeU5hbWU9XCJCcm93bmxvdy5Wb3Rlc1wiLCBjb21wVmFsID0gY29tcFZhbCwgcHJlZHMgPSBUUlVFKVxuYGBgIn0= -->
-<pre class="r"><code>plotMCMC_HD( codaSamples = codaSamples, data = train, xName=c(&quot;Behinds&quot;, &quot;Bounces&quot;, &quot;Clangers&quot;, &quot;Clearances&quot;, &quot;Contested.Marks&quot;, &quot;Contested.Possessions&quot;,
-    &quot;Disposals&quot;, &quot;Frees&quot;, &quot;Frees.Against&quot;, &quot;Goal.Assists&quot;, &quot;Goals&quot;, &quot;Handballs&quot;,
-    &quot;Hit.Outs&quot;, &quot;Inside.50s&quot;, &quot;Kicks&quot;, &quot;Marks&quot;, &quot;Marks.Inside.50&quot;, &quot;One.Percenters&quot;, &quot;Rebounds&quot;,
-    &quot;Tackles&quot;, &quot;Uncontested.Possessions&quot;) ,
-             yName=&quot;Brownlow.Votes&quot;, compVal = compVal, preds = TRUE)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3IgaW4gYmV0YSAlKiUgbWF0cml4KFljb3JYLCBuY29sID0gMSkgOiBub24tY29uZm9ybWFibGUgYXJndW1lbnRzXG4ifQ== -->
-<pre><code>Error in beta %*% matrix(YcorX, ncol = 1) : non-conformable arguments</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3IgaW4gaWYgKGNsYXNzKHBhcmFtU2FtcGxlVmVjKSA9PSBcIm1jbWMubGlzdFwiKSB7IDogXG4gIHRoZSBjb25kaXRpb24gaGFzIGxlbmd0aCA+IDFcbiJ9 -->
+<pre><code>Error in if (class(paramSampleVec) == &quot;mcmc.list&quot;) { : 
+  the condition has length &gt; 1</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
+</div>
+<div id="jags-run-3" class="section level3">
+<h3>JAGS Run 3</h3>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucHJlZCA8LSBjKClcbm1vZGUgPC0gc3VtbWFyeUluZm9bLFwiTW9kZVwiXVxueFByZWQyID0gYXMubWF0cml4KHRlc3RfYmFsYW5jZWRbLDE6MjJdKVxuZm9yIChrIGluIDE6bnJvdyh4UHJlZCkpIHtcbiBcbiAgcHJlZFtrXSA8LSBtb2RlW1wiYmV0YTBcIl0gK1xuICAgIChtb2RlW1wiYmV0YVsxXVwiXSp4UHJlZDJbaywxXSkgK1xuICAgIChtb2RlW1wiYmV0YVsyXVwiXSp4UHJlZDJbaywyXSkgKyBcbiAgICAobW9kZVtcImJldGFbM11cIl0qeFByZWQyW2ssM10pICsgXG4gICAgKG1vZGVbXCJiZXRhWzRdXCJdKnhQcmVkMltrLDRdKSArIFxuICAgIChtb2RlW1wiYmV0YVs1XVwiXSp4UHJlZDJbayw1XSkgK1xuICAgIChtb2RlW1wiYmV0YVs2XVwiXSp4UHJlZDJbayw2XSkgK1xuICAgIChtb2RlW1wiYmV0YVs3XVwiXSp4UHJlZDJbayw3XSkgK1xuICAgIChtb2RlW1wiYmV0YVs4XVwiXSp4UHJlZDJbayw4XSkgK1xuICAgIChtb2RlW1wiYmV0YVs5XVwiXSp4UHJlZDJbayw5XSkgK1xuICAgIChtb2RlW1wiYmV0YVsxMF1cIl0qeFByZWQyW2ssMTBdKSArXG4gICAgKG1vZGVbXCJiZXRhWzExXVwiXSp4UHJlZDJbaywxMV0pICtcbiAgICAobW9kZVtcImJldGFbMTJdXCJdKnhQcmVkMltrLDEyXSkgK1xuICAgIChtb2RlW1wiYmV0YVsxM11cIl0qeFByZWQyW2ssMTNdKSArXG4gICAgKG1vZGVbXCJiZXRhWzE0XVwiXSp4UHJlZDJbaywxNF0pICtcbiAgICAobW9kZVtcImJldGFbMTVdXCJdKnhQcmVkMltrLDE1XSkgK1xuICAgIChtb2RlW1wiYmV0YVsxNl1cIl0qeFByZWQyW2ssMTZdKSArXG4gICAgKG1vZGVbXCJiZXRhWzE3XVwiXSp4UHJlZDJbaywxN10pICtcbiAgICAobW9kZVtcImJldGFbMThdXCJdKnhQcmVkMltrLDE4XSkgK1xuICAgIChtb2RlW1wiYmV0YVsxOV1cIl0qeFByZWQyW2ssMTldKSArXG4gICAgKG1vZGVbXCJiZXRhWzIwXVwiXSp4UHJlZDJbaywyMF0pICtcbiAgICAobW9kZVtcImJldGFbMjFdXCJdKnhQcmVkMltrLDIxXSkgK1xuICAgIChtb2RlW1wiYmV0YVsyMl1cIl0qeFByZWQyW2ssMjJdKVxufVxuYGBgIn0= -->
-<pre class="r"><code>pred &lt;- c()
-mode &lt;- summaryInfo[,&quot;Mode&quot;]
-xPred2 = as.matrix(test_balanced[,1:22])
-for (k in 1:nrow(xPred)) {
- 
-  pred[k] &lt;- mode[&quot;beta0&quot;] +
-    (mode[&quot;beta[1]&quot;]*xPred2[k,1]) +
-    (mode[&quot;beta[2]&quot;]*xPred2[k,2]) + 
-    (mode[&quot;beta[3]&quot;]*xPred2[k,3]) + 
-    (mode[&quot;beta[4]&quot;]*xPred2[k,4]) + 
-    (mode[&quot;beta[5]&quot;]*xPred2[k,5]) +
-    (mode[&quot;beta[6]&quot;]*xPred2[k,6]) +
-    (mode[&quot;beta[7]&quot;]*xPred2[k,7]) +
-    (mode[&quot;beta[8]&quot;]*xPred2[k,8]) +
-    (mode[&quot;beta[9]&quot;]*xPred2[k,9]) +
-    (mode[&quot;beta[10]&quot;]*xPred2[k,10]) +
-    (mode[&quot;beta[11]&quot;]*xPred2[k,11]) +
-    (mode[&quot;beta[12]&quot;]*xPred2[k,12]) +
-    (mode[&quot;beta[13]&quot;]*xPred2[k,13]) +
-    (mode[&quot;beta[14]&quot;]*xPred2[k,14]) +
-    (mode[&quot;beta[15]&quot;]*xPred2[k,15]) +
-    (mode[&quot;beta[16]&quot;]*xPred2[k,16]) +
-    (mode[&quot;beta[17]&quot;]*xPred2[k,17]) +
-    (mode[&quot;beta[18]&quot;]*xPred2[k,18]) +
-    (mode[&quot;beta[19]&quot;]*xPred2[k,19]) +
-    (mode[&quot;beta[20]&quot;]*xPred2[k,20]) +
-    (mode[&quot;beta[21]&quot;]*xPred2[k,21]) +
-    (mode[&quot;beta[22]&quot;]*xPred2[k,22])
-}</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBSdW4gMVxucnVuX251bWJlciA8LSAzXG5cbiMgSHlwZXIgUGFyYW1ldGVyc1xuYWRhcHRTdGVwcyA9IDUwXG5idXJuSW5TdGVwcyA9IDEwMFxubkNoYWlucyA9IDJcbnRoaW5TdGVwcyA9IDE3XG5udW1TYXZlZFN0ZXBzID0gMjUwXG5cbiMgUnVuIEpBR1NcbmNvZGFTYW1wbGVzIDwtIHJ1bl9qYWdzX21vZGVsXzIodHJhaW4sIHRlc3QsIHZhcl9jb2xfY291bnQsIHJ1bl9udW1iZXIgPSBydW5fbnVtYmVyLCBhZGFwdFN0ZXBzID0gYWRhcHRTdGVwcywgYnVybkluU3RlcHMgPSBidXJuSW5TdGVwcywgbkNoYWlucyA9IG5DaGFpbnMsIHRoaW5TdGVwcyA9IHRoaW5TdGVwcywgbnVtU2F2ZWRTdGVwcyA9IG51bVNhdmVkU3RlcHMpXG5cbiMgU2F2ZSBTdGF0ZVxuc2F2ZV9ydW5fc3RhdGUoY29kYVNhbXBsZXMsIHJ1bl9udW1iZXIpXG5cbiMgRGlhZ25vc3RpY3NcbnN1bW1hcnlJbmZvIDwtIGdlbmVyYXRlX2RpYWdub3N0aWNzKGNvZGFTYW1wbGVzLCBydW5fbnVtYmVyLCB2YXJfY29sX2NvdW50KVxuXG4jIExlYWRlciBCb2FyZFxuY3JlYXRlX2xlYWRlcmJvYXJkKHRlc3QsIHN1bW1hcnlJbmZvLCB2YXJfY29sX2NvdW50KVxuYGBgIn0= -->
+<pre class="r"><code># Run 1
+run_number &lt;- 3
+
+# Hyper Parameters
+adaptSteps = 50
+burnInSteps = 100
+nChains = 2
+thinSteps = 17
+numSavedSteps = 250
+
+# Run JAGS
+codaSamples &lt;- run_jags_model_2(train, test, var_col_count, run_number = run_number, adaptSteps = adaptSteps, burnInSteps = burnInSteps, nChains = nChains, thinSteps = thinSteps, numSavedSteps = numSavedSteps)
+
+# Save State
+save_run_state(codaSamples, run_number)
+
+# Diagnostics
+summaryInfo &lt;- generate_diagnostics(codaSamples, run_number, var_col_count)
+
+# Leader Board
+create_leaderboard(test, summaryInfo, var_col_count)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
 </div>
-<div id="predictive-check" class="section level1">
-<h1>============ Predictive check ============</h1>
+<div id="run-performance-analysis" class="section level1">
+<h1>Run Performance Analysis</h1>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGVyZm9ybWFuY2VfdGVzdCA8LSBmdW5jdGlvbiAocHJlZGljdGlvbnMpe1xuICBtb2RlcyA9IHN1bW1hcnlJbmZvWyxcIk1vZGVcIl1cbiAgcmVhbCA9IGModGVzdCRCcm93bmxvdy5Wb3RlcylcbiAgbGVuZ3RoKHByZWRpY3Rpb25zKVxuICBsZW5ndGgocmVhbClcbiAgbiA9IGxlbmd0aChyZWFsKVxuICAjIE1BRVxuICBwcmludChwYXN0ZShcIk1BRTpcIixzdW0oYWJzKHByZWRpY3Rpb25zIC0gcmVhbCkpL24pKVxuICAjIE1TRVxuICBtc2UgPSBzdW0oKHJlYWwgLSBwcmVkaWN0aW9ucyleMilcbiAgcHJpbnQocGFzdGUoXCJNU0U6XCIsbXNlKSlcbiAgIyBSTVNFXG4gIHByaW50KHBhc3RlKFwiUk1TRTpcIixzcXJ0KG1zZS9uKSkpXG59XG5cbnBlcmZvcm1hbmNlX3Rlc3QocHJlZClcbmBgYCJ9 -->
-<pre class="r"><code>performance_test &lt;- function (predictions){
-  modes = summaryInfo[,&quot;Mode&quot;]
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGVyZm9ybWFuY2VfdGVzdCA8LSBmdW5jdGlvbiAocHJlZGljdGlvbnMpIHtcbiAgcmVhbCA9IGModGVzdCRCcm93bmxvdy5Wb3RlcylcbiAgbGVuZ3RoKHByZWRpY3Rpb25zKVxuICBsZW5ndGgocmVhbClcbiAgbiA9IGxlbmd0aChyZWFsKVxuICBwcmludChwYXN0ZShcIk1BRTpcIiwgc3VtKGFicyhwcmVkaWN0aW9ucyAtIHJlYWwpKS9uKSlcbiAgcHJpbnQocGFzdGUoXCJNU0U6XCIsIHN1bSgocmVhbCAtIHByZWRpY3Rpb25zKV4yKSkpXG4gIHByaW50KHBhc3RlKFwiUk1TRTpcIiwgc3FydChtc2UvbikpKVxufVxuXG5wZXJmb3JtYW5jZV90ZXN0KHByZWQpXG5gYGAifQ== -->
+<pre class="r"><code>performance_test &lt;- function (predictions) {
   real = c(test$Brownlow.Votes)
   length(predictions)
   length(real)
   n = length(real)
-  # MAE
-  print(paste(&quot;MAE:&quot;,sum(abs(predictions - real))/n))
-  # MSE
-  mse = sum((real - predictions)^2)
-  print(paste(&quot;MSE:&quot;,mse))
-  # RMSE
-  print(paste(&quot;RMSE:&quot;,sqrt(mse/n)))
+  print(paste(&quot;MAE:&quot;, sum(abs(predictions - real))/n))
+  print(paste(&quot;MSE:&quot;, sum((real - predictions)^2)))
+  print(paste(&quot;RMSE:&quot;, sqrt(mse/n)))
 }
 
 performance_test(pred)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiTUFFOiAwLjY2MzI5MTAwMDM3NzIzM1wiXG5bMV0gXCJNU0U6IDYxODUuOTA3NzE4NzYwMTNcIlxuWzFdIFwiUk1TRTogMC44MjQxMTk1MzI0ODA4NDFcIlxuIn0= -->
-<pre><code>[1] &quot;MAE: 0.663291000377233&quot;
-[1] &quot;MSE: 6185.90771876013&quot;
-[1] &quot;RMSE: 0.824119532480841&quot;</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShkcGx5cilcbmxpYnJhcnkodGlkeXIpXG5cbnRlc3QkcHJlZCA8LSBwcmVkXG5cblxubGVhZGVyYm9hcmQgPSBjKClcbmZvciAoaWQgaW4gdW5saXN0KHRlc3QkZ2FtZUlkWzFdKSkge1xuICBnYW1lIDwtIHRlc3RbdGVzdCRnYW1lSWQgPT0gaWQsXVxuICBvcmRlcmVkIDwtIGdhbWVbb3JkZXIoLWdhbWUkcHJlZCksXVxuICB0b3BfM19yb3dzIDwtIGhlYWQob3JkZXJlZCwgMylcbiAgcHJpbnQodG9wXzNfcm93c1tvcmRlcih0b3BfM19yb3dzJHByZWQpLF0pXG4gICMgZm9yIChyb3cgaW4gdG9wXzNfcm93c1tvcmRlcigtdG9wXzNfcm93cyRwcmVkKSxdKSB7XG4gICMgICBpZF9uYW1lID0gcGFzdGUocm93JGRpc3BsYXlOYW1lLCByb3ckcGxheWVySWQsIHNlcD1cIl9cIilcbiAgIyAgIHNjb3JlIDwtIDBcbiAgIyAgIGlmICghaXMubnVsbChsZWFkZXJib2FyZFtpZF9uYW1lXSkpIHtcbiAgIyAgICAgc2NvcmUgPC0gbGVhZGVyYm9hcmRbaWRfbmFtZV1cbiAgIyAgIH1cbiAgIyAgIFxuICAjICAgbGVhZGVyYm9hcmRbaWRfbmFtZV0gPC0gc2NvcmUgKyBcbiAgIyB9XG59XG5gYGAifQ== -->
-<pre class="r"><code>library(dplyr)
-library(tidyr)
-
-test$pred &lt;- pred
-
-
-leaderboard = c()
-for (id in unlist(test$gameId[1])) {
-  game &lt;- test[test$gameId == id,]
-  ordered &lt;- game[order(-game$pred),]
-  top_3_rows &lt;- head(ordered, 3)
-  print(top_3_rows[order(top_3_rows$pred),])
-  # for (row in top_3_rows[order(-top_3_rows$pred),]) {
-  #   id_name = paste(row$displayName, row$playerId, sep=&quot;_&quot;)
-  #   score &lt;- 0
-  #   if (!is.null(leaderboard[id_name])) {
-  #     score &lt;- leaderboard[id_name]
-  #   }
-  #   
-  #   leaderboard[id_name] &lt;- score + 
-  # }
-}</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibnJvdyI6MywibmNvbCI6MjgsInN1bW1hcnkiOnsiRGVzY3JpcHRpb24iOlsiZGYgWzMgw5cgMjhdIl19fSwicmRmIjoiSDRzSUFBQUFBQUFBQm8xVmIyZ2NSUlRmdTl6MmtqT1gzS0h0VVRqdzFQaEJTSllrL2kyQ3M1ZUw2VVdiTk1RMERiRzJuZXhOTjl2YnpJYWRQZHVMUnFvWVJDUW9mbWhSdE1YMlF3dWxSUVNMVmtyU1AxRDhJTDEra1Vxb05xV1Joa2FiYUl0YU5YVm1iMmN1dVlKa1lIa3p2emZ2OTk3N3pUdXV1N1h2OFZCZlNKS2tDaW5nOTBrVk10MUs4cWFldG9abkpJclFnMDhLU0ZYTTdxYVg3cWViT1AxcVdJUzYrc1RVMElrcGEySmVjcGNxaWVYNk9WNXVoZi9xdDM5M3ZGbi9LZml0dmU3RDlyb3g4SFB2d2xzN1U1OEovdXF4RDc1WTAvS2RHbTFnNnpGMUZVczNkR3FsL09EUFI0N2RYRGlaQTdmM3VDQ1liOXMvODdieGcvRGYrUHBwRzErYkFyUG0xbWVQOXhUQXI4RXJid1N2akFpL1Y1ZnEzN3p6MFZjUHZzeHRlWDV3dUxBdE9Tci94SzJvUDdLOExuQjdKcHhQYmUyOUozNzJJN1krNWxia240NDlmOUY1WmMzRXVYZkh0NDE5QThCY1RoMk43bjE5cGYycm9lKy9QSmJ0dndUKzlkNG5laWIrMEpuNHc0Si9ZVlMrRlN0MGdUKzJGK3U0R1pzOGNoMXNFZnpuV2ZyWUJ2RFZYNmZmLzJTdGoxc1JQMzlTZWUvZzlRdmMzdk8rdkw5OUxzOXpQSi93WHlyVDUyS0N3UDY2aU9DZjlQQmJjNTNuNWpvdlRCVFErT1E3K2xIaEw2eXJmbkI3NjI1aGZ3bjBudDkzT1MzOHMrdVBQekF5blJiNnpvMU1VK1ExNmdzenYxY3JzMnpRSSs2K09PeVJEaTFsNW5RZDZxZytrYzdwZ3g0ZTNwQzNNS2xQdkFCdE81L3h3T3AreTg1YTlZbFdtTWVvUkI2Y0tYM0x5S3VhRzV1YnVwc2FHNXRXQUhpOUpIK01QdVduZWlRdkw2NGRWMTE3NEt4YTBocjhjK0JRSk9IM2djWFB4eEo3dHV3RmQrLzhQdmxTT2xyMkk1WXhIRUtFdHN2cWlYdGdzQVVOR2poRHhOSEtZUTN4WTJYS2hGaEhOaitIVWlhQ05seHlvelpsWVFjUkIyV1VEbWhuT2J5NkJIZFpoQ0JDREtvZDc3RFZJTU1XZ1NZSDVEWWJDY2F3ZTFDU09qUXdjYmpNNnkxb0trbEtReHdSeFREQm1ZWTRNd0JOQVZTbURVZlptQk8zUSsyWUdCbWtQTmtvNGw4ME5GR3d2TFQ2V3ZlZ2lBZ1BydG1Ja2RLRmJBM1Izb1FtbGQxb2dJcFdrckFIYWxsVHRCUGJoTFgvMDZKUFVicE1tRWQ4b0dwYWJHc1hOcTFkU3EvbENKYjdNbFF5ZXEyVFBxRUhCZkwwS2J6OUtwM2k3Wnlpa3QxRXRqZ0hobTFLdjN3WXFtZ1dwVGdRcFY5RUxjdkVhaTZmSE0yRWhIaVR6TUZRQmpwUTJXR3ppaVJwc1N3a2FBMDdicHVTbi8xdnlHWEJQcnNNaU9Rd3F5YlRvQTNtY0xhaCtRbVd3ZlVYdjdCbks1YnM0OFdjL3JzZWw4elZRRmczTU5kSk51RUFNcm02VEZ6V3RUSnNHNWhQVjRpaVJIRXNCL0o3SWMweU9lSTJKeTMrQjFndmJrUXZCd0FBIn0= -->
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["Behinds"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["Bounces"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["Clangers"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["Clearances"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Contested.Marks"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["Contested.Possessions"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["Disposals"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["Frees"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["Frees.Against"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["Goal.Assists"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["Goals"],"name":[11],"type":["dbl"],"align":["right"]},{"label":["Handballs"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["Hit.Outs"],"name":[13],"type":["dbl"],"align":["right"]},{"label":["Inside.50s"],"name":[14],"type":["dbl"],"align":["right"]},{"label":["Kicks"],"name":[15],"type":["dbl"],"align":["right"]},{"label":["Marks"],"name":[16],"type":["dbl"],"align":["right"]},{"label":["Marks.Inside.50"],"name":[17],"type":["dbl"],"align":["right"]},{"label":["One.Percenters"],"name":[18],"type":["dbl"],"align":["right"]},{"label":["Rebounds"],"name":[19],"type":["dbl"],"align":["right"]},{"label":["Tackles"],"name":[20],"type":["dbl"],"align":["right"]},{"label":["Uncontested.Possessions"],"name":[21],"type":["dbl"],"align":["right"]},{"label":["X..Played"],"name":[22],"type":["dbl"],"align":["right"]},{"label":["Brownlow.Votes"],"name":[23],"type":["int"],"align":["right"]},{"label":["displayName"],"name":[24],"type":["chr"],"align":["left"]},{"label":["year"],"name":[25],"type":["int"],"align":["right"]},{"label":["gameId"],"name":[26],"type":["chr"],"align":["left"]},{"label":["playerId"],"name":[27],"type":["dbl"],"align":["right"]},{"label":["pred"],"name":[28],"type":["dbl"],"align":["right"]}],"data":[{"1":"5.428571","2":"-1","3":"-0.5871560","4":"3.565217","5":"-1","6":"1.508711","7":"0.8663594","8":"1.142857","9":"-1.00000000","10":"4.000000","11":"-1.0","12":"0.5340909","13":"-1","14":"3.354839","15":"1.0930233","16":"-0.18181818","17":"1.045455","18":"-1.00000000","19":"-0.3750000","20":"0.1250000","21":"0.2534819","22":"0.79","23":"0","24":"McCluggage, Hugh","25":"2021","26":"2021R1001","27":"2017777675","28":"1.788974","_rn_":"15"},{"1":"-1.000000","2":"-1","3":"1.1428571","4":"4.294118","5":"-1","6":"1.343750","7":"0.7944785","8":"2.292683","9":"0.04651163","10":"-1.000000","11":"0.8","12":"-0.1604478","13":"-1","14":"1.812500","15":"1.4609375","16":"0.09756098","17":"1.045455","18":"0.02272727","19":"-1.0000000","20":"1.3076923","21":"0.2534819","22":"0.80","23":"3","24":"Lyons, Jarryd","25":"2021","26":"2021R1001","27":"2012767797","28":"1.918096","_rn_":"11"},{"1":"2.000000","2":"-1","3":"0.6981132","4":"2.857143","5":"-1","6":"1.017241","7":"0.9384615","8":"2.292683","9":"0.04651163","10":"1.368421","11":"0.8","12":"0.8893130","13":"-1","14":"4.439560","15":"0.9716495","16":"0.09756098","17":"-1.000000","18":"1.09302326","19":"0.2676056","20":"-0.2561983","21":"0.9067797","22":"0.89","23":"2","24":"Zorko, Dayne","25":"2021","26":"2021R1001","27":"2012905229","28":"1.998768","_rn_":"23"}],"options":{"columns":{"min":{},"max":[10],"total":[28]},"rows":{"min":[10],"max":[10],"total":[3]},"pages":{}}}
-  </script>
-</div>
-<!-- rnb-frame-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIWlzLm51bGwoaGlbXCJ5b1wiXSlcblxuYGBgIn0= -->
-<pre class="r"><code>!is.null(hi[&quot;yo&quot;])
-</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIEZBTFNFXG4ifQ== -->
-<pre><code>[1] FALSE</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 </div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIkFGTCBNb2RlbGxpbmcgb2YgUGVyZm9ybWFuY2UgUGVyIEdhbWUiDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KYGBge3J9DQpzb3VyY2UoIi4uLy4uL3V0aWxpdGllcy9EQkRBMkUtdXRpbGl0aWVzLlIiKQ0Kc291cmNlKCIuLi8uLi91dGlsaXRpZXMvTW9yZVV0aWxpdGllcy5SIikNCmxpYnJhcnkoZ2dwbG90MikNCmxpYnJhcnkoZ2dwdWJyKQ0KbGlicmFyeShrcykNCmxpYnJhcnkocmphZ3MpDQpsaWJyYXJ5KHJ1bmphZ3MpDQpsaWJyYXJ5KGJlbmNobWFya21lKQ0KYGBgDQoNCiMjIFJlYWQgdHJhaW4gYW5kIHRlc3Qgc2V0cyBmcm9tIGZpbGVzLg0KYGBge3J9DQp0cmFpbiA8LSByZWFkLmNzdigiLi4vLi4vZGF0YS90cmFpbl9wZXJmb3JtYW5jZS5jc3YiKQ0KdGVzdCA8LSByZWFkLmNzdigiLi4vLi4vZGF0YS90ZXN0X3BlcmZvcm1hbmNlLmNzdiIpDQp0ZXN0X2JhbGFuY2VkIDwtIHJlYWQuY3N2KCIuLi8uLi9kYXRhL3Rlc3RfYmFsYW5jZWRfcGVyZm9ybWFuY2UuY3N2IikNCnBlcmZvcm1hbmNlIDwtIHJlYWQuY3N2KCIuLi8uLi9kYXRhL3BlcmZvcm1hbmNlLmNzdiIpDQpgYGANCg0KIyBNb2RlbGxpbmcNCmBgYHtyfQ0KY29sbmFtZXModHJhaW5bLDE6MjJdKQ0KeSA8LSB0cmFpbiRCcm93bmxvdy5Wb3Rlcw0KeCA8LSBhcy5tYXRyaXgodHJhaW5bLDE6MjJdKQ0KeFByZWQgPSBhcy5tYXRyaXgodGVzdFssMToyMl0pDQoNCmRhdGFMaXN0ID0gbGlzdCgNCiAgeCA9IHgsDQogIGNvbENvdW50ID0gbmNvbCh4KSwgDQogIA0KICB5ID0geSwNCiAgcm93Q291bnQgPSBsZW5ndGgoeSksDQogIA0KICB4UHJlZCA9IHhQcmVkLA0KICBwcmVkQ291bnQgPSBucm93KHhQcmVkKQ0KKQ0KDQpzdW1tYXJ5KHgpDQpgYGANCg0KDQpgYGB7cn0NCnRhYmxlKHgpDQpgYGANCiMjIyBKQUdTIE1vZGVsDQpgYGB7cn0NCgltb2RlbFN0cmluZyA9ICINCglkYXRhIHsNCgkgIHlNZWFuIDwtIG1lYW4oeSkNCgkgIA0KCSAgIyBUaGVyZSB3YXMgbm8gZXhwZXJ0IGluZm9ybWF0aW9uIGFuZCBiZWNhdXNlIHdlIGhhdmUgYSBsb3Qgb2YgZGF0YSwgd2UgDQoJICAjIG1hZGUgdGhlIHZhcmlhbmNlcyB2ZXJ5IGhpZ2ggYW5kIG11ID0gMCBzbyB0aGF0IHRoZSBtb2RlbCBjYW4gY29udmVyZ2UgDQoJICAjIHdpdGhvdXQgcHJpb3JzIGVmZmVjdGluZyB0aGUgcmVzdWx0cyBtdWNoLg0KCSAgbXUwIDwtIHlNZWFuDQoJICBmb3IgKGkgaW4gMTpjb2xDb3VudCkgew0KCSAgICBtdVtpXSA8LSAwDQoJICB9DQoJICANCgkgIFZhcjAgICA8LSAxMDAwICMgU2V0IHNpbXBseSB0byAxDQoJICBmb3IgKGkgaW4gMTpjb2xDb3VudCkgew0KCSAgICBWYXJbaV0gPC0gMTAwMA0KCSAgfQ0KCX0NCgkNCgkjIE1vZGVsDQoJbW9kZWwgew0KCSAgYmV0YTAgICB+IGRub3JtKG11MCwgIDEvVmFyMCkNCgkgIGZvciAoaiBpbiAxOmNvbENvdW50KSB7DQoJICAgIGJldGFbal0gfiBkbm9ybShtdVtqXSwgMS9WYXJbal0pDQoJICB9DQoJICANCgkgIHByZWNpc2lvbiB+IGRleHAoMS8wLjI1KSANCgkgIA0KCSAgZm9yIChpIGluIDE6cm93Q291bnQpIHsNCgkgIA0KCSAgICAjIE5vcm1hbCBMaWtlbGlob29kDQoJICAgIHlbaV0gfiBkbm9ybShiZXRhMCArIHN1bShiZXRhWzE6Y29sQ291bnRdKnhbaSwxOmNvbENvdW50XSksIHByZWNpc2lvbikNCgkgIH0NCg0KICAgIGZvciAoayBpbiAxOnByZWRDb3VudCkgew0KICAgICAgcHJlZFtrXSA8LSBiZXRhMCArIHN1bShiZXRhWzE6Y29sQ291bnRdKnhQcmVkW2ssMTpjb2xDb3VudF0pDQogICAgfQ0KfQ0KIg0KCQ0KCXdyaXRlTGluZXMobW9kZWxTdHJpbmcsIGNvbj0iVEVNUG1vZGVsMi50eHQiKQ0KYGBgDQojIyMgUnVuIEpBR1MNCmBgYHtyfQ0KDQpwYXJhbWV0ZXJzID0gYygiYmV0YTAiKQ0KZm9yICggaSBpbiAxOjIyKXsNCiAgcGFyYW1ldGVycyA9IGMocGFyYW1ldGVycywgcGFzdGUwKCJiZXRhWyIsaSwiXSIpKQ0KfQ0KZm9yICggaSBpbiAxOm5yb3coeFByZWQpKXsNCiAgcGFyYW1ldGVycyA9IGMocGFyYW1ldGVycywgcGFzdGUwKCJwcmVkWyIsaSwiXSIpKQ0KfQ0KDQphZGFwdFN0ZXBzID0gNTANCmJ1cm5JblN0ZXBzID0gMTAwDQpuQ2hhaW5zID0gMg0KdGhpblN0ZXBzID0gMTcNCm51bVNhdmVkU3RlcHMgPSAyNTANCg0Kbkl0ZXIgPSBjZWlsaW5nKCAoIG51bVNhdmVkU3RlcHMgKiB0aGluU3RlcHMgKSAvIG5DaGFpbnMgKQ0KDQpzdGFydFRpbWUgPSBwcm9jLnRpbWUoKQ0KIyBzaW5rKCJkZWJ1ZzIudHh0IikNCnJ1bkphZ3NPdXQgPC0gcnVuLmphZ3MoIG1ldGhvZD0icGFyYWxsZWwiICwNCiAgICAgICAgICAgICAgICAgICAgICAgIG1vZGVsPSJURU1QbW9kZWwyLnR4dCIsDQogICAgICAgICAgICAgICAgICAgICAgICBtb25pdG9yPXBhcmFtZXRlcnMsDQogICAgICAgICAgICAgICAgICAgICAgICBkYXRhPWRhdGFMaXN0LA0KICAgICAgICAgICAgICAgICAgICAgICAgbi5jaGFpbnM9bkNoYWlucywNCiAgICAgICAgICAgICAgICAgICAgICAgIGFkYXB0PWFkYXB0U3RlcHMsDQogICAgICAgICAgICAgICAgICAgICAgICBidXJuaW49YnVybkluU3RlcHMsDQogICAgICAgICAgICAgICAgICAgICAgICBzYW1wbGU9bnVtU2F2ZWRTdGVwcywNCiAgICAgICAgICAgICAgICAgICAgICAgIHRoaW49dGhpblN0ZXBzICwgc3VtbWFyaXNlPUZBTFNFICwgcGxvdHM9RkFMU0UgKQ0Kc3RvcFRpbWUgPSBwcm9jLnRpbWUoKQ0KZHVyYXRpb24gPSBzdG9wVGltZSAtIHN0YXJ0VGltZQ0Kc2hvdyhkdXJhdGlvbikNCmNvZGFTYW1wbGVzID0gYXMubWNtYy5saXN0KCBydW5KYWdzT3V0ICkNCiMgc2luaygpDQpzYXZlKCBjb2RhU2FtcGxlcyAsIGZpbGU9cGFzdGUoIlJ1bjEiLCJNY21jLlJkYXRhIixzZXA9IiIpICkNCnNhdmUuaW1hZ2UoZmlsZT0nUnVuMS5SRGF0YScpDQpgYGANCiMgTG9hZCBzYXZlDQpgYGB7cn0NCmxvYWQuaW1hZ2UoZmlsZT0nUnVuMS5SRGF0YScpDQpgYGANCg0KIyMjIFJlc3VsdHMNCmBgYHtyfQ0KDQojID09PT09PT09PT09PT0gRGlzcGxheSBSZXN1bHRzID09PT09PT09PT09PQ0KZGlhZ01DTUMoIGNvZGFTYW1wbGVzICwgcGFyTmFtZT0iYmV0YTAiICkNCmZvciAoIGkgaW4gMToyMikgew0KICBkaWFnTUNNQyggY29kYVNhbXBsZXMgLCBwYXJOYW1lPXBhc3RlMCgiYmV0YVsiLGksIl0iKSApDQp9DQoNCmNvbXBWYWwgPC0gZGF0YS5mcmFtZSgNCiAgImJldGEwIiA9IDAsIA0KICAiYmV0YVsxXSIgPSAwLA0KICAiYmV0YVsyXSIgPSAwLCANCiAgImJldGFbM10iID0gMCwgDQogICJiZXRhWzRdIiA9ICAwLCANCiAgImJldGFbNV0iID0gIDAsDQogICJiZXRhWzZdIiA9ICAwLA0KICAiYmV0YVs3XSIgPSAgMCwNCiAgImJldGFbOF0iID0gIDAsDQogICJiZXRhWzldIiA9ICAwLA0KICAiYmV0YVsxMF0iID0gIDAsDQogICJiZXRhWzExXSIgPSAgMCwNCiAgImJldGFbMTJdIiA9ICAwLA0KICAiYmV0YVsxM10iID0gIDAsDQogICJiZXRhWzE0XSIgPSAgMCwNCiAgImJldGFbMTVdIiA9ICAwLA0KICAiYmV0YVsxNl0iID0gIDAsDQogICJiZXRhWzE3XSIgPSAgMCwNCiAgImJldGFbMThdIiA9ICAwLA0KICAiYmV0YVsxOV0iID0gIDAsDQogICJiZXRhWzIwXSIgPSAgMCwNCiAgImJldGFbMjFdIiA9ICAwLA0KICAiYmV0YVsyMl0iID0gIDAsDQogIGNoZWNrLm5hbWVzPUZBTFNFKQ0KDQoNCnN1bW1hcnlJbmZvIDwtIHNtcnlNQ01DKCBjb2RhU2FtcGxlcyA9IGNvZGFTYW1wbGVzICwgY29tcFZhbCA9IGNvbXBWYWwsIHNhdmVOYW1lPSJTdW1tYXJ5SW5mbyIgKQ0KDQoNCnBsb3RNQ01DX0hEKCBjb2RhU2FtcGxlcyA9IGNvZGFTYW1wbGVzLCBkYXRhID0gdHJhaW5fYmFsYW5jZWQsIHhOYW1lPWMoDQogICJEaXNwb3NhbHMiLA0KICAiS2lja3MiLA0KICAiTWFya3MiLA0KICAiSGFuZGJhbGxzIiwNCiAgIkdvYWxzIiwNCiAgIkJlaGluZHMiLA0KICAiSGl0Lk91dHMiLA0KICAiVGFja2xlcyIsDQogICJSZWJvdW5kcyIsDQogICJJbnNpZGUuNTBzIiwNCiAgIkNsZWFyYW5jZXMiLA0KICAiQ2xhbmdlcnMiLA0KICAiRnJlZXMiLA0KICAiRnJlZXMuQWdhaW5zdCIsDQogICJDb250ZXN0ZWQuUG9zc2Vzc2lvbnMiLA0KICAiVW5jb250ZXN0ZWQuUG9zc2Vzc2lvbnMiLA0KICAiQ29udGVzdGVkLk1hcmtzIiwNCiAgIk1hcmtzLkluc2lkZS41MCIsDQogICJPbmUuUGVyY2VudGVycyIsDQogICJCb3VuY2VzIiwNCiAgIkdvYWwuQXNzaXN0cyIsDQogICJYLi5QbGF5ZWQiDQogKSwNCiB5TmFtZT0iQnJvd25sb3cuVm90ZXMiLCBjb21wVmFsID0gY29tcFZhbCwgcHJlZHMgPSBUUlVFKQ0KYGBgDQoNCmBgYHtyfQ0KcGxvdE1DTUNfSEQoIGNvZGFTYW1wbGVzID0gY29kYVNhbXBsZXMsIGRhdGEgPSB0cmFpbl9iYWxhbmNlZCwgeE5hbWU9YygiQmVoaW5kcyIsICJCb3VuY2VzIiwgIkNsYW5nZXJzIiwgIkNsZWFyYW5jZXMiLCAiQ29udGVzdGVkLk1hcmtzIiwgIkNvbnRlc3RlZC5Qb3NzZXNzaW9ucyIsDQogICAgIkRpc3Bvc2FscyIsICJGcmVlcyIsICJGcmVlcy5BZ2FpbnN0IiwgIkdvYWwuQXNzaXN0cyIsICJHb2FscyIsICJIYW5kYmFsbHMiLA0KICAgICJIaXQuT3V0cyIsICJJbnNpZGUuNTBzIiwgIktpY2tzIiwgIk1hcmtzIiwgIk1hcmtzLkluc2lkZS41MCIsICJPbmUuUGVyY2VudGVycyIsICJSZWJvdW5kcyIsDQogICAgIlRhY2tsZXMiLCAiVW5jb250ZXN0ZWQuUG9zc2Vzc2lvbnMiKSwgeU5hbWU9IkJyb3dubG93LlZvdGVzIiwgY29tcFZhbCA9IGNvbXBWYWwsIHByZWRzID0gVFJVRSkNCmBgYA0KDQpgYGB7cn0NCnByZWQgPC0gYygpDQptb2RlIDwtIHN1bW1hcnlJbmZvWywiTW9kZSJdDQp4UHJlZDIgPSBhcy5tYXRyaXgodGVzdF9iYWxhbmNlZFssMToyMl0pDQpmb3IgKGsgaW4gMTpucm93KHhQcmVkKSkgew0KIA0KICBwcmVkW2tdIDwtIG1vZGVbImJldGEwIl0gKw0KICAgIChtb2RlWyJiZXRhWzFdIl0qeFByZWQyW2ssMV0pICsNCiAgICAobW9kZVsiYmV0YVsyXSJdKnhQcmVkMltrLDJdKSArIA0KICAgIChtb2RlWyJiZXRhWzNdIl0qeFByZWQyW2ssM10pICsgDQogICAgKG1vZGVbImJldGFbNF0iXSp4UHJlZDJbayw0XSkgKyANCiAgICAobW9kZVsiYmV0YVs1XSJdKnhQcmVkMltrLDVdKSArDQogICAgKG1vZGVbImJldGFbNl0iXSp4UHJlZDJbayw2XSkgKw0KICAgIChtb2RlWyJiZXRhWzddIl0qeFByZWQyW2ssN10pICsNCiAgICAobW9kZVsiYmV0YVs4XSJdKnhQcmVkMltrLDhdKSArDQogICAgKG1vZGVbImJldGFbOV0iXSp4UHJlZDJbayw5XSkgKw0KICAgIChtb2RlWyJiZXRhWzEwXSJdKnhQcmVkMltrLDEwXSkgKw0KICAgIChtb2RlWyJiZXRhWzExXSJdKnhQcmVkMltrLDExXSkgKw0KICAgIChtb2RlWyJiZXRhWzEyXSJdKnhQcmVkMltrLDEyXSkgKw0KICAgIChtb2RlWyJiZXRhWzEzXSJdKnhQcmVkMltrLDEzXSkgKw0KICAgIChtb2RlWyJiZXRhWzE0XSJdKnhQcmVkMltrLDE0XSkgKw0KICAgIChtb2RlWyJiZXRhWzE1XSJdKnhQcmVkMltrLDE1XSkgKw0KICAgIChtb2RlWyJiZXRhWzE2XSJdKnhQcmVkMltrLDE2XSkgKw0KICAgIChtb2RlWyJiZXRhWzE3XSJdKnhQcmVkMltrLDE3XSkgKw0KICAgIChtb2RlWyJiZXRhWzE4XSJdKnhQcmVkMltrLDE4XSkgKw0KICAgIChtb2RlWyJiZXRhWzE5XSJdKnhQcmVkMltrLDE5XSkgKw0KICAgIChtb2RlWyJiZXRhWzIwXSJdKnhQcmVkMltrLDIwXSkgKw0KICAgIChtb2RlWyJiZXRhWzIxXSJdKnhQcmVkMltrLDIxXSkgKw0KICAgIChtb2RlWyJiZXRhWzIyXSJdKnhQcmVkMltrLDIyXSkNCn0NCmBgYA0KDQojID09PT09PT09PT09PSBQcmVkaWN0aXZlIGNoZWNrID09PT09PT09PT09PQ0KYGBge3J9DQpwZXJmb3JtYW5jZV90ZXN0IDwtIGZ1bmN0aW9uIChwcmVkaWN0aW9ucykgew0KICByZWFsID0gYyh0ZXN0JEJyb3dubG93LlZvdGVzKQ0KICBsZW5ndGgocHJlZGljdGlvbnMpDQogIGxlbmd0aChyZWFsKQ0KICBuID0gbGVuZ3RoKHJlYWwpDQogIHByaW50KHBhc3RlKCJNQUU6Iiwgc3VtKGFicyhwcmVkaWN0aW9ucyAtIHJlYWwpKS9uKSkNCiAgcHJpbnQocGFzdGUoIk1TRToiLCBzdW0oKHJlYWwgLSBwcmVkaWN0aW9ucyleMikpKQ0KICBwcmludChwYXN0ZSgiUk1TRToiLCBzcXJ0KG1zZS9uKSkpDQp9DQoNCnBlcmZvcm1hbmNlX3Rlc3QocHJlZCkNCmBgYA0KDQoNCmBgYHtyfQ0KbGlicmFyeShkcGx5cikNCmxpYnJhcnkodGlkeXIpDQoNCnRlc3QkcHJlZCA8LSBwcmVkDQoNCg0KbGVhZGVyYm9hcmQgPSBjKCkNCmZvciAoaWQgaW4gdW5saXN0KHRlc3QkZ2FtZUlkWzFdKSkgew0KICBnYW1lIDwtIHRlc3RbdGVzdCRnYW1lSWQgPT0gaWQsXQ0KICBvcmRlcmVkIDwtIGdhbWVbb3JkZXIoLWdhbWUkcHJlZCksXQ0KICB0b3BfM19yb3dzIDwtIGhlYWQob3JkZXJlZCwgMykNCiAgDQogICMgUmV2ZXJzZSBvcmRlciBzbyB0aGF0IGJyb3dubG93IHByZWRpY3Rpb25zIGNhbiBiZSBlcXVhbCB0byBpbmRleA0KICB0b3BfM19yb3dzIDwtIHRvcF8zX3Jvd3Nbb3JkZXIodG9wXzNfcm93cyRwcmVkKSxdDQogIGZvciAocm93IGluIHRvcF8zX3Jvd3MpIHsNCiAgICBpZF9uYW1lID0gcGFzdGUocm93JGRpc3BsYXlOYW1lLCByb3ckcGxheWVySWQsIHNlcD0iXyIpDQogICAgc2NvcmUgPC0gMA0KICAgIGlmICghaXMubnVsbChsZWFkZXJib2FyZFtpZF9uYW1lXSkpIHsNCiAgICAgIHNjb3JlIDwtIGxlYWRlcmJvYXJkW2lkX25hbWVdDQogICAgfQ0KDQogICAgbGVhZGVyYm9hcmRbaWRfbmFtZV0gPC0gc2NvcmUgKw0KICB9DQp9DQpgYGANCg0KYGBge3J9DQpoaSA9IGMoKQ0KIWlzLm51bGwoaGlbInlvIl0pDQpgYGANCg==</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIkFGTCBNb2RlbGxpbmcgb2YgUGVyZm9ybWFuY2UgUGVyIEdhbWUiDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KYGBge3J9DQpzb3VyY2UoIi4uLy4uL3V0aWxpdGllcy9Nb2RlbDJTY3JpcHRzLlIiKQ0KDQojIFJlYWQgdHJhaW4gYW5kIHRlc3Qgc2V0cyBmcm9tIGZpbGVzLg0KdHJhaW4gPC0gcmVhZC5jc3YoIi4uLy4uL2RhdGEvdHJhaW5fcGVyZm9ybWFuY2UuY3N2IikNCnRlc3QgPC0gcmVhZC5jc3YoIi4uLy4uL2RhdGEvdGVzdF9wZXJmb3JtYW5jZS5jc3YiKQ0KDQp2YXJfY29sX2NvdW50IDwtIDIyDQpgYGANCg0KIyBMb2FkIHNhdmUNCmBgYHtyfQ0KIyBsb2FkX3J1bl9zdGF0ZShydW5fbnVtYmVyKQ0KYGBgDQoNCiMjIyBKQUdTIFJ1biAxDQpgYGB7cn0NCiMgUnVuIDENCnJ1bl9udW1iZXIgPC0gMQ0KDQojIEh5cGVyIFBhcmFtZXRlcnMNCmFkYXB0U3RlcHMgPSA1MA0KYnVybkluU3RlcHMgPSAxMDANCm5DaGFpbnMgPSAyDQp0aGluU3RlcHMgPSAxNw0KbnVtU2F2ZWRTdGVwcyA9IDI1MA0KDQojIFJ1biBKQUdTDQpjb2RhU2FtcGxlcyA8LSBydW5famFnc19tb2RlbF8yKHRyYWluLCB0ZXN0LCB2YXJfY29sX2NvdW50LCBydW5fbnVtYmVyID0gcnVuX251bWJlciwgYWRhcHRTdGVwcyA9IGFkYXB0U3RlcHMsIGJ1cm5JblN0ZXBzID0gYnVybkluU3RlcHMsIG5DaGFpbnMgPSBuQ2hhaW5zLCB0aGluU3RlcHMgPSB0aGluU3RlcHMsIG51bVNhdmVkU3RlcHMgPSBudW1TYXZlZFN0ZXBzKQ0KDQojIFNhdmUgU3RhdGUNCnNhdmVfcnVuX3N0YXRlKGNvZGFTYW1wbGVzLCBydW5fbnVtYmVyKQ0KDQojIERpYWdub3N0aWNzDQpzdW1tYXJ5SW5mbyA8LSBnZW5lcmF0ZV9kaWFnbm9zdGljcyhjb2RhU2FtcGxlcywgcnVuX251bWJlciwgdmFyX2NvbF9jb3VudCkNCg0KIyBMZWFkZXIgQm9hcmQNCmNyZWF0ZV9sZWFkZXJib2FyZCh0ZXN0LCBzdW1tYXJ5SW5mbywgdmFyX2NvbF9jb3VudCkNCmBgYA0KDQojIyMgSkFHUyBSdW4gMg0KYGBge3J9DQojIFJ1biAxDQpydW5fbnVtYmVyIDwtIDINCg0KIyBIeXBlciBQYXJhbWV0ZXJzDQphZGFwdFN0ZXBzID0gNTANCmJ1cm5JblN0ZXBzID0gMTAwDQpuQ2hhaW5zID0gMg0KdGhpblN0ZXBzID0gMTcNCm51bVNhdmVkU3RlcHMgPSAyNTANCg0KIyBSdW4gSkFHUw0KY29kYVNhbXBsZXMgPC0gcnVuX2phZ3NfbW9kZWxfMih0cmFpbiwgdGVzdCwgdmFyX2NvbF9jb3VudCwgcnVuX251bWJlciA9IHJ1bl9udW1iZXIsIGFkYXB0U3RlcHMgPSBhZGFwdFN0ZXBzLCBidXJuSW5TdGVwcyA9IGJ1cm5JblN0ZXBzLCBuQ2hhaW5zID0gbkNoYWlucywgdGhpblN0ZXBzID0gdGhpblN0ZXBzLCBudW1TYXZlZFN0ZXBzID0gbnVtU2F2ZWRTdGVwcykNCg0KIyBTYXZlIFN0YXRlDQpzYXZlX3J1bl9zdGF0ZShjb2RhU2FtcGxlcywgcnVuX251bWJlcikNCg0KIyBEaWFnbm9zdGljcw0Kc3VtbWFyeUluZm8gPC0gZ2VuZXJhdGVfZGlhZ25vc3RpY3MoY29kYVNhbXBsZXMsIHJ1bl9udW1iZXIsIHZhcl9jb2xfY291bnQpDQoNCiMgTGVhZGVyIEJvYXJkDQpjcmVhdGVfbGVhZGVyYm9hcmQodGVzdCwgc3VtbWFyeUluZm8sIHZhcl9jb2xfY291bnQpDQpgYGANCg0KIyMjIEpBR1MgUnVuIDMNCmBgYHtyfQ0KIyBSdW4gMQ0KcnVuX251bWJlciA8LSAzDQoNCiMgSHlwZXIgUGFyYW1ldGVycw0KYWRhcHRTdGVwcyA9IDUwDQpidXJuSW5TdGVwcyA9IDEwMA0KbkNoYWlucyA9IDINCnRoaW5TdGVwcyA9IDE3DQpudW1TYXZlZFN0ZXBzID0gMjUwDQoNCiMgUnVuIEpBR1MNCmNvZGFTYW1wbGVzIDwtIHJ1bl9qYWdzX21vZGVsXzIodHJhaW4sIHRlc3QsIHZhcl9jb2xfY291bnQsIHJ1bl9udW1iZXIgPSBydW5fbnVtYmVyLCBhZGFwdFN0ZXBzID0gYWRhcHRTdGVwcywgYnVybkluU3RlcHMgPSBidXJuSW5TdGVwcywgbkNoYWlucyA9IG5DaGFpbnMsIHRoaW5TdGVwcyA9IHRoaW5TdGVwcywgbnVtU2F2ZWRTdGVwcyA9IG51bVNhdmVkU3RlcHMpDQoNCiMgU2F2ZSBTdGF0ZQ0Kc2F2ZV9ydW5fc3RhdGUoY29kYVNhbXBsZXMsIHJ1bl9udW1iZXIpDQoNCiMgRGlhZ25vc3RpY3MNCnN1bW1hcnlJbmZvIDwtIGdlbmVyYXRlX2RpYWdub3N0aWNzKGNvZGFTYW1wbGVzLCBydW5fbnVtYmVyLCB2YXJfY29sX2NvdW50KQ0KDQojIExlYWRlciBCb2FyZA0KY3JlYXRlX2xlYWRlcmJvYXJkKHRlc3QsIHN1bW1hcnlJbmZvLCB2YXJfY29sX2NvdW50KQ0KYGBgDQoNCiMgUnVuIFBlcmZvcm1hbmNlIEFuYWx5c2lzDQpgYGB7cn0NCnBlcmZvcm1hbmNlX3Rlc3QgPC0gZnVuY3Rpb24gKHByZWRpY3Rpb25zKSB7DQogIHJlYWwgPSBjKHRlc3QkQnJvd25sb3cuVm90ZXMpDQogIGxlbmd0aChwcmVkaWN0aW9ucykNCiAgbGVuZ3RoKHJlYWwpDQogIG4gPSBsZW5ndGgocmVhbCkNCiAgcHJpbnQocGFzdGUoIk1BRToiLCBzdW0oYWJzKHByZWRpY3Rpb25zIC0gcmVhbCkpL24pKQ0KICBwcmludChwYXN0ZSgiTVNFOiIsIHN1bSgocmVhbCAtIHByZWRpY3Rpb25zKV4yKSkpDQogIHByaW50KHBhc3RlKCJSTVNFOiIsIHNxcnQobXNlL24pKSkNCn0NCg0KcGVyZm9ybWFuY2VfdGVzdChwcmVkKQ0KYGBgDQo=</div>
 
 
 
