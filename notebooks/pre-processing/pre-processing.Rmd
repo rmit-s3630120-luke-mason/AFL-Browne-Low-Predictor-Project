@@ -121,41 +121,40 @@ convert_list_stoi <- function(list_str) {
 }
 
 # Creates the performance dataset but from x number of games and optionally without many 0 votes.
-create_performance_dataset <- function(number_of_games, balanced = FALSE){
-  # Read in the stats of the players
-  all_stats <- read.csv("../../data/all_stats.csv")
+create_performance_dataset <- function(df, number_of_games, balanced = FALSE){
+
 
   # Group the rows into games, by game id
-  top <- all_stats %>% group_by(gameId) %>% summarise()
+  top <- df %>% group_by(gameId) %>% summarise()
   gameIds <- as.list(head(top, number_of_games))
-  game_stats <- all_stats[all_stats$gameId %in% unlist(gameIds),]
+  game_stats <- df[df$gameId %in% unlist(gameIds),]
   
   # Drop the redundant columns
-  drops <- c("team", "round", "displayName",	"gameNumber")
+  drops <- c("team", "round",	"gameNumber")
   game_stats <- game_stats[ , !(names(game_stats) %in% drops)]
   
   stat_cols <- c(
+    "Behinds",
+    "Bounces",
+    "Clangers",
+    "Clearances",
+    "Contested.Marks",
+    "Contested.Possessions",
     "Disposals",
+    "Frees", 
+    "Frees.Against",
+    "Goal.Assists",
+    "Goals",
+    "Handballs",
+    "Hit.Outs",
+    "Inside.50s",
     "Kicks",
     "Marks",
-    "Handballs",
-    "Goals",
-    "Behinds",
-    "Hit.Outs",
-    "Tackles",
-    "Rebounds",
-    "Inside.50s",
-    "Clearances",
-    "Clangers",
-    "Frees",
-    "Frees.Against",
-    "Contested.Possessions",
-    "Uncontested.Possessions",
-    "Contested.Marks",
     "Marks.Inside.50",
     "One.Percenters",
-    "Bounces",
-    "Goal.Assists",
+    "Rebounds",
+    "Tackles",
+    "Uncontested.Possessions"
     )
   
   xPlayed <- "X..Played"
@@ -163,7 +162,7 @@ create_performance_dataset <- function(number_of_games, balanced = FALSE){
 
   
   # Column names.
-  x <- c(stat_cols, c(xPlayed, label, "year"))
+  x <- c(stat_cols, c(xPlayed, label, "displayName", "year", "gameId", "playerId"))
   
   # The new data frame to create.
   new_df <- data.frame(matrix(ncol = length(x), nrow = 0))
@@ -187,11 +186,13 @@ create_performance_dataset <- function(number_of_games, balanced = FALSE){
       indices <- indices[2:length(indices)]
 
       # Remove the selected rows, to be left with a single 0, 1, 2, and 3 brownlow votes row
-      player_ids <- unlist(game[-indices,]$id)
+      row_indices <- unlist(game[-indices,]$id)
+    } else {
+        row_indices <- unlist(1:nrow(game))
     }
   
     # For each player in the group, get the rest of the players in that group and aggregate their stats
-    for (row_index in player_ids) {
+    for (row_index in row_indices) {
   
       # Get the player row
       player <- game[c(row_index),]
@@ -225,14 +226,14 @@ create_performance_dataset <- function(number_of_games, balanced = FALSE){
       # Shift rows to columns
       performance <- pivot_wider(data=performance, names_from="stat", values_from="performance")
   
-      # Add % played column
-      performance[xPlayed] <- as.matrix(player[xPlayed])[1] /100
-  
-      # Add label column
+      # Add columns to help post processing
+      performance[xPlayed] <- as.matrix(player[xPlayed])[1] / 100
       performance[label] <- as.matrix(player[label])[1]
-      
-      # Add year column to help splitting later
+      performance["displayName"] <- as.matrix(player["displayName"])[1]
       performance["year"] <- as.matrix(player["year"])[1]
+      performance["gameId"] <- as.matrix(player["gameId"])[1]
+      performance["playerId"] <- as.matrix(player["playerId"])[1]
+      
       # print(player)
       # Add the row to the new data frame.
       new_df[nrow(new_df) + 1,] <- performance[1,]
@@ -245,16 +246,32 @@ create_performance_dataset <- function(number_of_games, balanced = FALSE){
 }
 ```
 
-### Create the performance dataset
-```{r}
-performance_df = create_performance_dataset(100)
-performance_df
-```
-
 ### Create more balanced performance dataset
 ```{r}
-balanced_performance_df = create_performance_dataset(10000, TRUE)
-balanced_performance_df
+# Read in the stats of the players
+all_stats <- read.csv("../../data/all_stats.csv")
+
+# Make the train set balanced
+train_performance = all_stats[all_stats$year != "2021",]
+balanced_performance_df = create_performance_dataset(train_performance, 10000, TRUE)
+
+# Make the test set be all of the games of 2021 so all can be tallied up.
+test_performance = all_stats[all_stats$year == "2021",]
+test_performance_df = create_performance_dataset(test_performance, 10000, FALSE)
+```
+
+# Save balanced split performance datasets
+```{r}
+# Write train and test sets to files.
+name = "performance"
+write.csv(balanced_performance_df, paste("../../data/train_", name, ".csv", sep=""), row.names=FALSE)
+write.csv(test_performance_df, paste("../../data/test_", name, ".csv", sep=""), row.names=FALSE)
+```
+
+### Create the performance dataset
+```{r}
+performance_df = create_performance_dataset(all_stats, 100)
+performance_df
 ```
 
 ## Save datasets
