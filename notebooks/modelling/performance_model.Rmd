@@ -48,11 +48,11 @@ create_leaderboard(test, summaryInfo, var_col_count)
 run_number <- 2
 
 # Hyper Parameters
-adaptSteps = 50
-burnInSteps = 100
+adaptSteps = 675
+burnInSteps = 1250
 nChains = 2
-thinSteps = 17
-numSavedSteps = 250
+thinSteps = 20
+numSavedSteps = 2500
 
 # Run JAGS
 codaSamples <- run_jags_model_2(train, test, var_col_count, run_number = run_number, adaptSteps = adaptSteps, burnInSteps = burnInSteps, nChains = nChains, thinSteps = thinSteps, numSavedSteps = numSavedSteps)

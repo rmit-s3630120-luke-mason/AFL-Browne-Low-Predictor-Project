@@ -135,33 +135,41 @@ generate_diagnostics <- function(codaSamples, run_number, var_col_count) {
     "beta[22]" =  0,
     check.names=FALSE)
   
-  summaryInfo <- smryMCMC( codaSamples = codaSamples , compVal = compVal, saveName="SummaryInfo" )
+  summaryInfo <- smryMCMC( codaSamples = codaSamples , compVal = compVal, saveName=saveName )
   
-  plotMCMC_HD( codaSamples = codaSamples, data = train, saveName=saveName, xName=c(
-    "Disposals",
-    "Kicks",
-    "Marks",
-    "Handballs",
-    "Goals",
-    "Behinds",
-    "Hit.Outs",
-    "Tackles",
-    "Rebounds",
-    "Inside.50s",
-    "Clearances",
-    "Clangers",
-    "Frees",
-    "Frees.Against",
-    "Contested.Possessions",
-    "Uncontested.Possessions",
-    "Contested.Marks",
-    "Marks.Inside.50",
-    "One.Percenters",
-    "Bounces",
-    "Goal.Assists",
-    "X..Played"
-  ),
-  yName="Brownlow.Votes", compVal = compVal, preds = TRUE)
+  out <- tryCatch(
+    {
+      plotMCMC_HD( codaSamples = codaSamples, data = train, saveName=saveName, xName=c(
+        "Disposals",
+        "Kicks",
+        "Marks",
+        "Handballs",
+        "Goals",
+        "Behinds",
+        "Hit.Outs",
+        "Tackles",
+        "Rebounds",
+        "Inside.50s",
+        "Clearances",
+        "Clangers",
+        "Frees",
+        "Frees.Against",
+        "Contested.Possessions",
+        "Uncontested.Possessions",
+        "Contested.Marks",
+        "Marks.Inside.50",
+        "One.Percenters",
+        "Bounces",
+        "Goal.Assists",
+        "X..Played"
+      ),
+      yName="Brownlow.Votes", compVal = compVal, preds = TRUE)
+    },
+    error=function(cond) {
+      print(cond)
+      return(NA)
+    }
+  )
   
   return (summaryInfo)
 }
