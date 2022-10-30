@@ -15,7 +15,7 @@ var_col_count <- 22
 # Load save
 ```{r}
 load_run_state(4)
-load(file=paste('Run1.RData'))
+load(file=paste('Run2.RData'))
 ```
 
 ### JAGS Run 1
