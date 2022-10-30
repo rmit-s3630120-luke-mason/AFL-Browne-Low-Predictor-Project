@@ -187,6 +187,25 @@ save_run_state <- function(codaSamples, run_number) {
   save.image(file=paste('Run', run_number, '.RData', sep=""))
 }
 
+performance_test <- function (test, predictions) {
+  real = c(test$Brownlow.Votes)
+  print(length(predictions))
+  print(length(real))
+  n = length(real)
+  print(paste("MAE:", sum(abs(predictions - real))/n))
+  mse <- sum((real - predictions)^2)
+  print(paste("MSE:", mse))
+  print(paste("RMSE:", sqrt(mse/n)))
+}
+
+performance_test_c <- function (real, predictions) {
+  n = length(real)
+  print(paste("MAE:", sum(abs(predictions - real))/n))
+  mse <- sum((real - predictions)^2)
+  print(paste("MSE:", mse))
+  print(paste("RMSE:", sqrt(mse/n)))
+}
+
 add_score <- function(df, id_name, new_votes) {
   
   # Find row with the id
@@ -207,8 +226,7 @@ get_row_id_name <- function(row) {
   return (paste(row$displayName, row$playerId, sep=", "))
 }
 
-# Save Leader Board
-create_leaderboard <- function(test_df, summaryInfo, var_col_count) {
+get_pred <- function(test_df, summaryInfo, var_col_count) {
   pred <- c()
   mode <- summaryInfo[,"Mode"]
   
@@ -240,6 +258,13 @@ create_leaderboard <- function(test_df, summaryInfo, var_col_count) {
       (mode["beta[21]"]*xPred[k,21]) +
       (mode["beta[22]"]*xPred[k,22])
   }
+  
+  return(pred)
+}
+
+# Save Leader Board
+create_leaderboard <- function(test_df, summaryInfo, var_col_count) {
+  pred <- get_pred(test_df, summaryInfo, var_col_count)
   
   test_df$pred <- pred
   
@@ -275,6 +300,45 @@ create_leaderboard <- function(test_df, summaryInfo, var_col_count) {
   write.csv(leaderboard[order(-leaderboard$Brownlow.Votes),], name, row.names=FALSE)
 }
 
+# Create Brownlow Vote predictions
+get_brownlow_preds <- function(test_df, summaryInfo, var_col_count) {
+  pred <- get_pred(test_df, summaryInfo, var_col_count)
+  
+  test_df$pred <- pred
+  
+  # Create data frame pred
+  columns = c("gameId", "playerId", "Brownlow.Votes")
+  brownlow_pred = data.frame(matrix(ncol = length(columns), nrow=0))
+  colnames(brownlow_pred) <- columns
+  
+  brownlow_pred$playerId <- as.double(brownlow_pred$playerId)
+  brownlow_pred$gameId <- as.character(brownlow_pred$gameId)
+  brownlow_pred$Brownlow.Votes <- as.numeric(brownlow_pred$Brownlow.Votes)
+  
+  # Post Processing the predictions per game
+  unique_game_ids <- test_df %>% group_by(gameId) %>% summarise()
+  for (id in unlist(unique_game_ids)) {
+    print(paste("Doing ", id))
+    game <- test_df[test_df$gameId == id,]
+    ordered <- game[order(-game$pred),]
+    
+    # Top 3 Votes
+    brownlow_pred <- assign_brownlow(brownlow_pred,ordered[1,]$gameId, ordered[1,]$playerId, 3)
+    brownlow_pred <- assign_brownlow(brownlow_pred,ordered[2,]$gameId, ordered[2,]$playerId, 2)
+    brownlow_pred <- assign_brownlow(brownlow_pred,ordered[3,]$gameId, ordered[3,]$playerId, 1)
+    
+    # Rest 0 votes
+    for (row_idx in 4:nrow(ordered)) {
+      brownlow_pred <- assign_brownlow(brownlow_pred,ordered[row_idx,]$gameId, ordered[row_idx,]$playerId, 0)
+    }
+  }
+  
+  return (brownlow_pred %>% group_by(brownlow_pred$gameId, brownlow_pred$playerId))
+}
+
+assign_brownlow <- function(df, gameId, playerId, votes) {
+  df <- rows_append(df, tibble(gameId=gameId, playerId=playerId, Brownlow.Votes=votes))
+}
 
 
 

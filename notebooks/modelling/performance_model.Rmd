@@ -15,7 +15,7 @@ var_col_count <- 22
 # Load save
 ```{r}
 load_run_state(4)
-load(file=paste('Run2.RData'))
+load(file=paste('Run4.RData'))
 ```
 
 ### JAGS Run 1
@@ -66,6 +66,9 @@ summaryInfo <- generate_diagnostics(codaSamples, run_number, var_col_count, TRUE
 
 # Leader Board
 create_leaderboard(test, summaryInfo, var_col_count)
+
+pred <- get_pred(test, summaryInfo, var_col_count)
+performance_test(pred)
 ```
 
 ### JAGS Run 3
@@ -91,6 +94,9 @@ summaryInfo <- generate_diagnostics(codaSamples, run_number, var_col_count, TRUE
 
 # Leader Board
 create_leaderboard(test, summaryInfo, var_col_count)
+
+pred <- get_pred(test, summaryInfo, var_col_count)
+performance_test(pred)
 ```
 
 ### JAGS Run 4
@@ -116,19 +122,19 @@ summaryInfo <- generate_diagnostics(codaSamples, run_number, var_col_count, TRUE
 
 # Leader Board
 create_leaderboard(test, summaryInfo, var_col_count)
+
+pred <- get_pred(test, summaryInfo, var_col_count)
+performance_test(pred)
 ```
 
 # Run Performance Analysis
 ```{r}
-performance_test <- function (predictions) {
-  real = c(test$Brownlow.Votes)
-  length(predictions)
-  length(real)
-  n = length(real)
-  print(paste("MAE:", sum(abs(predictions - real))/n))
-  print(paste("MSE:", sum((real - predictions)^2)))
-  print(paste("RMSE:", sqrt(mse/n)))
-}
 
-performance_test(pred)
+
+# performance_test(pred)
+ordered_real_pred <- test %>% group_by(test$gameId, test$playerId)
+guess_pred <- get_brownlow_preds(test, summaryInfo, var_col_count)
+guess_pred
+length(guess_pred)
+length(c(ordered_real_pred))
 ```
