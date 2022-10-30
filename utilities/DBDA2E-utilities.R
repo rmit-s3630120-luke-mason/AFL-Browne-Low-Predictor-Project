@@ -340,9 +340,11 @@ plotPost = function( paramSampleVec , cenTend=c("mode","median","mean")[1] ,
   if ( is.null(border) ) border="white"
   
   # convert coda object to matrix:
-  if ( class(paramSampleVec) == "mcmc.list" ) {
-    paramSampleVec = as.matrix(paramSampleVec)
-  }
+  # print(paramSampleVec)
+  
+  # if ( class(paramSampleVec) == "mcmc.list" ) {
+  #   paramSampleVec = as.matrix(paramSampleVec)
+  # }
   
   summaryColNames = c("ESS","mean","median","mode",
                       "hdiMass","hdiLow","hdiHigh",

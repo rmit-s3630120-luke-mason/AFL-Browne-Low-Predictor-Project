@@ -14,7 +14,8 @@ var_col_count <- 22
 
 # Load save
 ```{r}
-# load_run_state(run_number)
+load_run_state(4)
+load(file=paste('Run1.RData'))
 ```
 
 ### JAGS Run 1
@@ -36,7 +37,7 @@ codaSamples <- run_jags_model_2(train, test, var_col_count, run_number = run_num
 save_run_state(codaSamples, run_number)
 
 # Diagnostics
-summaryInfo <- generate_diagnostics(codaSamples, run_number, var_col_count)
+summaryInfo <- generate_diagnostics(codaSamples, run_number, var_col_count, TRUE)
 
 # Leader Board
 create_leaderboard(test, summaryInfo, var_col_count)
@@ -44,7 +45,7 @@ create_leaderboard(test, summaryInfo, var_col_count)
 
 ### JAGS Run 2
 ```{r}
-# Run 1
+# Run 2
 run_number <- 2
 
 # Hyper Parameters
@@ -61,7 +62,7 @@ codaSamples <- run_jags_model_2(train, test, var_col_count, run_number = run_num
 save_run_state(codaSamples, run_number)
 
 # Diagnostics
-summaryInfo <- generate_diagnostics(codaSamples, run_number, var_col_count)
+summaryInfo <- generate_diagnostics(codaSamples, run_number, var_col_count, TRUE)
 
 # Leader Board
 create_leaderboard(test, summaryInfo, var_col_count)
@@ -69,15 +70,15 @@ create_leaderboard(test, summaryInfo, var_col_count)
 
 ### JAGS Run 3
 ```{r}
-# Run 1
+# Run 3
 run_number <- 3
 
 # Hyper Parameters
-adaptSteps = 50
-burnInSteps = 100
-nChains = 2
-thinSteps = 17
-numSavedSteps = 250
+adaptSteps = 675
+burnInSteps = 5000
+nChains = 4
+thinSteps = 40
+numSavedSteps = 4000
 
 # Run JAGS
 codaSamples <- run_jags_model_2(train, test, var_col_count, run_number = run_number, adaptSteps = adaptSteps, burnInSteps = burnInSteps, nChains = nChains, thinSteps = thinSteps, numSavedSteps = numSavedSteps)
@@ -86,7 +87,32 @@ codaSamples <- run_jags_model_2(train, test, var_col_count, run_number = run_num
 save_run_state(codaSamples, run_number)
 
 # Diagnostics
-summaryInfo <- generate_diagnostics(codaSamples, run_number, var_col_count)
+summaryInfo <- generate_diagnostics(codaSamples, run_number, var_col_count, TRUE)
+
+# Leader Board
+create_leaderboard(test, summaryInfo, var_col_count)
+```
+
+### JAGS Run 4
+```{r}
+# Run 3
+run_number <- 4
+
+# Hyper Parameters
+adaptSteps = 675
+burnInSteps = 20000
+nChains = 4
+thinSteps = 40
+numSavedSteps = 4000
+
+# Run JAGS
+codaSamples <- run_jags_model_2(train, test, var_col_count, run_number = run_number, adaptSteps = adaptSteps, burnInSteps = burnInSteps, nChains = nChains, thinSteps = thinSteps, numSavedSteps = numSavedSteps)
+
+# Save State
+save_run_state(codaSamples, run_number)
+
+# Diagnostics
+summaryInfo <- generate_diagnostics(codaSamples, run_number, var_col_count, TRUE)
 
 # Leader Board
 create_leaderboard(test, summaryInfo, var_col_count)

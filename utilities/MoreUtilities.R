@@ -127,18 +127,19 @@ plotMCMC_HD = function( codaSamples , data , xName="x" , yName="y", preds = FALS
     }
   }
   panelCount = decideOpenGraph( panelCount , saveName=paste0(saveName,"PostMarg") )
+  
   histInfo = plotPost( Rsq , cex.lab = 1.75 , showCurve=showCurve ,
-                       xlab=bquote(R^2) , main=paste("Prop Var Accntd") , finished=TRUE )
+                       xlab=bquote(R^2) , main=paste("Prop Var Accntd") , finished=FALSE )
   
   panelCount = 1
-  if ( pred){
-    
-    for ( pIdx in 1:ncol(pred) ) {
-      panelCount = decideOpenGraph( panelCount , saveName=paste0(saveName,"PostMarg") )
-      histInfo = plotPost( pred[,pIdx] , cex.lab = 1.75 , showCurve=showCurve ,
-                           xlab=bquote(pred[.(pIdx)]) , main=paste0("Prediction ",pIdx) ) 
-    }
-  }# Added by Demirhan
+  # if ( pred){
+  #   
+  #   for ( pIdx in 1:ncol(pred) ) {
+  #     panelCount = decideOpenGraph( panelCount , saveName=paste0(saveName,"PostMarg") )
+  #     histInfo = plotPost( pred[,pIdx] , cex.lab = 1.75 , showCurve=showCurve ,
+  #                          xlab=bquote(pred[.(pIdx)]) , main=paste0("Prediction ",pIdx) ) 
+  #   }
+  # }# Added by Demirhan
   # Standardized scale:
   panelCount = 1
   # panelCount = decideOpenGraph( panelCount , saveName=paste0(saveName,"PostMargZ") )
@@ -150,8 +151,10 @@ plotMCMC_HD = function( codaSamples , data , xName="x" , yName="y", preds = FALS
   #                        xlab=bquote(z*beta[.(bIdx)]) , main=xName[bIdx] )
   # }
   panelCount = decideOpenGraph( panelCount , saveName=paste0(saveName,"PostMargZ") )
-  histInfo = plotPost( Rsq , cex.lab = 1.75 , showCurve=showCurve ,
-                       xlab=bquote(R^2) , main=paste("Prop Var Accntd") )
+  
+  # histInfo = plotPost( Rsq , cex.lab = 1.75 , showCurve=showCurve ,
+  #                      xlab=bquote(R^2) , main=paste("Prop Var Accntd") )
+  
   panelCount = decideOpenGraph( panelCount , finished=TRUE , saveName=paste0(saveName,"PostMargZ") )
   
   #-----------------------------------------------------------------------------

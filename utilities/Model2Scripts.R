@@ -95,7 +95,7 @@ run_jags_model_2 <- function (train_df, test_df, var_col_count, run_number, adap
 }
 
 # Prints and saves all the diagnostics to file
-generate_diagnostics <- function(codaSamples, run_number, var_col_count) {
+generate_diagnostics <- function(codaSamples, run_number, var_col_count, skip_beta = FALSE) {
   directory <- paste('runs/', run_number, sep='')
   saveName <- paste(directory, "/model_2_", sep='')
   
@@ -104,9 +104,11 @@ generate_diagnostics <- function(codaSamples, run_number, var_col_count) {
     dir.create(directory)
   }
   
-  diagMCMC( codaSamples , parName="beta0", saveName=saveName)
-  for ( i in 1:var_col_count) {
-    diagMCMC( codaSamples , parName=paste0("beta[",i,"]"), saveName=saveName)
+  if (!skip_beta) {
+    diagMCMC( codaSamples , parName="beta0", saveName=saveName)
+    for ( i in 1:var_col_count) {
+      diagMCMC( codaSamples , parName=paste0("beta[",i,"]"), saveName=saveName)
+    }
   }
   
   compVal <- data.frame(
@@ -163,7 +165,7 @@ generate_diagnostics <- function(codaSamples, run_number, var_col_count) {
         "Goal.Assists",
         "X..Played"
       ),
-      yName="Brownlow.Votes", compVal = compVal, preds = TRUE)
+      yName="Brownlow.Votes", compVal = compVal)
     },
     error=function(cond) {
       print(cond)

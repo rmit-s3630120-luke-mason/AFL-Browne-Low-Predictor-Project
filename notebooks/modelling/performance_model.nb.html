@@ -1793,38 +1793,27 @@ var_col_count &lt;- 22</code></pre>
 <h1>Load save</h1>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBsb2FkX3J1bl9zdGF0ZShydW5fbnVtYmVyKVxuYGBgIn0= -->
-<pre class="r"><code># load_run_state(run_number)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubG9hZF9ydW5fc3RhdGUoNClcblxuYGBgIn0= -->
+<pre class="r"><code>load_run_state(4)
+</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiV2FybmluZzogY2Fubm90IG9wZW4gY29tcHJlc3NlZCBmaWxlICdSdW4gNCAuUkRhdGEnLCBwcm9iYWJsZSByZWFzb24gJ05vIHN1Y2ggZmlsZSBvciBkaXJlY3RvcnknRXJyb3IgaW4gcmVhZENoYXIoY29uLCA1TCwgdXNlQnl0ZXMgPSBUUlVFKSA6IGNhbm5vdCBvcGVuIHRoZSBjb25uZWN0aW9uXG4ifQ== -->
+<pre><code>Warning: cannot open compressed file &#39;Run 4 .RData&#39;, probable reason &#39;No such file or directory&#39;Error in readChar(con, 5L, useBytes = TRUE) : cannot open the connection</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <div id="jags-run-1" class="section level3">
 <h3>JAGS Run 1</h3>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBSdW4gMVxucnVuX251bWJlciA8LSAxXG5cbiMgSHlwZXIgUGFyYW1ldGVyc1xuYWRhcHRTdGVwcyA9IDUwXG5idXJuSW5TdGVwcyA9IDEwMFxubkNoYWlucyA9IDJcbnRoaW5TdGVwcyA9IDE3XG5udW1TYXZlZFN0ZXBzID0gMjUwXG5cbiMgUnVuIEpBR1NcbmNvZGFTYW1wbGVzIDwtIHJ1bl9qYWdzX21vZGVsXzIodHJhaW4sIHRlc3QsIHZhcl9jb2xfY291bnQsIHJ1bl9udW1iZXIgPSBydW5fbnVtYmVyLCBhZGFwdFN0ZXBzID0gYWRhcHRTdGVwcywgYnVybkluU3RlcHMgPSBidXJuSW5TdGVwcywgbkNoYWlucyA9IG5DaGFpbnMsIHRoaW5TdGVwcyA9IHRoaW5TdGVwcywgbnVtU2F2ZWRTdGVwcyA9IG51bVNhdmVkU3RlcHMpXG5cbiMgU2F2ZSBTdGF0ZVxuc2F2ZV9ydW5fc3RhdGUoY29kYVNhbXBsZXMsIHJ1bl9udW1iZXIpXG5cbiMgRGlhZ25vc3RpY3NcbnN1bW1hcnlJbmZvIDwtIGdlbmVyYXRlX2RpYWdub3N0aWNzKGNvZGFTYW1wbGVzLCBydW5fbnVtYmVyLCB2YXJfY29sX2NvdW50KVxuXG4jIExlYWRlciBCb2FyZFxuY3JlYXRlX2xlYWRlcmJvYXJkKHRlc3QsIHN1bW1hcnlJbmZvLCB2YXJfY29sX2NvdW50KVxuYGBgIn0= -->
-<pre class="r"><code># Run 1
-run_number &lt;- 1
-
-# Hyper Parameters
-adaptSteps = 50
-burnInSteps = 100
-nChains = 2
-thinSteps = 17
-numSavedSteps = 250
-
-# Run JAGS
-codaSamples &lt;- run_jags_model_2(train, test, var_col_count, run_number = run_number, adaptSteps = adaptSteps, burnInSteps = burnInSteps, nChains = nChains, thinSteps = thinSteps, numSavedSteps = numSavedSteps)
-
-# Save State
-save_run_state(codaSamples, run_number)
-
-# Diagnostics
-summaryInfo &lt;- generate_diagnostics(codaSamples, run_number, var_col_count)
-
-# Leader Board
-create_leaderboard(test, summaryInfo, var_col_count)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBEaWFnbm9zdGljc1xuc3VtbWFyeUluZm8gPC0gZ2VuZXJhdGVfZGlhZ25vc3RpY3MoY29kYVNhbXBsZXMsIHJ1bl9udW1iZXIsIHZhcl9jb2xfY291bnQsIFRSVUUpXG5cbmBgYCJ9 -->
+<pre class="r"><code># Diagnostics
+summaryInfo &lt;- generate_diagnostics(codaSamples, run_number, var_col_count, TRUE)
+</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiPHNpbXBsZUVycm9yIGluIGlmIChjbGFzcyhwYXJhbVNhbXBsZVZlYykgPT0gXCJtY21jLmxpc3RcIikgeyAgICBwYXJhbVNhbXBsZVZlYyA9IGFzLm1hdHJpeChwYXJhbVNhbXBsZVZlYyl9OiB0aGUgY29uZGl0aW9uIGhhcyBsZW5ndGggPiAxPlxuIn0= -->
+<pre><code>&lt;simpleError in if (class(paramSampleVec) == &quot;mcmc.list&quot;) {    paramSampleVec = as.matrix(paramSampleVec)}: the condition has length &gt; 1&gt;</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -1832,9 +1821,9 @@ create_leaderboard(test, summaryInfo, var_col_count)</code></pre>
 <h3>JAGS Run 2</h3>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBEaWFnbm9zdGljc1xuc3VtbWFyeUluZm8gPC0gZ2VuZXJhdGVfZGlhZ25vc3RpY3MoY29kYVNhbXBsZXMsIHJ1bl9udW1iZXIsIHZhcl9jb2xfY291bnQpXG5cbmBgYCJ9 -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBEaWFnbm9zdGljc1xuc3VtbWFyeUluZm8gPC0gZ2VuZXJhdGVfZGlhZ25vc3RpY3MoY29kYVNhbXBsZXMsIHJ1bl9udW1iZXIsIHZhcl9jb2xfY291bnQsIFRSVUUpXG5cbmBgYCJ9 -->
 <pre class="r"><code># Diagnostics
-summaryInfo &lt;- generate_diagnostics(codaSamples, run_number, var_col_count)
+summaryInfo &lt;- generate_diagnostics(codaSamples, run_number, var_col_count, TRUE)
 </code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-begin eyJkYXRhIjoiPHNpbXBsZUVycm9yIGluIGlmIChjbGFzcyhwYXJhbVNhbXBsZVZlYykgPT0gXCJtY21jLmxpc3RcIikgeyAgICBwYXJhbVNhbXBsZVZlYyA9IGFzLm1hdHJpeChwYXJhbVNhbXBsZVZlYyl9OiB0aGUgY29uZGl0aW9uIGhhcyBsZW5ndGggPiAxPlxuIn0= -->
@@ -1847,29 +1836,29 @@ summaryInfo &lt;- generate_diagnostics(codaSamples, run_number, var_col_count)
 <h3>JAGS Run 3</h3>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBSdW4gMVxucnVuX251bWJlciA8LSAzXG5cbiMgSHlwZXIgUGFyYW1ldGVyc1xuYWRhcHRTdGVwcyA9IDUwXG5idXJuSW5TdGVwcyA9IDEwMFxubkNoYWlucyA9IDJcbnRoaW5TdGVwcyA9IDE3XG5udW1TYXZlZFN0ZXBzID0gMjUwXG5cbiMgUnVuIEpBR1NcbmNvZGFTYW1wbGVzIDwtIHJ1bl9qYWdzX21vZGVsXzIodHJhaW4sIHRlc3QsIHZhcl9jb2xfY291bnQsIHJ1bl9udW1iZXIgPSBydW5fbnVtYmVyLCBhZGFwdFN0ZXBzID0gYWRhcHRTdGVwcywgYnVybkluU3RlcHMgPSBidXJuSW5TdGVwcywgbkNoYWlucyA9IG5DaGFpbnMsIHRoaW5TdGVwcyA9IHRoaW5TdGVwcywgbnVtU2F2ZWRTdGVwcyA9IG51bVNhdmVkU3RlcHMpXG5cbiMgU2F2ZSBTdGF0ZVxuc2F2ZV9ydW5fc3RhdGUoY29kYVNhbXBsZXMsIHJ1bl9udW1iZXIpXG5cbiMgRGlhZ25vc3RpY3NcbnN1bW1hcnlJbmZvIDwtIGdlbmVyYXRlX2RpYWdub3N0aWNzKGNvZGFTYW1wbGVzLCBydW5fbnVtYmVyLCB2YXJfY29sX2NvdW50KVxuXG4jIExlYWRlciBCb2FyZFxuY3JlYXRlX2xlYWRlcmJvYXJkKHRlc3QsIHN1bW1hcnlJbmZvLCB2YXJfY29sX2NvdW50KVxuYGBgIn0= -->
-<pre class="r"><code># Run 1
-run_number &lt;- 3
-
-# Hyper Parameters
-adaptSteps = 50
-burnInSteps = 100
-nChains = 2
-thinSteps = 17
-numSavedSteps = 250
-
-# Run JAGS
-codaSamples &lt;- run_jags_model_2(train, test, var_col_count, run_number = run_number, adaptSteps = adaptSteps, burnInSteps = burnInSteps, nChains = nChains, thinSteps = thinSteps, numSavedSteps = numSavedSteps)
-
-# Save State
-save_run_state(codaSamples, run_number)
-
-# Diagnostics
-summaryInfo &lt;- generate_diagnostics(codaSamples, run_number, var_col_count)
-
-# Leader Board
-create_leaderboard(test, summaryInfo, var_col_count)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBEaWFnbm9zdGljc1xuc3VtbWFyeUluZm8gPC0gZ2VuZXJhdGVfZGlhZ25vc3RpY3MoY29kYVNhbXBsZXMsIHJ1bl9udW1iZXIsIHZhcl9jb2xfY291bnQsIFRSVUUpXG5cbmBgYCJ9 -->
+<pre class="r"><code># Diagnostics
+summaryInfo &lt;- generate_diagnostics(codaSamples, run_number, var_col_count, TRUE)
+</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiPHNpbXBsZUVycm9yIGluIGlmIChwcmVkKSB7ICAgIGZvciAocElkeCBpbiAxOm5jb2wocHJlZCkpIHsgICAgICAgIHBhbmVsQ291bnQgPSBkZWNpZGVPcGVuR3JhcGgocGFuZWxDb3VudCwgc2F2ZU5hbWUgPSBwYXN0ZTAoc2F2ZU5hbWUsICAgICAgICAgICAgIFwiUG9zdE1hcmdcIikpICAgICAgICBoaXN0SW5mbyA9IHBsb3RQb3N0KHByZWRbLCBwSWR4XSwgY2V4LmxhYiA9IDEuNzUsIHNob3dDdXJ2ZSA9IHNob3dDdXJ2ZSwgICAgICAgICAgICAgeGxhYiA9IGJxdW90ZShwcmVkWy4ocElkeCldKSwgbWFpbiA9IHBhc3RlMChcIlByZWRpY3Rpb24gXCIsICAgICAgICAgICAgICAgICBwSWR4KSkgICAgfX06IHRoZSBjb25kaXRpb24gaGFzIGxlbmd0aCA+IDE+XG4ifQ== -->
+<pre><code>&lt;simpleError in if (pred) {    for (pIdx in 1:ncol(pred)) {        panelCount = decideOpenGraph(panelCount, saveName = paste0(saveName,             &quot;PostMarg&quot;))        histInfo = plotPost(pred[, pIdx], cex.lab = 1.75, showCurve = showCurve,             xlab = bquote(pred[.(pIdx)]), main = paste0(&quot;Prediction &quot;,                 pIdx))    }}: the condition has length &gt; 1&gt;</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="jags-run-4" class="section level3">
+<h3>JAGS Run 4</h3>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBEaWFnbm9zdGljc1xuc3VtbWFyeUluZm8gPC0gZ2VuZXJhdGVfZGlhZ25vc3RpY3MoY29kYVNhbXBsZXMsIHJ1bl9udW1iZXIsIHZhcl9jb2xfY291bnQsIFRSVUUpXG5cbmBgYCJ9 -->
+<pre class="r"><code># Diagnostics
+summaryInfo &lt;- generate_diagnostics(codaSamples, run_number, var_col_count, TRUE)
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiPHNpbXBsZUVycm9yIGluIGlmIChjbGFzcyhwYXJhbVNhbXBsZVZlYykgPT0gXCJtY21jLmxpc3RcIikgeyAgICBwYXJhbVNhbXBsZVZlYyA9IGFzLm1hdHJpeChwYXJhbVNhbXBsZVZlYyl9OiB0aGUgY29uZGl0aW9uIGhhcyBsZW5ndGggPiAxPlxuIn0= -->
+<pre><code>&lt;simpleError in if (class(paramSampleVec) == &quot;mcmc.list&quot;) {    paramSampleVec = as.matrix(paramSampleVec)}: the condition has length &gt; 1&gt;</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -1894,7 +1883,7 @@ performance_test(pred)</code></pre>
 <!-- rnb-chunk-end -->
 </div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIkFGTCBNb2RlbGxpbmcgb2YgUGVyZm9ybWFuY2UgUGVyIEdhbWUiDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KYGBge3J9DQpzb3VyY2UoIi4uLy4uL3V0aWxpdGllcy9Nb2RlbDJTY3JpcHRzLlIiKQ0KDQojIFJlYWQgdHJhaW4gYW5kIHRlc3Qgc2V0cyBmcm9tIGZpbGVzLg0KdHJhaW4gPC0gcmVhZC5jc3YoIi4uLy4uL2RhdGEvdHJhaW5fcGVyZm9ybWFuY2UuY3N2IikNCnRlc3QgPC0gcmVhZC5jc3YoIi4uLy4uL2RhdGEvdGVzdF9wZXJmb3JtYW5jZS5jc3YiKQ0KDQp2YXJfY29sX2NvdW50IDwtIDIyDQpgYGANCg0KIyBMb2FkIHNhdmUNCmBgYHtyfQ0KIyBsb2FkX3J1bl9zdGF0ZShydW5fbnVtYmVyKQ0KYGBgDQoNCiMjIyBKQUdTIFJ1biAxDQpgYGB7cn0NCiMgUnVuIDENCnJ1bl9udW1iZXIgPC0gMQ0KDQojIEh5cGVyIFBhcmFtZXRlcnMNCmFkYXB0U3RlcHMgPSA1MA0KYnVybkluU3RlcHMgPSAxMDANCm5DaGFpbnMgPSAyDQp0aGluU3RlcHMgPSAxNw0KbnVtU2F2ZWRTdGVwcyA9IDI1MA0KDQojIFJ1biBKQUdTDQpjb2RhU2FtcGxlcyA8LSBydW5famFnc19tb2RlbF8yKHRyYWluLCB0ZXN0LCB2YXJfY29sX2NvdW50LCBydW5fbnVtYmVyID0gcnVuX251bWJlciwgYWRhcHRTdGVwcyA9IGFkYXB0U3RlcHMsIGJ1cm5JblN0ZXBzID0gYnVybkluU3RlcHMsIG5DaGFpbnMgPSBuQ2hhaW5zLCB0aGluU3RlcHMgPSB0aGluU3RlcHMsIG51bVNhdmVkU3RlcHMgPSBudW1TYXZlZFN0ZXBzKQ0KDQojIFNhdmUgU3RhdGUNCnNhdmVfcnVuX3N0YXRlKGNvZGFTYW1wbGVzLCBydW5fbnVtYmVyKQ0KDQojIERpYWdub3N0aWNzDQpzdW1tYXJ5SW5mbyA8LSBnZW5lcmF0ZV9kaWFnbm9zdGljcyhjb2RhU2FtcGxlcywgcnVuX251bWJlciwgdmFyX2NvbF9jb3VudCkNCg0KIyBMZWFkZXIgQm9hcmQNCmNyZWF0ZV9sZWFkZXJib2FyZCh0ZXN0LCBzdW1tYXJ5SW5mbywgdmFyX2NvbF9jb3VudCkNCmBgYA0KDQojIyMgSkFHUyBSdW4gMg0KYGBge3J9DQojIFJ1biAxDQpydW5fbnVtYmVyIDwtIDINCg0KIyBIeXBlciBQYXJhbWV0ZXJzDQphZGFwdFN0ZXBzID0gNjc1DQpidXJuSW5TdGVwcyA9IDEyNTANCm5DaGFpbnMgPSAyDQp0aGluU3RlcHMgPSAyMA0KbnVtU2F2ZWRTdGVwcyA9IDI1MDANCg0KIyBSdW4gSkFHUw0KY29kYVNhbXBsZXMgPC0gcnVuX2phZ3NfbW9kZWxfMih0cmFpbiwgdGVzdCwgdmFyX2NvbF9jb3VudCwgcnVuX251bWJlciA9IHJ1bl9udW1iZXIsIGFkYXB0U3RlcHMgPSBhZGFwdFN0ZXBzLCBidXJuSW5TdGVwcyA9IGJ1cm5JblN0ZXBzLCBuQ2hhaW5zID0gbkNoYWlucywgdGhpblN0ZXBzID0gdGhpblN0ZXBzLCBudW1TYXZlZFN0ZXBzID0gbnVtU2F2ZWRTdGVwcykNCg0KIyBTYXZlIFN0YXRlDQpzYXZlX3J1bl9zdGF0ZShjb2RhU2FtcGxlcywgcnVuX251bWJlcikNCg0KIyBEaWFnbm9zdGljcw0Kc3VtbWFyeUluZm8gPC0gZ2VuZXJhdGVfZGlhZ25vc3RpY3MoY29kYVNhbXBsZXMsIHJ1bl9udW1iZXIsIHZhcl9jb2xfY291bnQpDQoNCiMgTGVhZGVyIEJvYXJkDQpjcmVhdGVfbGVhZGVyYm9hcmQodGVzdCwgc3VtbWFyeUluZm8sIHZhcl9jb2xfY291bnQpDQpgYGANCg0KIyMjIEpBR1MgUnVuIDMNCmBgYHtyfQ0KIyBSdW4gMQ0KcnVuX251bWJlciA8LSAzDQoNCiMgSHlwZXIgUGFyYW1ldGVycw0KYWRhcHRTdGVwcyA9IDUwDQpidXJuSW5TdGVwcyA9IDEwMA0KbkNoYWlucyA9IDINCnRoaW5TdGVwcyA9IDE3DQpudW1TYXZlZFN0ZXBzID0gMjUwDQoNCiMgUnVuIEpBR1MNCmNvZGFTYW1wbGVzIDwtIHJ1bl9qYWdzX21vZGVsXzIodHJhaW4sIHRlc3QsIHZhcl9jb2xfY291bnQsIHJ1bl9udW1iZXIgPSBydW5fbnVtYmVyLCBhZGFwdFN0ZXBzID0gYWRhcHRTdGVwcywgYnVybkluU3RlcHMgPSBidXJuSW5TdGVwcywgbkNoYWlucyA9IG5DaGFpbnMsIHRoaW5TdGVwcyA9IHRoaW5TdGVwcywgbnVtU2F2ZWRTdGVwcyA9IG51bVNhdmVkU3RlcHMpDQoNCiMgU2F2ZSBTdGF0ZQ0Kc2F2ZV9ydW5fc3RhdGUoY29kYVNhbXBsZXMsIHJ1bl9udW1iZXIpDQoNCiMgRGlhZ25vc3RpY3MNCnN1bW1hcnlJbmZvIDwtIGdlbmVyYXRlX2RpYWdub3N0aWNzKGNvZGFTYW1wbGVzLCBydW5fbnVtYmVyLCB2YXJfY29sX2NvdW50KQ0KDQojIExlYWRlciBCb2FyZA0KY3JlYXRlX2xlYWRlcmJvYXJkKHRlc3QsIHN1bW1hcnlJbmZvLCB2YXJfY29sX2NvdW50KQ0KYGBgDQoNCiMgUnVuIFBlcmZvcm1hbmNlIEFuYWx5c2lzDQpgYGB7cn0NCnBlcmZvcm1hbmNlX3Rlc3QgPC0gZnVuY3Rpb24gKHByZWRpY3Rpb25zKSB7DQogIHJlYWwgPSBjKHRlc3QkQnJvd25sb3cuVm90ZXMpDQogIGxlbmd0aChwcmVkaWN0aW9ucykNCiAgbGVuZ3RoKHJlYWwpDQogIG4gPSBsZW5ndGgocmVhbCkNCiAgcHJpbnQocGFzdGUoIk1BRToiLCBzdW0oYWJzKHByZWRpY3Rpb25zIC0gcmVhbCkpL24pKQ0KICBwcmludChwYXN0ZSgiTVNFOiIsIHN1bSgocmVhbCAtIHByZWRpY3Rpb25zKV4yKSkpDQogIHByaW50KHBhc3RlKCJSTVNFOiIsIHNxcnQobXNlL24pKSkNCn0NCg0KcGVyZm9ybWFuY2VfdGVzdChwcmVkKQ0KYGBgDQo=</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIkFGTCBNb2RlbGxpbmcgb2YgUGVyZm9ybWFuY2UgUGVyIEdhbWUiDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KYGBge3J9DQpzb3VyY2UoIi4uLy4uL3V0aWxpdGllcy9Nb2RlbDJTY3JpcHRzLlIiKQ0KDQojIFJlYWQgdHJhaW4gYW5kIHRlc3Qgc2V0cyBmcm9tIGZpbGVzLg0KdHJhaW4gPC0gcmVhZC5jc3YoIi4uLy4uL2RhdGEvdHJhaW5fcGVyZm9ybWFuY2UuY3N2IikNCnRlc3QgPC0gcmVhZC5jc3YoIi4uLy4uL2RhdGEvdGVzdF9wZXJmb3JtYW5jZS5jc3YiKQ0KDQp2YXJfY29sX2NvdW50IDwtIDIyDQpgYGANCg0KIyBMb2FkIHNhdmUNCmBgYHtyfQ0KbG9hZF9ydW5fc3RhdGUoNCkNCmxvYWQoZmlsZT1wYXN0ZSgnUnVuMS5SRGF0YScpKQ0KYGBgDQoNCiMjIyBKQUdTIFJ1biAxDQpgYGB7cn0NCiMgUnVuIDENCnJ1bl9udW1iZXIgPC0gMQ0KDQojIEh5cGVyIFBhcmFtZXRlcnMNCmFkYXB0U3RlcHMgPSA1MA0KYnVybkluU3RlcHMgPSAxMDANCm5DaGFpbnMgPSAyDQp0aGluU3RlcHMgPSAxNw0KbnVtU2F2ZWRTdGVwcyA9IDI1MA0KDQojIFJ1biBKQUdTDQpjb2RhU2FtcGxlcyA8LSBydW5famFnc19tb2RlbF8yKHRyYWluLCB0ZXN0LCB2YXJfY29sX2NvdW50LCBydW5fbnVtYmVyID0gcnVuX251bWJlciwgYWRhcHRTdGVwcyA9IGFkYXB0U3RlcHMsIGJ1cm5JblN0ZXBzID0gYnVybkluU3RlcHMsIG5DaGFpbnMgPSBuQ2hhaW5zLCB0aGluU3RlcHMgPSB0aGluU3RlcHMsIG51bVNhdmVkU3RlcHMgPSBudW1TYXZlZFN0ZXBzKQ0KDQojIFNhdmUgU3RhdGUNCnNhdmVfcnVuX3N0YXRlKGNvZGFTYW1wbGVzLCBydW5fbnVtYmVyKQ0KDQojIERpYWdub3N0aWNzDQpzdW1tYXJ5SW5mbyA8LSBnZW5lcmF0ZV9kaWFnbm9zdGljcyhjb2RhU2FtcGxlcywgcnVuX251bWJlciwgdmFyX2NvbF9jb3VudCwgVFJVRSkNCg0KIyBMZWFkZXIgQm9hcmQNCmNyZWF0ZV9sZWFkZXJib2FyZCh0ZXN0LCBzdW1tYXJ5SW5mbywgdmFyX2NvbF9jb3VudCkNCmBgYA0KDQojIyMgSkFHUyBSdW4gMg0KYGBge3J9DQojIFJ1biAyDQpydW5fbnVtYmVyIDwtIDINCg0KIyBIeXBlciBQYXJhbWV0ZXJzDQphZGFwdFN0ZXBzID0gNjc1DQpidXJuSW5TdGVwcyA9IDEyNTANCm5DaGFpbnMgPSAyDQp0aGluU3RlcHMgPSAyMA0KbnVtU2F2ZWRTdGVwcyA9IDI1MDANCg0KIyBSdW4gSkFHUw0KY29kYVNhbXBsZXMgPC0gcnVuX2phZ3NfbW9kZWxfMih0cmFpbiwgdGVzdCwgdmFyX2NvbF9jb3VudCwgcnVuX251bWJlciA9IHJ1bl9udW1iZXIsIGFkYXB0U3RlcHMgPSBhZGFwdFN0ZXBzLCBidXJuSW5TdGVwcyA9IGJ1cm5JblN0ZXBzLCBuQ2hhaW5zID0gbkNoYWlucywgdGhpblN0ZXBzID0gdGhpblN0ZXBzLCBudW1TYXZlZFN0ZXBzID0gbnVtU2F2ZWRTdGVwcykNCg0KIyBTYXZlIFN0YXRlDQpzYXZlX3J1bl9zdGF0ZShjb2RhU2FtcGxlcywgcnVuX251bWJlcikNCg0KIyBEaWFnbm9zdGljcw0Kc3VtbWFyeUluZm8gPC0gZ2VuZXJhdGVfZGlhZ25vc3RpY3MoY29kYVNhbXBsZXMsIHJ1bl9udW1iZXIsIHZhcl9jb2xfY291bnQsIFRSVUUpDQoNCiMgTGVhZGVyIEJvYXJkDQpjcmVhdGVfbGVhZGVyYm9hcmQodGVzdCwgc3VtbWFyeUluZm8sIHZhcl9jb2xfY291bnQpDQpgYGANCg0KIyMjIEpBR1MgUnVuIDMNCmBgYHtyfQ0KIyBSdW4gMw0KcnVuX251bWJlciA8LSAzDQoNCiMgSHlwZXIgUGFyYW1ldGVycw0KYWRhcHRTdGVwcyA9IDY3NQ0KYnVybkluU3RlcHMgPSA1MDAwDQpuQ2hhaW5zID0gNA0KdGhpblN0ZXBzID0gNDANCm51bVNhdmVkU3RlcHMgPSA0MDAwDQoNCiMgUnVuIEpBR1MNCmNvZGFTYW1wbGVzIDwtIHJ1bl9qYWdzX21vZGVsXzIodHJhaW4sIHRlc3QsIHZhcl9jb2xfY291bnQsIHJ1bl9udW1iZXIgPSBydW5fbnVtYmVyLCBhZGFwdFN0ZXBzID0gYWRhcHRTdGVwcywgYnVybkluU3RlcHMgPSBidXJuSW5TdGVwcywgbkNoYWlucyA9IG5DaGFpbnMsIHRoaW5TdGVwcyA9IHRoaW5TdGVwcywgbnVtU2F2ZWRTdGVwcyA9IG51bVNhdmVkU3RlcHMpDQoNCiMgU2F2ZSBTdGF0ZQ0Kc2F2ZV9ydW5fc3RhdGUoY29kYVNhbXBsZXMsIHJ1bl9udW1iZXIpDQoNCiMgRGlhZ25vc3RpY3MNCnN1bW1hcnlJbmZvIDwtIGdlbmVyYXRlX2RpYWdub3N0aWNzKGNvZGFTYW1wbGVzLCBydW5fbnVtYmVyLCB2YXJfY29sX2NvdW50LCBUUlVFKQ0KDQojIExlYWRlciBCb2FyZA0KY3JlYXRlX2xlYWRlcmJvYXJkKHRlc3QsIHN1bW1hcnlJbmZvLCB2YXJfY29sX2NvdW50KQ0KYGBgDQoNCiMjIyBKQUdTIFJ1biA0DQpgYGB7cn0NCiMgUnVuIDMNCnJ1bl9udW1iZXIgPC0gNA0KDQojIEh5cGVyIFBhcmFtZXRlcnMNCmFkYXB0U3RlcHMgPSA2NzUNCmJ1cm5JblN0ZXBzID0gMjAwMDANCm5DaGFpbnMgPSA0DQp0aGluU3RlcHMgPSA0MA0KbnVtU2F2ZWRTdGVwcyA9IDQwMDANCg0KIyBSdW4gSkFHUw0KY29kYVNhbXBsZXMgPC0gcnVuX2phZ3NfbW9kZWxfMih0cmFpbiwgdGVzdCwgdmFyX2NvbF9jb3VudCwgcnVuX251bWJlciA9IHJ1bl9udW1iZXIsIGFkYXB0U3RlcHMgPSBhZGFwdFN0ZXBzLCBidXJuSW5TdGVwcyA9IGJ1cm5JblN0ZXBzLCBuQ2hhaW5zID0gbkNoYWlucywgdGhpblN0ZXBzID0gdGhpblN0ZXBzLCBudW1TYXZlZFN0ZXBzID0gbnVtU2F2ZWRTdGVwcykNCg0KIyBTYXZlIFN0YXRlDQpzYXZlX3J1bl9zdGF0ZShjb2RhU2FtcGxlcywgcnVuX251bWJlcikNCg0KIyBEaWFnbm9zdGljcw0Kc3VtbWFyeUluZm8gPC0gZ2VuZXJhdGVfZGlhZ25vc3RpY3MoY29kYVNhbXBsZXMsIHJ1bl9udW1iZXIsIHZhcl9jb2xfY291bnQsIFRSVUUpDQoNCiMgTGVhZGVyIEJvYXJkDQpjcmVhdGVfbGVhZGVyYm9hcmQodGVzdCwgc3VtbWFyeUluZm8sIHZhcl9jb2xfY291bnQpDQpgYGANCg0KIyBSdW4gUGVyZm9ybWFuY2UgQW5hbHlzaXMNCmBgYHtyfQ0KcGVyZm9ybWFuY2VfdGVzdCA8LSBmdW5jdGlvbiAocHJlZGljdGlvbnMpIHsNCiAgcmVhbCA9IGModGVzdCRCcm93bmxvdy5Wb3RlcykNCiAgbGVuZ3RoKHByZWRpY3Rpb25zKQ0KICBsZW5ndGgocmVhbCkNCiAgbiA9IGxlbmd0aChyZWFsKQ0KICBwcmludChwYXN0ZSgiTUFFOiIsIHN1bShhYnMocHJlZGljdGlvbnMgLSByZWFsKSkvbikpDQogIHByaW50KHBhc3RlKCJNU0U6Iiwgc3VtKChyZWFsIC0gcHJlZGljdGlvbnMpXjIpKSkNCiAgcHJpbnQocGFzdGUoIlJNU0U6Iiwgc3FydChtc2UvbikpKQ0KfQ0KDQpwZXJmb3JtYW5jZV90ZXN0KHByZWQpDQpgYGANCg==</div>
 
 
 
