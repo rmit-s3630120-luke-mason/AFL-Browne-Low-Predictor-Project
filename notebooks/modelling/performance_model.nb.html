@@ -1805,29 +1805,6 @@ var_col_count &lt;- 22</code></pre>
 <h3>JAGS Run 1</h3>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBSdW4gMVxucnVuX251bWJlciA8LSAxXG5cbiMgSHlwZXIgUGFyYW1ldGVyc1xuYWRhcHRTdGVwcyA9IDUwXG5idXJuSW5TdGVwcyA9IDEwMFxubkNoYWlucyA9IDJcbnRoaW5TdGVwcyA9IDE3XG5udW1TYXZlZFN0ZXBzID0gMjUwXG5cbiMgUnVuIEpBR1NcbmNvZGFTYW1wbGVzIDwtIHJ1bl9qYWdzX21vZGVsXzIodHJhaW4sIHRlc3QsIHZhcl9jb2xfY291bnQsIHJ1bl9udW1iZXIgPSBydW5fbnVtYmVyLCBhZGFwdFN0ZXBzID0gYWRhcHRTdGVwcywgYnVybkluU3RlcHMgPSBidXJuSW5TdGVwcywgbkNoYWlucyA9IG5DaGFpbnMsIHRoaW5TdGVwcyA9IHRoaW5TdGVwcywgbnVtU2F2ZWRTdGVwcyA9IG51bVNhdmVkU3RlcHMpXG5cbiMgU2F2ZSBTdGF0ZVxuc2F2ZV9ydW5fc3RhdGUoY29kYVNhbXBsZXMsIHJ1bl9udW1iZXIpXG5cbiMgRGlhZ25vc3RpY3NcbnN1bW1hcnlJbmZvIDwtIGdlbmVyYXRlX2RpYWdub3N0aWNzKGNvZGFTYW1wbGVzLCBydW5fbnVtYmVyLCB2YXJfY29sX2NvdW50LCBUUlVFKVxuXG4jIExlYWRlciBCb2FyZFxuY3JlYXRlX2xlYWRlcmJvYXJkKHRlc3QsIHN1bW1hcnlJbmZvLCB2YXJfY29sX2NvdW50KVxuYGBgIn0= -->
-<pre class="r"><code># Run 1
-run_number &lt;- 1
-
-# Hyper Parameters
-adaptSteps = 50
-burnInSteps = 100
-nChains = 2
-thinSteps = 17
-numSavedSteps = 250
-
-# Run JAGS
-codaSamples &lt;- run_jags_model_2(train, test, var_col_count, run_number = run_number, adaptSteps = adaptSteps, burnInSteps = burnInSteps, nChains = nChains, thinSteps = thinSteps, numSavedSteps = numSavedSteps)
-
-# Save State
-save_run_state(codaSamples, run_number)
-
-# Diagnostics
-summaryInfo &lt;- generate_diagnostics(codaSamples, run_number, var_col_count, TRUE)
-
-# Leader Board
-create_leaderboard(test, summaryInfo, var_col_count)</code></pre>
-<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -1853,16 +1830,14 @@ create_leaderboard(test, summaryInfo, var_col_count)</code></pre>
 <h3>JAGS Run 3</h3>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGVyZm9ybWFuY2VfdGVzdChwcmVkKVxuXG5gYGAifQ== -->
-<pre class="r"><code>performance_test(pred)
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBEaWFnbm9zdGljc1xuc3VtbWFyeUluZm8gPC0gZ2VuZXJhdGVfZGlhZ25vc3RpY3MoY29kYVNhbXBsZXMsIHJ1bl9udW1iZXIsIHZhcl9jb2xfY291bnQsIFRSVUUpXG5cbmBgYCJ9 -->
+<pre class="r"><code># Diagnostics
+summaryInfo &lt;- generate_diagnostics(codaSamples, run_number, var_col_count, TRUE)
 </code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDkxMDhcblsxXSA5MTA4XG5bMV0gXCJNQUU6IDAuNjUzNTk2MDM1MzUwNDAzXCJcblsxXSBcIk1TRTogNjAzMi4zMTY0MjIzMzg1NlwiXG5bMV0gXCJSTVNFOiAwLjgxMzgyNDA5OTEwNzY1MVwiXG4ifQ== -->
-<pre><code>[1] 9108
-[1] 9108
-[1] &quot;MAE: 0.653596035350403&quot;
-[1] &quot;MSE: 6032.31642233856&quot;
-[1] &quot;RMSE: 0.813824099107651&quot;</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3IgaW4gZ2VuZXJhdGVfZGlhZ25vc3RpY3MoY29kYVNhbXBsZXMsIHJ1bl9udW1iZXIsIHZhcl9jb2xfY291bnQsICA6IFxuICB1bnVzZWQgYXJndW1lbnQgKFRSVUUpXG4ifQ== -->
+<pre><code>Error in generate_diagnostics(codaSamples, run_number, var_col_count,  : 
+  unused argument (TRUE)</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -1871,16 +1846,13 @@ create_leaderboard(test, summaryInfo, var_col_count)</code></pre>
 <h3>JAGS Run 4</h3>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGVyZm9ybWFuY2VfdGVzdChwcmVkKVxuXG5gYGAifQ== -->
-<pre class="r"><code>performance_test(pred)
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBEaWFnbm9zdGljc1xuc3VtbWFyeUluZm8gPC0gZ2VuZXJhdGVfZGlhZ25vc3RpY3MoY29kYVNhbXBsZXMsIHJ1bl9udW1iZXIsIHZhcl9jb2xfY291bnQsIFRSVUUpXG5cbmBgYCJ9 -->
+<pre class="r"><code># Diagnostics
+summaryInfo &lt;- generate_diagnostics(codaSamples, run_number, var_col_count, TRUE)
 </code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDkxMDhcblsxXSA5MTA4XG5bMV0gXCJNQUU6IDAuNjcxODEzODgzNDAyMzE1XCJcblsxXSBcIk1TRTogNjQzMS45MTEwNDE3MDAxMlwiXG5bMV0gXCJSTVNFOiAwLjg0MDM0NjcwODk5Mjk4NVwiXG4ifQ== -->
-<pre><code>[1] 9108
-[1] 9108
-[1] &quot;MAE: 0.671813883402315&quot;
-[1] &quot;MSE: 6431.91104170012&quot;
-[1] &quot;RMSE: 0.840346708992985&quot;</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiPHNpbXBsZUVycm9yIGluIGlmIChjbGFzcyhwYXJhbVNhbXBsZVZlYykgPT0gXCJtY21jLmxpc3RcIikgeyAgICBwYXJhbVNhbXBsZVZlYyA9IGFzLm1hdHJpeChwYXJhbVNhbXBsZVZlYyl9OiB0aGUgY29uZGl0aW9uIGhhcyBsZW5ndGggPiAxPlxuIn0= -->
+<pre><code>&lt;simpleError in if (class(paramSampleVec) == &quot;mcmc.list&quot;) {    paramSampleVec = as.matrix(paramSampleVec)}: the condition has length &gt; 1&gt;</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -1890,65 +1862,223 @@ create_leaderboard(test, summaryInfo, var_col_count)</code></pre>
 <h1>Run Performance Analysis</h1>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ3Vlc3NfcHJlZCA8LSBnZXRfYnJvd25sb3dfcHJlZHModGVzdCwgc3VtbWFyeUluZm8sIHZhcl9jb2xfY291bnQpXG5cbmBgYCJ9 -->
-<pre class="r"><code>guess_pred &lt;- get_brownlow_preds(test, summaryInfo, var_col_count)
-</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxub3JkZXJlZF9yZWFsX3ByZWQgPC0gdGVzdFtvcmRlcih0ZXN0JGdhbWVJZCwgdGVzdCRwbGF5ZXJJZCksXVxuZ3Vlc3NfcHJlZCA8LSBnZXRfYnJvd25sb3dfcHJlZHModGVzdCwgc3VtbWFyeUluZm8sIHZhcl9jb2xfY291bnQpXG5gYGAifQ== -->
+<pre class="r"><code>ordered_real_pred &lt;- test[order(test$gameId, test$playerId),]
+guess_pred &lt;- get_brownlow_preds(test, summaryInfo, var_col_count)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiYHN1bW1hcmlzZSgpYCBoYXMgZ3JvdXBlZCBvdXRwdXQgYnkgJ2dhbWVJZCcuIFlvdSBjYW4gb3ZlcnJpZGUgdXNpbmcgdGhlIGAuZ3JvdXBzYCBhcmd1bWVudC5cbiJ9 -->
-<pre><code>`summarise()` has grouped output by &#39;gameId&#39;. You can override using the `.groups` argument.</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiRG9pbmcgIDIwMjFSMTAwMVwiXG5bMV0gXCJEb2luZyAgMjAyMVIxMDAxXCJcblsxXSBcIkRvaW5nICAyMDIxUjEwMDFcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMTAwMVwiXG5bMV0gXCJEb2luZyAgMjAyMVIxMDAxXCJcblsxXSBcIkRvaW5nICAyMDIxUjEwMDFcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMTAwMVwiXG5bMV0gXCJEb2luZyAgMjAyMVIxMDAxXCJcblsxXSBcIkRvaW5nICAyMDIxUjEwMDFcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMTAwMVwiXG5bMV0gXCJEb2luZyAgMjAyMVIxMDAxXCJcblsxXSBcIkRvaW5nICAyMDIxUjEwMDFcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMTAwMVwiXG5bMV0gXCJEb2luZyAgMjAyMVIxMDAxXCJcblsxXSBcIkRvaW5nICAyMDIxUjEwMDFcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMTAwMVwiXG5bMV0gXCJEb2luZyAgMjAyMVIxMDAxXCJcblsxXSBcIkRvaW5nICAyMDIxUjEwMDFcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMTAwMVwiXG5bMV0gXCJEb2luZyAgMjAyMVIxMDAxXCJcblsxXSBcIkRvaW5nICAyMDIxUjEwMDFcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMTAwMVwiXG5bMV0gXCJEb2luZyAgMjAyMVIxMDAxXCJcblsxXSBcIkRvaW5nICAyMDIxUjEwMDFcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMTAwMVwiXG5bMV0gXCJEb2luZyAgMjAyMVIxMDAxXCJcblsxXSBcIkRvaW5nICAyMDIxUjEwMDFcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMTAwMVwiXG5bMV0gXCJEb2luZyAgMjAyMVIxMDAxXCJcblsxXSBcIkRvaW5nICAyMDIxUjEwMDFcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMTAwMVwiXG5bMV0gXCJEb2luZyAgMjAyMVIxMDAxXCJcblsxXSBcIkRvaW5nICAyMDIxUjEwMDFcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMTAwMVwiXG5bMV0gXCJEb2luZyAgMjAyMVIxMDAxXCJcblsxXSBcIkRvaW5nICAyMDIxUjEwMDFcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMTAwMVwiXG5bMV0gXCJEb2luZyAgMjAyMVIxMDAxXCJcblsxXSBcIkRvaW5nICAyMDIxUjEwMDFcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMTAwMVwiXG5bMV0gXCJEb2luZyAgMjAyMVIxMDAxXCJcblsxXSBcIkRvaW5nICAyMDIxUjEwMDFcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMTAwMVwiXG5bMV0gXCJEb2luZyAgMjAyMVIxMDAxXCJcblsxXSBcIkRvaW5nICAyMDIxUjEwMDFcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMTAwMVwiXG4ifQ== -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiRG9pbmcgIDIwMjFSMTAwMVwiXG5bMV0gXCJEb2luZyAgMjAyMVIxMDAyXCJcblsxXSBcIkRvaW5nICAyMDIxUjEwMDNcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMTAwNFwiXG5bMV0gXCJEb2luZyAgMjAyMVIxMDA1XCJcblsxXSBcIkRvaW5nICAyMDIxUjEwMDZcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMTAwN1wiXG5bMV0gXCJEb2luZyAgMjAyMVIxMDA4XCJcblsxXSBcIkRvaW5nICAyMDIxUjEwMDlcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMTAxXCJcblsxXSBcIkRvaW5nICAyMDIxUjEwMlwiXG5bMV0gXCJEb2luZyAgMjAyMVIxMDNcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMTA0XCJcblsxXSBcIkRvaW5nICAyMDIxUjEwNVwiXG5bMV0gXCJEb2luZyAgMjAyMVIxMDZcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMTA3XCJcblsxXSBcIkRvaW5nICAyMDIxUjEwOFwiXG5bMV0gXCJEb2luZyAgMjAyMVIxMDlcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMTEwMVwiXG5bMV0gXCJEb2luZyAgMjAyMVIxMTAyXCJcblsxXSBcIkRvaW5nICAyMDIxUjExMDNcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMTEwNFwiXG5bMV0gXCJEb2luZyAgMjAyMVIxMTA1XCJcblsxXSBcIkRvaW5nICAyMDIxUjExMDZcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMTEwN1wiXG5bMV0gXCJEb2luZyAgMjAyMVIxMTA4XCJcblsxXSBcIkRvaW5nICAyMDIxUjExMDlcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMTIwMVwiXG5bMV0gXCJEb2luZyAgMjAyMVIxMjAyXCJcblsxXSBcIkRvaW5nICAyMDIxUjEyMDNcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMTIwNFwiXG5bMV0gXCJEb2luZyAgMjAyMVIxMjA1XCJcblsxXSBcIkRvaW5nICAyMDIxUjEyMDZcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMTMwMVwiXG5bMV0gXCJEb2luZyAgMjAyMVIxMzAyXCJcblsxXSBcIkRvaW5nICAyMDIxUjEzMDNcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMTMwNFwiXG5bMV0gXCJEb2luZyAgMjAyMVIxMzA1XCJcblsxXSBcIkRvaW5nICAyMDIxUjEzMDZcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMTMwN1wiXG5bMV0gXCJEb2luZyAgMjAyMVIxNDAxXCJcblsxXSBcIkRvaW5nICAyMDIxUjE0MDJcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMTQwM1wiXG5bMV0gXCJEb2luZyAgMjAyMVIxNDA0XCJcblsxXSBcIkRvaW5nICAyMDIxUjE0MDVcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMTUwMVwiXG5bMV0gXCJEb2luZyAgMjAyMVIxNTAyXCJcblsxXSBcIkRvaW5nICAyMDIxUjE1MDNcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMTUwNFwiXG5bMV0gXCJEb2luZyAgMjAyMVIxNTA1XCJcblsxXSBcIkRvaW5nICAyMDIxUjE1MDZcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMTUwN1wiXG5bMV0gXCJEb2luZyAgMjAyMVIxNTA4XCJcblsxXSBcIkRvaW5nICAyMDIxUjE1MDlcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMTYwMVwiXG5bMV0gXCJEb2luZyAgMjAyMVIxNjAyXCJcblsxXSBcIkRvaW5nICAyMDIxUjE2MDNcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMTYwNFwiXG5bMV0gXCJEb2luZyAgMjAyMVIxNjA1XCJcblsxXSBcIkRvaW5nICAyMDIxUjE2MDZcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMTYwN1wiXG5bMV0gXCJEb2luZyAgMjAyMVIxNjA4XCJcblsxXSBcIkRvaW5nICAyMDIxUjE2MDlcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMTcwMVwiXG5bMV0gXCJEb2luZyAgMjAyMVIxNzAyXCJcblsxXSBcIkRvaW5nICAyMDIxUjE3MDNcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMTcwNFwiXG5bMV0gXCJEb2luZyAgMjAyMVIxNzA1XCJcblsxXSBcIkRvaW5nICAyMDIxUjE3MDZcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMTcwN1wiXG5bMV0gXCJEb2luZyAgMjAyMVIxNzA4XCJcblsxXSBcIkRvaW5nICAyMDIxUjE3MDlcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMTgwMVwiXG5bMV0gXCJEb2luZyAgMjAyMVIxODAyXCJcblsxXSBcIkRvaW5nICAyMDIxUjE4MDNcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMTgwNFwiXG5bMV0gXCJEb2luZyAgMjAyMVIxODA1XCJcblsxXSBcIkRvaW5nICAyMDIxUjE4MDZcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMTgwN1wiXG5bMV0gXCJEb2luZyAgMjAyMVIxODA4XCJcblsxXSBcIkRvaW5nICAyMDIxUjE4MDlcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMTkwMVwiXG5bMV0gXCJEb2luZyAgMjAyMVIxOTAyXCJcblsxXSBcIkRvaW5nICAyMDIxUjE5MDNcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMTkwNFwiXG5bMV0gXCJEb2luZyAgMjAyMVIxOTA1XCJcblsxXSBcIkRvaW5nICAyMDIxUjE5MDZcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMTkwN1wiXG5bMV0gXCJEb2luZyAgMjAyMVIxOTA4XCJcblsxXSBcIkRvaW5nICAyMDIxUjE5MDlcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMjAwMVwiXG5bMV0gXCJEb2luZyAgMjAyMVIyMDAyXCJcblsxXSBcIkRvaW5nICAyMDIxUjIwMDNcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMjAwNFwiXG5bMV0gXCJEb2luZyAgMjAyMVIyMDA1XCJcblsxXSBcIkRvaW5nICAyMDIxUjIwMDZcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMjAwN1wiXG5bMV0gXCJEb2luZyAgMjAyMVIyMDA4XCJcblsxXSBcIkRvaW5nICAyMDIxUjIwMDlcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMjAxXCJcblsxXSBcIkRvaW5nICAyMDIxUjIwMlwiXG5bMV0gXCJEb2luZyAgMjAyMVIyMDNcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMjA0XCJcblsxXSBcIkRvaW5nICAyMDIxUjIwNVwiXG5bMV0gXCJEb2luZyAgMjAyMVIyMDZcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMjA3XCJcblsxXSBcIkRvaW5nICAyMDIxUjIwOFwiXG5bMV0gXCJEb2luZyAgMjAyMVIyMDlcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMjEwMVwiXG5bMV0gXCJEb2luZyAgMjAyMVIyMTAyXCJcblsxXSBcIkRvaW5nICAyMDIxUjIxMDNcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMjEwNFwiXG5bMV0gXCJEb2luZyAgMjAyMVIyMTA1XCJcblsxXSBcIkRvaW5nICAyMDIxUjIxMDZcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMjEwN1wiXG5bMV0gXCJEb2luZyAgMjAyMVIyMTA4XCJcblsxXSBcIkRvaW5nICAyMDIxUjIxMDlcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMjIwMVwiXG5bMV0gXCJEb2luZyAgMjAyMVIyMjAyXCJcblsxXSBcIkRvaW5nICAyMDIxUjIyMDNcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMjIwNFwiXG5bMV0gXCJEb2luZyAgMjAyMVIyMjA1XCJcblsxXSBcIkRvaW5nICAyMDIxUjIyMDZcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMjIwN1wiXG5bMV0gXCJEb2luZyAgMjAyMVIyMjA4XCJcblsxXSBcIkRvaW5nICAyMDIxUjIyMDlcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMjMwMVwiXG5bMV0gXCJEb2luZyAgMjAyMVIyMzAyXCJcblsxXSBcIkRvaW5nICAyMDIxUjIzMDNcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMjMwNFwiXG5bMV0gXCJEb2luZyAgMjAyMVIyMzA1XCJcblsxXSBcIkRvaW5nICAyMDIxUjIzMDZcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMjMwN1wiXG5bMV0gXCJEb2luZyAgMjAyMVIyMzA4XCJcblsxXSBcIkRvaW5nICAyMDIxUjIzMDlcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMzAxXCJcblsxXSBcIkRvaW5nICAyMDIxUjMwMlwiXG5bMV0gXCJEb2luZyAgMjAyMVIzMDNcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMzA0XCJcblsxXSBcIkRvaW5nICAyMDIxUjMwNVwiXG5bMV0gXCJEb2luZyAgMjAyMVIzMDZcIlxuWzFdIFwiRG9pbmcgIDIwMjFSMzA3XCJcblsxXSBcIkRvaW5nICAyMDIxUjMwOFwiXG5bMV0gXCJEb2luZyAgMjAyMVIzMDlcIlxuWzFdIFwiRG9pbmcgIDIwMjFSNDAxXCJcblsxXSBcIkRvaW5nICAyMDIxUjQwMlwiXG5bMV0gXCJEb2luZyAgMjAyMVI0MDNcIlxuWzFdIFwiRG9pbmcgIDIwMjFSNDA0XCJcblsxXSBcIkRvaW5nICAyMDIxUjQwNVwiXG5bMV0gXCJEb2luZyAgMjAyMVI0MDZcIlxuWzFdIFwiRG9pbmcgIDIwMjFSNDA3XCJcblsxXSBcIkRvaW5nICAyMDIxUjQwOFwiXG5bMV0gXCJEb2luZyAgMjAyMVI0MDlcIlxuWzFdIFwiRG9pbmcgIDIwMjFSNTAxXCJcblsxXSBcIkRvaW5nICAyMDIxUjUwMlwiXG5bMV0gXCJEb2luZyAgMjAyMVI1MDNcIlxuWzFdIFwiRG9pbmcgIDIwMjFSNTA0XCJcblsxXSBcIkRvaW5nICAyMDIxUjUwNVwiXG5bMV0gXCJEb2luZyAgMjAyMVI1MDZcIlxuWzFdIFwiRG9pbmcgIDIwMjFSNTA3XCJcblsxXSBcIkRvaW5nICAyMDIxUjUwOFwiXG5bMV0gXCJEb2luZyAgMjAyMVI1MDlcIlxuWzFdIFwiRG9pbmcgIDIwMjFSNjAxXCJcblsxXSBcIkRvaW5nICAyMDIxUjYwMlwiXG5bMV0gXCJEb2luZyAgMjAyMVI2MDNcIlxuWzFdIFwiRG9pbmcgIDIwMjFSNjA0XCJcblsxXSBcIkRvaW5nICAyMDIxUjYwNVwiXG5bMV0gXCJEb2luZyAgMjAyMVI2MDZcIlxuWzFdIFwiRG9pbmcgIDIwMjFSNjA3XCJcblsxXSBcIkRvaW5nICAyMDIxUjYwOFwiXG5bMV0gXCJEb2luZyAgMjAyMVI2MDlcIlxuWzFdIFwiRG9pbmcgIDIwMjFSNzAxXCJcblsxXSBcIkRvaW5nICAyMDIxUjcwMlwiXG5bMV0gXCJEb2luZyAgMjAyMVI3MDNcIlxuWzFdIFwiRG9pbmcgIDIwMjFSNzA0XCJcblsxXSBcIkRvaW5nICAyMDIxUjcwNVwiXG5bMV0gXCJEb2luZyAgMjAyMVI3MDZcIlxuWzFdIFwiRG9pbmcgIDIwMjFSNzA3XCJcblsxXSBcIkRvaW5nICAyMDIxUjcwOFwiXG5bMV0gXCJEb2luZyAgMjAyMVI3MDlcIlxuWzFdIFwiRG9pbmcgIDIwMjFSODAxXCJcblsxXSBcIkRvaW5nICAyMDIxUjgwMlwiXG5bMV0gXCJEb2luZyAgMjAyMVI4MDNcIlxuWzFdIFwiRG9pbmcgIDIwMjFSODA0XCJcblsxXSBcIkRvaW5nICAyMDIxUjgwNVwiXG5bMV0gXCJEb2luZyAgMjAyMVI4MDZcIlxuWzFdIFwiRG9pbmcgIDIwMjFSODA3XCJcblsxXSBcIkRvaW5nICAyMDIxUjgwOFwiXG5bMV0gXCJEb2luZyAgMjAyMVI4MDlcIlxuWzFdIFwiRG9pbmcgIDIwMjFSOTAxXCJcblsxXSBcIkRvaW5nICAyMDIxUjkwMlwiXG5bMV0gXCJEb2luZyAgMjAyMVI5MDNcIlxuWzFdIFwiRG9pbmcgIDIwMjFSOTA0XCJcblsxXSBcIkRvaW5nICAyMDIxUjkwNVwiXG5bMV0gXCJEb2luZyAgMjAyMVI5MDZcIlxuWzFdIFwiRG9pbmcgIDIwMjFSOTA3XCJcblsxXSBcIkRvaW5nICAyMDIxUjkwOFwiXG5bMV0gXCJEb2luZyAgMjAyMVI5MDlcIlxuIn0= -->
 <pre><code>[1] &quot;Doing  2021R1001&quot;
-[1] &quot;Doing  2021R1001&quot;
-[1] &quot;Doing  2021R1001&quot;
-[1] &quot;Doing  2021R1001&quot;
-[1] &quot;Doing  2021R1001&quot;
-[1] &quot;Doing  2021R1001&quot;
-[1] &quot;Doing  2021R1001&quot;
-[1] &quot;Doing  2021R1001&quot;
-[1] &quot;Doing  2021R1001&quot;
-[1] &quot;Doing  2021R1001&quot;
-[1] &quot;Doing  2021R1001&quot;
-[1] &quot;Doing  2021R1001&quot;
-[1] &quot;Doing  2021R1001&quot;
-[1] &quot;Doing  2021R1001&quot;
-[1] &quot;Doing  2021R1001&quot;
-[1] &quot;Doing  2021R1001&quot;
-[1] &quot;Doing  2021R1001&quot;
-[1] &quot;Doing  2021R1001&quot;
-[1] &quot;Doing  2021R1001&quot;
-[1] &quot;Doing  2021R1001&quot;
-[1] &quot;Doing  2021R1001&quot;
-[1] &quot;Doing  2021R1001&quot;
-[1] &quot;Doing  2021R1001&quot;
-[1] &quot;Doing  2021R1001&quot;
-[1] &quot;Doing  2021R1001&quot;
-[1] &quot;Doing  2021R1001&quot;
-[1] &quot;Doing  2021R1001&quot;
-[1] &quot;Doing  2021R1001&quot;
-[1] &quot;Doing  2021R1001&quot;
-[1] &quot;Doing  2021R1001&quot;
-[1] &quot;Doing  2021R1001&quot;
-[1] &quot;Doing  2021R1001&quot;
-[1] &quot;Doing  2021R1001&quot;
-[1] &quot;Doing  2021R1001&quot;
-[1] &quot;Doing  2021R1001&quot;
-[1] &quot;Doing  2021R1001&quot;
-[1] &quot;Doing  2021R1001&quot;
-[1] &quot;Doing  2021R1001&quot;
-[1] &quot;Doing  2021R1001&quot;
-[1] &quot;Doing  2021R1001&quot;
-[1] &quot;Doing  2021R1001&quot;
-[1] &quot;Doing  2021R1001&quot;
-[1] &quot;Doing  2021R1001&quot;
-[1] &quot;Doing  2021R1001&quot;
-[1] &quot;Doing  2021R1001&quot;
-[1] &quot;Doing  2021R1001&quot;</code></pre>
+[1] &quot;Doing  2021R1002&quot;
+[1] &quot;Doing  2021R1003&quot;
+[1] &quot;Doing  2021R1004&quot;
+[1] &quot;Doing  2021R1005&quot;
+[1] &quot;Doing  2021R1006&quot;
+[1] &quot;Doing  2021R1007&quot;
+[1] &quot;Doing  2021R1008&quot;
+[1] &quot;Doing  2021R1009&quot;
+[1] &quot;Doing  2021R101&quot;
+[1] &quot;Doing  2021R102&quot;
+[1] &quot;Doing  2021R103&quot;
+[1] &quot;Doing  2021R104&quot;
+[1] &quot;Doing  2021R105&quot;
+[1] &quot;Doing  2021R106&quot;
+[1] &quot;Doing  2021R107&quot;
+[1] &quot;Doing  2021R108&quot;
+[1] &quot;Doing  2021R109&quot;
+[1] &quot;Doing  2021R1101&quot;
+[1] &quot;Doing  2021R1102&quot;
+[1] &quot;Doing  2021R1103&quot;
+[1] &quot;Doing  2021R1104&quot;
+[1] &quot;Doing  2021R1105&quot;
+[1] &quot;Doing  2021R1106&quot;
+[1] &quot;Doing  2021R1107&quot;
+[1] &quot;Doing  2021R1108&quot;
+[1] &quot;Doing  2021R1109&quot;
+[1] &quot;Doing  2021R1201&quot;
+[1] &quot;Doing  2021R1202&quot;
+[1] &quot;Doing  2021R1203&quot;
+[1] &quot;Doing  2021R1204&quot;
+[1] &quot;Doing  2021R1205&quot;
+[1] &quot;Doing  2021R1206&quot;
+[1] &quot;Doing  2021R1301&quot;
+[1] &quot;Doing  2021R1302&quot;
+[1] &quot;Doing  2021R1303&quot;
+[1] &quot;Doing  2021R1304&quot;
+[1] &quot;Doing  2021R1305&quot;
+[1] &quot;Doing  2021R1306&quot;
+[1] &quot;Doing  2021R1307&quot;
+[1] &quot;Doing  2021R1401&quot;
+[1] &quot;Doing  2021R1402&quot;
+[1] &quot;Doing  2021R1403&quot;
+[1] &quot;Doing  2021R1404&quot;
+[1] &quot;Doing  2021R1405&quot;
+[1] &quot;Doing  2021R1501&quot;
+[1] &quot;Doing  2021R1502&quot;
+[1] &quot;Doing  2021R1503&quot;
+[1] &quot;Doing  2021R1504&quot;
+[1] &quot;Doing  2021R1505&quot;
+[1] &quot;Doing  2021R1506&quot;
+[1] &quot;Doing  2021R1507&quot;
+[1] &quot;Doing  2021R1508&quot;
+[1] &quot;Doing  2021R1509&quot;
+[1] &quot;Doing  2021R1601&quot;
+[1] &quot;Doing  2021R1602&quot;
+[1] &quot;Doing  2021R1603&quot;
+[1] &quot;Doing  2021R1604&quot;
+[1] &quot;Doing  2021R1605&quot;
+[1] &quot;Doing  2021R1606&quot;
+[1] &quot;Doing  2021R1607&quot;
+[1] &quot;Doing  2021R1608&quot;
+[1] &quot;Doing  2021R1609&quot;
+[1] &quot;Doing  2021R1701&quot;
+[1] &quot;Doing  2021R1702&quot;
+[1] &quot;Doing  2021R1703&quot;
+[1] &quot;Doing  2021R1704&quot;
+[1] &quot;Doing  2021R1705&quot;
+[1] &quot;Doing  2021R1706&quot;
+[1] &quot;Doing  2021R1707&quot;
+[1] &quot;Doing  2021R1708&quot;
+[1] &quot;Doing  2021R1709&quot;
+[1] &quot;Doing  2021R1801&quot;
+[1] &quot;Doing  2021R1802&quot;
+[1] &quot;Doing  2021R1803&quot;
+[1] &quot;Doing  2021R1804&quot;
+[1] &quot;Doing  2021R1805&quot;
+[1] &quot;Doing  2021R1806&quot;
+[1] &quot;Doing  2021R1807&quot;
+[1] &quot;Doing  2021R1808&quot;
+[1] &quot;Doing  2021R1809&quot;
+[1] &quot;Doing  2021R1901&quot;
+[1] &quot;Doing  2021R1902&quot;
+[1] &quot;Doing  2021R1903&quot;
+[1] &quot;Doing  2021R1904&quot;
+[1] &quot;Doing  2021R1905&quot;
+[1] &quot;Doing  2021R1906&quot;
+[1] &quot;Doing  2021R1907&quot;
+[1] &quot;Doing  2021R1908&quot;
+[1] &quot;Doing  2021R1909&quot;
+[1] &quot;Doing  2021R2001&quot;
+[1] &quot;Doing  2021R2002&quot;
+[1] &quot;Doing  2021R2003&quot;
+[1] &quot;Doing  2021R2004&quot;
+[1] &quot;Doing  2021R2005&quot;
+[1] &quot;Doing  2021R2006&quot;
+[1] &quot;Doing  2021R2007&quot;
+[1] &quot;Doing  2021R2008&quot;
+[1] &quot;Doing  2021R2009&quot;
+[1] &quot;Doing  2021R201&quot;
+[1] &quot;Doing  2021R202&quot;
+[1] &quot;Doing  2021R203&quot;
+[1] &quot;Doing  2021R204&quot;
+[1] &quot;Doing  2021R205&quot;
+[1] &quot;Doing  2021R206&quot;
+[1] &quot;Doing  2021R207&quot;
+[1] &quot;Doing  2021R208&quot;
+[1] &quot;Doing  2021R209&quot;
+[1] &quot;Doing  2021R2101&quot;
+[1] &quot;Doing  2021R2102&quot;
+[1] &quot;Doing  2021R2103&quot;
+[1] &quot;Doing  2021R2104&quot;
+[1] &quot;Doing  2021R2105&quot;
+[1] &quot;Doing  2021R2106&quot;
+[1] &quot;Doing  2021R2107&quot;
+[1] &quot;Doing  2021R2108&quot;
+[1] &quot;Doing  2021R2109&quot;
+[1] &quot;Doing  2021R2201&quot;
+[1] &quot;Doing  2021R2202&quot;
+[1] &quot;Doing  2021R2203&quot;
+[1] &quot;Doing  2021R2204&quot;
+[1] &quot;Doing  2021R2205&quot;
+[1] &quot;Doing  2021R2206&quot;
+[1] &quot;Doing  2021R2207&quot;
+[1] &quot;Doing  2021R2208&quot;
+[1] &quot;Doing  2021R2209&quot;
+[1] &quot;Doing  2021R2301&quot;
+[1] &quot;Doing  2021R2302&quot;
+[1] &quot;Doing  2021R2303&quot;
+[1] &quot;Doing  2021R2304&quot;
+[1] &quot;Doing  2021R2305&quot;
+[1] &quot;Doing  2021R2306&quot;
+[1] &quot;Doing  2021R2307&quot;
+[1] &quot;Doing  2021R2308&quot;
+[1] &quot;Doing  2021R2309&quot;
+[1] &quot;Doing  2021R301&quot;
+[1] &quot;Doing  2021R302&quot;
+[1] &quot;Doing  2021R303&quot;
+[1] &quot;Doing  2021R304&quot;
+[1] &quot;Doing  2021R305&quot;
+[1] &quot;Doing  2021R306&quot;
+[1] &quot;Doing  2021R307&quot;
+[1] &quot;Doing  2021R308&quot;
+[1] &quot;Doing  2021R309&quot;
+[1] &quot;Doing  2021R401&quot;
+[1] &quot;Doing  2021R402&quot;
+[1] &quot;Doing  2021R403&quot;
+[1] &quot;Doing  2021R404&quot;
+[1] &quot;Doing  2021R405&quot;
+[1] &quot;Doing  2021R406&quot;
+[1] &quot;Doing  2021R407&quot;
+[1] &quot;Doing  2021R408&quot;
+[1] &quot;Doing  2021R409&quot;
+[1] &quot;Doing  2021R501&quot;
+[1] &quot;Doing  2021R502&quot;
+[1] &quot;Doing  2021R503&quot;
+[1] &quot;Doing  2021R504&quot;
+[1] &quot;Doing  2021R505&quot;
+[1] &quot;Doing  2021R506&quot;
+[1] &quot;Doing  2021R507&quot;
+[1] &quot;Doing  2021R508&quot;
+[1] &quot;Doing  2021R509&quot;
+[1] &quot;Doing  2021R601&quot;
+[1] &quot;Doing  2021R602&quot;
+[1] &quot;Doing  2021R603&quot;
+[1] &quot;Doing  2021R604&quot;
+[1] &quot;Doing  2021R605&quot;
+[1] &quot;Doing  2021R606&quot;
+[1] &quot;Doing  2021R607&quot;
+[1] &quot;Doing  2021R608&quot;
+[1] &quot;Doing  2021R609&quot;
+[1] &quot;Doing  2021R701&quot;
+[1] &quot;Doing  2021R702&quot;
+[1] &quot;Doing  2021R703&quot;
+[1] &quot;Doing  2021R704&quot;
+[1] &quot;Doing  2021R705&quot;
+[1] &quot;Doing  2021R706&quot;
+[1] &quot;Doing  2021R707&quot;
+[1] &quot;Doing  2021R708&quot;
+[1] &quot;Doing  2021R709&quot;
+[1] &quot;Doing  2021R801&quot;
+[1] &quot;Doing  2021R802&quot;
+[1] &quot;Doing  2021R803&quot;
+[1] &quot;Doing  2021R804&quot;
+[1] &quot;Doing  2021R805&quot;
+[1] &quot;Doing  2021R806&quot;
+[1] &quot;Doing  2021R807&quot;
+[1] &quot;Doing  2021R808&quot;
+[1] &quot;Doing  2021R809&quot;
+[1] &quot;Doing  2021R901&quot;
+[1] &quot;Doing  2021R902&quot;
+[1] &quot;Doing  2021R903&quot;
+[1] &quot;Doing  2021R904&quot;
+[1] &quot;Doing  2021R905&quot;
+[1] &quot;Doing  2021R906&quot;
+[1] &quot;Doing  2021R907&quot;
+[1] &quot;Doing  2021R908&quot;
+[1] &quot;Doing  2021R909&quot;</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxub3JkZXJlZF9ndWVzc19wcmVkIDwtIGd1ZXNzX3ByZWRbb3JkZXIoZ3Vlc3NfcHJlZCRnYW1lSWQsIGd1ZXNzX3ByZWQkcGxheWVySWQpLF1cbnBlcmZvcm1hbmNlX3Rlc3RfYyhjKG9yZGVyZWRfcmVhbF9wcmVkJEJyb3dubG93LlZvdGVzKSwgYyhvcmRlcmVkX2d1ZXNzX3ByZWQkQnJvd25sb3cuVm90ZXMpKVxuYGBgIn0= -->
+<pre class="r"><code>ordered_guess_pred &lt;- guess_pred[order(guess_pred$gameId, guess_pred$playerId),]
+performance_test_c(c(ordered_real_pred$Brownlow.Votes), c(ordered_guess_pred$Brownlow.Votes))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiTUFFOiAwLjEwNjQ5OTc4MDQxMjgyNFwiXG5bMV0gXCJNU0U6IDE3NThcIlxuWzFdIFwiUk1TRTogMC40MzkzMzcxNDU5MzY2MjJcIlxuIn0= -->
+<pre><code>[1] &quot;MAE: 0.106499780412824&quot;
+[1] &quot;MSE: 1758&quot;
+[1] &quot;RMSE: 0.439337145936622&quot;</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 </div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIkFGTCBNb2RlbGxpbmcgb2YgUGVyZm9ybWFuY2UgUGVyIEdhbWUiDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KYGBge3J9DQpzb3VyY2UoIi4uLy4uL3V0aWxpdGllcy9Nb2RlbDJTY3JpcHRzLlIiKQ0KDQojIFJlYWQgdHJhaW4gYW5kIHRlc3Qgc2V0cyBmcm9tIGZpbGVzLg0KdHJhaW4gPC0gcmVhZC5jc3YoIi4uLy4uL2RhdGEvdHJhaW5fcGVyZm9ybWFuY2UuY3N2IikNCnRlc3QgPC0gcmVhZC5jc3YoIi4uLy4uL2RhdGEvdGVzdF9wZXJmb3JtYW5jZS5jc3YiKQ0KDQp2YXJfY29sX2NvdW50IDwtIDIyDQpgYGANCg0KIyBMb2FkIHNhdmUNCmBgYHtyfQ0KbG9hZF9ydW5fc3RhdGUoNCkNCmxvYWQoZmlsZT1wYXN0ZSgnUnVuNC5SRGF0YScpKQ0KYGBgDQoNCiMjIyBKQUdTIFJ1biAxDQpgYGB7cn0NCiMgUnVuIDENCnJ1bl9udW1iZXIgPC0gMQ0KDQojIEh5cGVyIFBhcmFtZXRlcnMNCmFkYXB0U3RlcHMgPSA1MA0KYnVybkluU3RlcHMgPSAxMDANCm5DaGFpbnMgPSAyDQp0aGluU3RlcHMgPSAxNw0KbnVtU2F2ZWRTdGVwcyA9IDI1MA0KDQojIFJ1biBKQUdTDQpjb2RhU2FtcGxlcyA8LSBydW5famFnc19tb2RlbF8yKHRyYWluLCB0ZXN0LCB2YXJfY29sX2NvdW50LCBydW5fbnVtYmVyID0gcnVuX251bWJlciwgYWRhcHRTdGVwcyA9IGFkYXB0U3RlcHMsIGJ1cm5JblN0ZXBzID0gYnVybkluU3RlcHMsIG5DaGFpbnMgPSBuQ2hhaW5zLCB0aGluU3RlcHMgPSB0aGluU3RlcHMsIG51bVNhdmVkU3RlcHMgPSBudW1TYXZlZFN0ZXBzKQ0KDQojIFNhdmUgU3RhdGUNCnNhdmVfcnVuX3N0YXRlKGNvZGFTYW1wbGVzLCBydW5fbnVtYmVyKQ0KDQojIERpYWdub3N0aWNzDQpzdW1tYXJ5SW5mbyA8LSBnZW5lcmF0ZV9kaWFnbm9zdGljcyhjb2RhU2FtcGxlcywgcnVuX251bWJlciwgdmFyX2NvbF9jb3VudCwgVFJVRSkNCg0KIyBMZWFkZXIgQm9hcmQNCmNyZWF0ZV9sZWFkZXJib2FyZCh0ZXN0LCBzdW1tYXJ5SW5mbywgdmFyX2NvbF9jb3VudCkNCmBgYA0KDQojIyMgSkFHUyBSdW4gMg0KYGBge3J9DQojIFJ1biAyDQpydW5fbnVtYmVyIDwtIDINCg0KIyBIeXBlciBQYXJhbWV0ZXJzDQphZGFwdFN0ZXBzID0gNjc1DQpidXJuSW5TdGVwcyA9IDEyNTANCm5DaGFpbnMgPSAyDQp0aGluU3RlcHMgPSAyMA0KbnVtU2F2ZWRTdGVwcyA9IDI1MDANCg0KIyBSdW4gSkFHUw0KY29kYVNhbXBsZXMgPC0gcnVuX2phZ3NfbW9kZWxfMih0cmFpbiwgdGVzdCwgdmFyX2NvbF9jb3VudCwgcnVuX251bWJlciA9IHJ1bl9udW1iZXIsIGFkYXB0U3RlcHMgPSBhZGFwdFN0ZXBzLCBidXJuSW5TdGVwcyA9IGJ1cm5JblN0ZXBzLCBuQ2hhaW5zID0gbkNoYWlucywgdGhpblN0ZXBzID0gdGhpblN0ZXBzLCBudW1TYXZlZFN0ZXBzID0gbnVtU2F2ZWRTdGVwcykNCg0KIyBTYXZlIFN0YXRlDQpzYXZlX3J1bl9zdGF0ZShjb2RhU2FtcGxlcywgcnVuX251bWJlcikNCg0KIyBEaWFnbm9zdGljcw0Kc3VtbWFyeUluZm8gPC0gZ2VuZXJhdGVfZGlhZ25vc3RpY3MoY29kYVNhbXBsZXMsIHJ1bl9udW1iZXIsIHZhcl9jb2xfY291bnQsIFRSVUUpDQoNCiMgTGVhZGVyIEJvYXJkDQpjcmVhdGVfbGVhZGVyYm9hcmQodGVzdCwgc3VtbWFyeUluZm8sIHZhcl9jb2xfY291bnQpDQoNCnByZWQgPC0gZ2V0X3ByZWQodGVzdCwgc3VtbWFyeUluZm8sIHZhcl9jb2xfY291bnQpDQpwZXJmb3JtYW5jZV90ZXN0KHByZWQpDQpgYGANCg0KIyMjIEpBR1MgUnVuIDMNCmBgYHtyfQ0KIyBSdW4gMw0KcnVuX251bWJlciA8LSAzDQoNCiMgSHlwZXIgUGFyYW1ldGVycw0KYWRhcHRTdGVwcyA9IDY3NQ0KYnVybkluU3RlcHMgPSA1MDAwDQpuQ2hhaW5zID0gNA0KdGhpblN0ZXBzID0gNDANCm51bVNhdmVkU3RlcHMgPSA0MDAwDQoNCiMgUnVuIEpBR1MNCmNvZGFTYW1wbGVzIDwtIHJ1bl9qYWdzX21vZGVsXzIodHJhaW4sIHRlc3QsIHZhcl9jb2xfY291bnQsIHJ1bl9udW1iZXIgPSBydW5fbnVtYmVyLCBhZGFwdFN0ZXBzID0gYWRhcHRTdGVwcywgYnVybkluU3RlcHMgPSBidXJuSW5TdGVwcywgbkNoYWlucyA9IG5DaGFpbnMsIHRoaW5TdGVwcyA9IHRoaW5TdGVwcywgbnVtU2F2ZWRTdGVwcyA9IG51bVNhdmVkU3RlcHMpDQoNCiMgU2F2ZSBTdGF0ZQ0Kc2F2ZV9ydW5fc3RhdGUoY29kYVNhbXBsZXMsIHJ1bl9udW1iZXIpDQoNCiMgRGlhZ25vc3RpY3MNCnN1bW1hcnlJbmZvIDwtIGdlbmVyYXRlX2RpYWdub3N0aWNzKGNvZGFTYW1wbGVzLCBydW5fbnVtYmVyLCB2YXJfY29sX2NvdW50LCBUUlVFKQ0KDQojIExlYWRlciBCb2FyZA0KY3JlYXRlX2xlYWRlcmJvYXJkKHRlc3QsIHN1bW1hcnlJbmZvLCB2YXJfY29sX2NvdW50KQ0KDQpwcmVkIDwtIGdldF9wcmVkKHRlc3QsIHN1bW1hcnlJbmZvLCB2YXJfY29sX2NvdW50KQ0KcGVyZm9ybWFuY2VfdGVzdChwcmVkKQ0KYGBgDQoNCiMjIyBKQUdTIFJ1biA0DQpgYGB7cn0NCiMgUnVuIDMNCnJ1bl9udW1iZXIgPC0gNA0KDQojIEh5cGVyIFBhcmFtZXRlcnMNCmFkYXB0U3RlcHMgPSA2NzUNCmJ1cm5JblN0ZXBzID0gMjAwMDANCm5DaGFpbnMgPSA0DQp0aGluU3RlcHMgPSA0MA0KbnVtU2F2ZWRTdGVwcyA9IDQwMDANCg0KIyBSdW4gSkFHUw0KY29kYVNhbXBsZXMgPC0gcnVuX2phZ3NfbW9kZWxfMih0cmFpbiwgdGVzdCwgdmFyX2NvbF9jb3VudCwgcnVuX251bWJlciA9IHJ1bl9udW1iZXIsIGFkYXB0U3RlcHMgPSBhZGFwdFN0ZXBzLCBidXJuSW5TdGVwcyA9IGJ1cm5JblN0ZXBzLCBuQ2hhaW5zID0gbkNoYWlucywgdGhpblN0ZXBzID0gdGhpblN0ZXBzLCBudW1TYXZlZFN0ZXBzID0gbnVtU2F2ZWRTdGVwcykNCg0KIyBTYXZlIFN0YXRlDQpzYXZlX3J1bl9zdGF0ZShjb2RhU2FtcGxlcywgcnVuX251bWJlcikNCg0KIyBEaWFnbm9zdGljcw0Kc3VtbWFyeUluZm8gPC0gZ2VuZXJhdGVfZGlhZ25vc3RpY3MoY29kYVNhbXBsZXMsIHJ1bl9udW1iZXIsIHZhcl9jb2xfY291bnQsIFRSVUUpDQoNCiMgTGVhZGVyIEJvYXJkDQpjcmVhdGVfbGVhZGVyYm9hcmQodGVzdCwgc3VtbWFyeUluZm8sIHZhcl9jb2xfY291bnQpDQoNCnByZWQgPC0gZ2V0X3ByZWQodGVzdCwgc3VtbWFyeUluZm8sIHZhcl9jb2xfY291bnQpDQpwZXJmb3JtYW5jZV90ZXN0KHByZWQpDQpgYGANCg0KIyBSdW4gUGVyZm9ybWFuY2UgQW5hbHlzaXMNCmBgYHtyfQ0KDQoNCiMgcGVyZm9ybWFuY2VfdGVzdChwcmVkKQ0Kb3JkZXJlZF9yZWFsX3ByZWQgPC0gdGVzdCAlPiUgZ3JvdXBfYnkodGVzdCRnYW1lSWQsIHRlc3QkcGxheWVySWQpDQpndWVzc19wcmVkIDwtIGdldF9icm93bmxvd19wcmVkcyh0ZXN0LCBzdW1tYXJ5SW5mbywgdmFyX2NvbF9jb3VudCkNCmd1ZXNzX3ByZWQNCmxlbmd0aChndWVzc19wcmVkKQ0KbGVuZ3RoKGMob3JkZXJlZF9yZWFsX3ByZWQpKQ0KYGBgDQo=</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIkFGTCBNb2RlbGxpbmcgb2YgUGVyZm9ybWFuY2UgUGVyIEdhbWUiDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KYGBge3J9DQpzb3VyY2UoIi4uLy4uL3V0aWxpdGllcy9Nb2RlbDJTY3JpcHRzLlIiKQ0KDQojIFJlYWQgdHJhaW4gYW5kIHRlc3Qgc2V0cyBmcm9tIGZpbGVzLg0KdHJhaW4gPC0gcmVhZC5jc3YoIi4uLy4uL2RhdGEvdHJhaW5fcGVyZm9ybWFuY2UuY3N2IikNCnRlc3QgPC0gcmVhZC5jc3YoIi4uLy4uL2RhdGEvdGVzdF9wZXJmb3JtYW5jZS5jc3YiKQ0KDQp2YXJfY29sX2NvdW50IDwtIDIyDQpgYGANCg0KIyBMb2FkIHNhdmUNCmBgYHtyfQ0KbG9hZF9ydW5fc3RhdGUoNCkNCmxvYWQoZmlsZT1wYXN0ZSgnUnVuMS5SRGF0YScpKQ0KYGBgDQoNCiMjIyBKQUdTIFJ1biAxDQpgYGB7cn0NCiMgUnVuIDENCnJ1bl9udW1iZXIgPC0gMQ0KDQojIEh5cGVyIFBhcmFtZXRlcnMNCmFkYXB0U3RlcHMgPSA1MA0KYnVybkluU3RlcHMgPSAxMDANCm5DaGFpbnMgPSAyDQp0aGluU3RlcHMgPSAxNw0KbnVtU2F2ZWRTdGVwcyA9IDI1MA0KDQojIFJ1biBKQUdTDQpjb2RhU2FtcGxlcyA8LSBydW5famFnc19tb2RlbF8yKHRyYWluLCB0ZXN0LCB2YXJfY29sX2NvdW50LCBydW5fbnVtYmVyID0gcnVuX251bWJlciwgYWRhcHRTdGVwcyA9IGFkYXB0U3RlcHMsIGJ1cm5JblN0ZXBzID0gYnVybkluU3RlcHMsIG5DaGFpbnMgPSBuQ2hhaW5zLCB0aGluU3RlcHMgPSB0aGluU3RlcHMsIG51bVNhdmVkU3RlcHMgPSBudW1TYXZlZFN0ZXBzKQ0KDQojIFNhdmUgU3RhdGUNCnNhdmVfcnVuX3N0YXRlKGNvZGFTYW1wbGVzLCBydW5fbnVtYmVyKQ0KDQojIERpYWdub3N0aWNzDQpzdW1tYXJ5SW5mbyA8LSBnZW5lcmF0ZV9kaWFnbm9zdGljcyhjb2RhU2FtcGxlcywgcnVuX251bWJlciwgdmFyX2NvbF9jb3VudCwgVFJVRSkNCg0KIyBMZWFkZXIgQm9hcmQNCmNyZWF0ZV9sZWFkZXJib2FyZCh0ZXN0LCBzdW1tYXJ5SW5mbywgdmFyX2NvbF9jb3VudCkNCmBgYA0KDQojIyMgSkFHUyBSdW4gMg0KYGBge3J9DQojIFJ1biAyDQpydW5fbnVtYmVyIDwtIDINCg0KIyBIeXBlciBQYXJhbWV0ZXJzDQphZGFwdFN0ZXBzID0gNjc1DQpidXJuSW5TdGVwcyA9IDEyNTANCm5DaGFpbnMgPSAyDQp0aGluU3RlcHMgPSAyMA0KbnVtU2F2ZWRTdGVwcyA9IDI1MDANCg0KIyBSdW4gSkFHUw0KY29kYVNhbXBsZXMgPC0gcnVuX2phZ3NfbW9kZWxfMih0cmFpbiwgdGVzdCwgdmFyX2NvbF9jb3VudCwgcnVuX251bWJlciA9IHJ1bl9udW1iZXIsIGFkYXB0U3RlcHMgPSBhZGFwdFN0ZXBzLCBidXJuSW5TdGVwcyA9IGJ1cm5JblN0ZXBzLCBuQ2hhaW5zID0gbkNoYWlucywgdGhpblN0ZXBzID0gdGhpblN0ZXBzLCBudW1TYXZlZFN0ZXBzID0gbnVtU2F2ZWRTdGVwcykNCg0KIyBTYXZlIFN0YXRlDQpzYXZlX3J1bl9zdGF0ZShjb2RhU2FtcGxlcywgcnVuX251bWJlcikNCg0KIyBEaWFnbm9zdGljcw0Kc3VtbWFyeUluZm8gPC0gZ2VuZXJhdGVfZGlhZ25vc3RpY3MoY29kYVNhbXBsZXMsIHJ1bl9udW1iZXIsIHZhcl9jb2xfY291bnQsIFRSVUUpDQoNCiMgTGVhZGVyIEJvYXJkDQpjcmVhdGVfbGVhZGVyYm9hcmQodGVzdCwgc3VtbWFyeUluZm8sIHZhcl9jb2xfY291bnQpDQoNCnByZWQgPC0gZ2V0X3ByZWQodGVzdCwgc3VtbWFyeUluZm8sIHZhcl9jb2xfY291bnQpDQpwZXJmb3JtYW5jZV90ZXN0KHRlc3QsIHByZWQpDQpgYGANCg0KIyMjIEpBR1MgUnVuIDMNCmBgYHtyfQ0KIyBSdW4gMw0KcnVuX251bWJlciA8LSAzDQoNCiMgSHlwZXIgUGFyYW1ldGVycw0KYWRhcHRTdGVwcyA9IDY3NQ0KYnVybkluU3RlcHMgPSA1MDAwDQpuQ2hhaW5zID0gNA0KdGhpblN0ZXBzID0gNDANCm51bVNhdmVkU3RlcHMgPSA0MDAwDQoNCiMgUnVuIEpBR1MNCmNvZGFTYW1wbGVzIDwtIHJ1bl9qYWdzX21vZGVsXzIodHJhaW4sIHRlc3QsIHZhcl9jb2xfY291bnQsIHJ1bl9udW1iZXIgPSBydW5fbnVtYmVyLCBhZGFwdFN0ZXBzID0gYWRhcHRTdGVwcywgYnVybkluU3RlcHMgPSBidXJuSW5TdGVwcywgbkNoYWlucyA9IG5DaGFpbnMsIHRoaW5TdGVwcyA9IHRoaW5TdGVwcywgbnVtU2F2ZWRTdGVwcyA9IG51bVNhdmVkU3RlcHMpDQoNCiMgU2F2ZSBTdGF0ZQ0Kc2F2ZV9ydW5fc3RhdGUoY29kYVNhbXBsZXMsIHJ1bl9udW1iZXIpDQoNCiMgRGlhZ25vc3RpY3MNCnN1bW1hcnlJbmZvIDwtIGdlbmVyYXRlX2RpYWdub3N0aWNzKGNvZGFTYW1wbGVzLCBydW5fbnVtYmVyLCB2YXJfY29sX2NvdW50LCBUUlVFKQ0KDQojIExlYWRlciBCb2FyZA0KY3JlYXRlX2xlYWRlcmJvYXJkKHRlc3QsIHN1bW1hcnlJbmZvLCB2YXJfY29sX2NvdW50KQ0KDQpwcmVkIDwtIGdldF9wcmVkKHRlc3QsIHN1bW1hcnlJbmZvLCB2YXJfY29sX2NvdW50KQ0KcGVyZm9ybWFuY2VfdGVzdCh0ZXN0LCBwcmVkKQ0KYGBgDQoNCiMjIyBKQUdTIFJ1biA0DQpgYGB7cn0NCiMgUnVuIDMNCnJ1bl9udW1iZXIgPC0gNA0KDQojIEh5cGVyIFBhcmFtZXRlcnMNCmFkYXB0U3RlcHMgPSA2NzUNCmJ1cm5JblN0ZXBzID0gMjAwMDANCm5DaGFpbnMgPSA0DQp0aGluU3RlcHMgPSA0MA0KbnVtU2F2ZWRTdGVwcyA9IDQwMDANCg0KIyBSdW4gSkFHUw0KY29kYVNhbXBsZXMgPC0gcnVuX2phZ3NfbW9kZWxfMih0cmFpbiwgdGVzdCwgdmFyX2NvbF9jb3VudCwgcnVuX251bWJlciA9IHJ1bl9udW1iZXIsIGFkYXB0U3RlcHMgPSBhZGFwdFN0ZXBzLCBidXJuSW5TdGVwcyA9IGJ1cm5JblN0ZXBzLCBuQ2hhaW5zID0gbkNoYWlucywgdGhpblN0ZXBzID0gdGhpblN0ZXBzLCBudW1TYXZlZFN0ZXBzID0gbnVtU2F2ZWRTdGVwcykNCg0KIyBTYXZlIFN0YXRlDQpzYXZlX3J1bl9zdGF0ZShjb2RhU2FtcGxlcywgcnVuX251bWJlcikNCg0KIyBEaWFnbm9zdGljcw0Kc3VtbWFyeUluZm8gPC0gZ2VuZXJhdGVfZGlhZ25vc3RpY3MoY29kYVNhbXBsZXMsIHJ1bl9udW1iZXIsIHZhcl9jb2xfY291bnQsIFRSVUUpDQoNCiMgTGVhZGVyIEJvYXJkDQpjcmVhdGVfbGVhZGVyYm9hcmQodGVzdCwgc3VtbWFyeUluZm8sIHZhcl9jb2xfY291bnQpDQoNCnByZWQgPC0gZ2V0X3ByZWQodGVzdCwgc3VtbWFyeUluZm8sIHZhcl9jb2xfY291bnQpDQpwZXJmb3JtYW5jZV90ZXN0KHRlc3QsIHByZWQpDQpgYGANCg0KIyBSdW4gUGVyZm9ybWFuY2UgQW5hbHlzaXMNCmBgYHtyfQ0Kb3JkZXJlZF9yZWFsX3ByZWQgPC0gdGVzdFtvcmRlcih0ZXN0JGdhbWVJZCwgdGVzdCRwbGF5ZXJJZCksXQ0KZ3Vlc3NfcHJlZCA8LSBnZXRfYnJvd25sb3dfcHJlZHModGVzdCwgc3VtbWFyeUluZm8sIHZhcl9jb2xfY291bnQpDQpvcmRlcmVkX2d1ZXNzX3ByZWQgPC0gZ3Vlc3NfcHJlZFtvcmRlcihndWVzc19wcmVkJGdhbWVJZCwgZ3Vlc3NfcHJlZCRwbGF5ZXJJZCksXQ0KcGVyZm9ybWFuY2VfdGVzdF9jKGMob3JkZXJlZF9yZWFsX3ByZWQkQnJvd25sb3cuVm90ZXMpLCBjKG9yZGVyZWRfZ3Vlc3NfcHJlZCRCcm93bmxvdy5Wb3RlcykpDQpgYGANCg==</div>
 
 
 
